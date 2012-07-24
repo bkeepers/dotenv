@@ -1,0 +1,22 @@
+module Dotenv
+  class Environment < Hash
+    def initialize(filename)
+      @filename = filename
+      load
+    end
+
+    def load
+      read.each do |line|
+        self[$1] = $2 if line =~ /\A([\w_]+)=(.*)\z/
+      end
+    end
+
+    def read
+      File.read(@filename).split("\n")
+    end
+
+    def apply
+      each { |k,v| ENV[k] = v }
+    end
+  end
+end
