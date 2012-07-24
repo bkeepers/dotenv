@@ -1,8 +1,8 @@
 # dotenv
 
-Loads environment settings for your application from `.env`.
+Loads environment variables from `.env` into `ENV`, automagically.
 
-The emerging practice of storing application configuration in  environment variables is a great idea, but it's not always practical to set all of those environment variables in your development or continuous integration environments. [Foreman](https://github.com/ddollar/foreman) provides this handy feature of loading settings from `.env`, which works great for anything that you want to put in your `Procfile`. But it makes things difficult when you want to run a console or rake task. `dotenv` solves that problem.
+Read more about the [motivation for dotenv at opensoul.org](http://opensoul.org/blog/archives/2012/07/24/dotenv/).
 
 ## Installation
 
