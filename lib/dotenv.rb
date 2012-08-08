@@ -6,4 +6,4 @@ module Dotenv
   end
 end
 
-require 'dotenv/railtie' if defined?(Rails)
+require 'dotenv/railtie' if defined?(Rails) and defined?(Rails::Railtie)
