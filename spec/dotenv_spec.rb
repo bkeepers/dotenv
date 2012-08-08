@@ -34,7 +34,7 @@ describe Dotenv::Environment do
 
     describe 'initialize' do
       it 'fails silently' do
-        lambda { Dotenv::Environment.new('.env_does_not_exist') }.should_not raise_error
+        expect { Dotenv::Environment.new('.env_does_not_exist') }.not_to raise_error
       end
     end
 
