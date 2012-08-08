@@ -18,7 +18,7 @@ describe Dotenv::Environment do
       expect(dotenv['OPTION_B']).to eq('2')
     end
     it 'fails silently if there is no file' do
-      lambda { Dotenv::Environment.new('.env_does_not_exist') }.should_not raise_error
+      expect { Dotenv::Environment.new('.env_does_not_exist') }.to_not raise_error
     end
   end
 
