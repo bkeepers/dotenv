@@ -2,7 +2,7 @@ module Dotenv
   class Environment < Hash
     def initialize(filename)
       @filename = filename
-      load
+      load if File.exists? @filename
     end
 
     def load
