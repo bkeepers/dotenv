@@ -41,6 +41,11 @@ Add your application configuration to `.env`.
     S3_BUCKET=dotenv
     SECRET_KEY=sssshhh!
 
+You can also create files per environment, such as `.env.test`:
+
+    S3_BUCKET=test
+    SECRET_KEY=test
+
 Whenever your application loads, these variables will be available in `ENV`:
 
     config.fog_directory  = ENV['S3_BUCKET']

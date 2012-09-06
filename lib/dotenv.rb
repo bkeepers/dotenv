@@ -1,8 +1,11 @@
 require 'dotenv/environment'
 
 module Dotenv
-  def self.load(filename = '.env')
-    Dotenv::Environment.new(filename).apply
+  def self.load(*filenames)
+    filenames << '.env' if filenames.empty?
+    filenames.inject({}) do |hash, filename|
+      hash.merge Dotenv::Environment.new(filename).apply
+    end
   end
 end
 
