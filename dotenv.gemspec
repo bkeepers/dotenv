@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |gem|
+  gem.version       = '0.2.0'
   gem.authors       = ["Brandon Keepers"]
   gem.email         = ["brandon@opensoul.org"]
   gem.description   = %q{Loads environment variables from `.env`.}
@@ -12,7 +13,6 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "dotenv"
   gem.require_paths = ["lib"]
-  gem.version       = '0.1.1'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
