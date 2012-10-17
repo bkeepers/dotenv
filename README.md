@@ -24,6 +24,7 @@ Install the gem:
 
 As early as possible in your application bootstrap process, load `.env`:
 
+    require 'dotenv'
     Dotenv.load
 
 To ensure `.env` is loaded in rake, load the tasks:
