@@ -5,7 +5,7 @@ module Dotenv
     end
 
     initializer 'dotenv', :group => :all do
-      Dotenv.load '.env', ".env.#{Rails.env}"
+      Dotenv.load ".env.#{Rails.env}", '.env'
     end
   end
 end
