@@ -59,6 +59,12 @@ describe Dotenv do
           subject.apply
           expect(ENV['OPTION_A']).to eq('1')
         end
+
+        it 'does not override defined variables' do
+          ENV['OPTION_A'] = 'predefined'
+          subject.apply
+          expect(ENV['OPTION_A']).to eq('predefined')
+        end
       end
     end
 
