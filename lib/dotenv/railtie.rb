@@ -1,4 +1,5 @@
-include Rake::DSL
+include Rake::DSL if defined? Rake
+
 module Dotenv
   class Railtie < Rails::Railtie
     rake_tasks do
