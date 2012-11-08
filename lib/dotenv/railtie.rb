@@ -1,7 +1,7 @@
-include Rake::DSL if defined? Rake
-
 module Dotenv
   class Railtie < Rails::Railtie
+    include Rake::DSL
+
     rake_tasks do
       desc 'Load environment settings from .env'
       task :dotenv do
