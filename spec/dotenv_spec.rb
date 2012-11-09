@@ -39,6 +39,18 @@ describe Dotenv do
       it 'returns hash of loaded environments' do
         expect(subject).to eq(expected)
       end
+
+      context 'with quoted file' do
+        let(:expected) do
+          {'OPTION_A' => '1', 'OPTION_B' => '2', 'OPTION_C' => '', 'OPTION_D' => '\n', 'DOTENV' => 'true'}
+        end
+        let(:env_path) { fixture_path('quoted.env') }
+
+        it 'returns hash of loaded environments' do
+          expect(subject).to eq(expected)
+        end
+
+      end
     end
   end
 
