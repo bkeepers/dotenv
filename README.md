@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/bkeepers/dotenv.png)](https://travis-ci.org/bkeepers/dotenv)
+
 # dotenv
 
 Loads environment variables from `.env` into `ENV`, automagically.
