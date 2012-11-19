@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.0 - unreleased
+
+* Add YAML-style variables
+    VARIABLE: some value
+
 ## 0.4.0 - Nov 13, 2012
 
 * Add support for quoted options, e.g.:
