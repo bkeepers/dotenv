@@ -47,6 +47,11 @@ You can also create files per environment, such as `.env.test`:
     S3_BUCKET=test
     SECRET_KEY=test
 
+An alternate yaml-like syntax is supported:
+
+    S3_BUCKET: dotenv
+    SECRET_KEY: 'sesame, open'
+
 Whenever your application loads, these variables will be available in `ENV`:
 
     config.fog_directory  = ENV['S3_BUCKET']
