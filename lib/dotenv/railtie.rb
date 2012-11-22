@@ -11,7 +11,7 @@ module Dotenv
       task :environment => :dotenv
     end
 
-    initializer 'dotenv', :group => :all do
+    before_configuration 'dotenv', :group => :all do
       Dotenv.load ".env.#{Rails.env}", '.env'
     end
   end
