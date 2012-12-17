@@ -10,7 +10,9 @@ Read more about the [motivation for dotenv at opensoul.org](http://opensoul.org/
 
 Add this line to your application's Gemfile:
 
-    gem 'dotenv', :groups => [:development, :test]
+```ruby
+gem 'dotenv', :groups => [:development, :test]
+```
 
 And then execute:
 
@@ -24,37 +26,49 @@ Install the gem:
 
 As early as possible in your application bootstrap process, load `.env`:
 
-    require 'dotenv'
-    Dotenv.load
+```ruby
+require 'dotenv'
+Dotenv.load
+```
 
 To ensure `.env` is loaded in rake, load the tasks:
 
-    require 'dotenv/tasks'
+```ruby
+require 'dotenv/tasks'
 
-    task :mytask => :dotenv do
-      # things that require .env
-    end
+task :mytask => :dotenv do
+    # things that require .env
+end
+```
 
 ## Usage
 
 Add your application configuration to `.env`.
 
-    S3_BUCKET=dotenv
-    SECRET_KEY=sssshhh!
+```shell
+S3_BUCKET=dotenv
+SECRET_KEY=sssshhh!
+```
 
 You can also create files per environment, such as `.env.test`:
 
-    S3_BUCKET=test
-    SECRET_KEY=test
+```shell
+S3_BUCKET=test
+SECRET_KEY=test
+```
 
 An alternate yaml-like syntax is supported:
 
-    S3_BUCKET: dotenv
-    SECRET_KEY: 'sesame, open'
+```yaml
+S3_BUCKET: dotenv
+SECRET_KEY: 'sesame, open'
+```
 
 Whenever your application loads, these variables will be available in `ENV`:
 
-    config.fog_directory  = ENV['S3_BUCKET']
+```ruby
+config.fog_directory  = ENV['S3_BUCKET']
+```
 
 ## Contributing
 
