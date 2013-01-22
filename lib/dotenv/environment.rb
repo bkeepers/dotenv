@@ -7,7 +7,7 @@ module Dotenv
 
     def load
       read.each do |line|
-        self[$1] = $2 || $3 if line =~ /\A([\w_]+)(?:=|: ?)(?:'([^']*)'|([^']*))\z/
+        self[$1] = $2 || $3 if line =~ /\A(\w+)(?:=|: ?)(?:'([^']*)'|([^']*))\z/
       end
     end
 
