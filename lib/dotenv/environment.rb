@@ -1,5 +1,3 @@
-require 'shellwords'
-
 module Dotenv
   class Environment < Hash
     def initialize(filename)
