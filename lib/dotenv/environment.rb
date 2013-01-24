@@ -1,3 +1,5 @@
+require 'shellwords'
+
 module Dotenv
   class Environment < Hash
     def initialize(filename)
@@ -16,7 +18,11 @@ module Dotenv
     end
 
     def apply
-      each { |k,v| ENV[k] ||= v }
+      each { |k,v| ENV[k] ||= substitute(v) }
+    end
+
+    def substitute(value)
+      value.gsub(/\$(\w+)/) { |m| ENV[$1] }
     end
   end
 end
