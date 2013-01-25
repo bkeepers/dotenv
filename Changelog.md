@@ -1,7 +1,8 @@
 # Changelog
 
-## 0.5.0 - unreleased
+## 0.5.0 - Jan 25, 2013
 
+* Load immediately on require in Rails instead of waiting for initialization
 * Add YAML-style variables
     VARIABLE: some value
 
