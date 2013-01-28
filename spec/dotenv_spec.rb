@@ -42,7 +42,8 @@ describe Dotenv do
 
       context 'with quoted file' do
         let(:expected) do
-          {'OPTION_A' => '1', 'OPTION_B' => '2', 'OPTION_C' => '', 'OPTION_D' => '\n', 'DOTENV' => 'true'}
+          {'OPTION_A' => '1', 'OPTION_B' => '2', 'OPTION_C' => '', 'OPTION_D' => '\n',
+           'OPTION_E' => '1', 'OPTION_F' => '2', 'OPTION_G' => '', 'OPTION_H' => '\n', 'DOTENV' => 'true'}
         end
         let(:env_path) { fixture_path('quoted.env') }
 
