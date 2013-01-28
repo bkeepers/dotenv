@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.1 - Jan 28, 2013
+
+* Support for double quotes
+
+      VARIABLE="some value"
+
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v0.5.0...v0.5.1)
+
 ## 0.5.0 - Jan 25, 2013
 
 * Load immediately on require in Rails instead of waiting for initialization

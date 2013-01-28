@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |gem|
-  gem.version       = '0.5.0'
+  gem.version       = '0.5.1'
   gem.authors       = ["Brandon Keepers"]
   gem.email         = ["brandon@opensoul.org"]
   gem.description   = %q{Loads environment variables from `.env`.}
