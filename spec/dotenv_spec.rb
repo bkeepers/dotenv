@@ -67,7 +67,7 @@ describe Dotenv do
 
       context 'with export keyword' do
         let(:expected) do
-          {'OPTION_A' => '1', 'OPTION_B' => '2', 'OPTION_C' => '', 'OPTION_D' => '\n', 'DOTENV' => 'true'}
+          {'OPTION_A' => '2', 'OPTION_B' => '\n', 'DOTENV' => 'true'}
         end
         let(:env_path) { fixture_path('exported.env') }
 
