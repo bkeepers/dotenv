@@ -9,4 +9,5 @@ module Dotenv
   end
 end
 
+# Deprecated
 require 'dotenv/railtie' if defined?(Rails) and defined?(Rails::Railtie)
