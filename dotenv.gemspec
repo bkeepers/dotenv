@@ -1,7 +1,8 @@
 # -*- encoding: utf-8 -*-
+require File.expand_path('../lib/dotenv/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.version       = '0.5.1'
+  gem.version       = Dotenv::VERSION
   gem.authors       = ["Brandon Keepers"]
   gem.email         = ["brandon@opensoul.org"]
   gem.description   = %q{Loads environment variables from `.env`.}
