@@ -1,3 +1,4 @@
+require 'foreman/env'
 module Dotenv
   class Environment < Hash
     def initialize(filename)
@@ -6,13 +7,7 @@ module Dotenv
     end
 
     def load
-      read.each do |line|
-        self[$1] = $2 || $3 if line =~ /\A(?:export\s+)?(\w+)(?:=|: ?)(?:['"]([^'"]*)['"]|([^'"]*))\z/
-      end
-    end
-
-    def read
-      File.read(@filename).split("\n")
+      Foreman::Env.new(@filename).entries { |name, value| self[name] = value }
     end
 
     def apply
