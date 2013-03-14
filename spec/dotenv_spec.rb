@@ -105,6 +105,18 @@ describe Dotenv do
       end
     end
 
+    context 'with substitutions in env file' do
+      let(:env_path) { fixture_path('sub.env') }
+
+      describe 'apply' do
+        it 'substitutes env settings' do
+          subject.apply
+          expect(ENV['OPTION_B']).to eq(ENV['OPTION_A'])
+          expect(ENV['OPTION_C']).to eq(ENV['OPTION_A']+':etc')
+        end
+      end
+    end
+
     context 'when the file does not exist' do
       let(:env_path) { fixture_path('.env_does_not_exist') }
 
