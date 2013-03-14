@@ -1,12 +1,20 @@
 # Changelog
 
-## 0.5.1 - Jan 28, 2013
+## 0.6.0 - unreleased
+
+* Add dotenv-rails gem for autoloading in a Rails app
+
+* Deprecated autoloading with plain dotenv gem
 
 * Support for double quotes
 
       VARIABLE="some value"
 
-[Full Changelog](https://github.com/bkeepers/dotenv/compare/v0.5.0...v0.5.1)
+* Support for pow-style variables prefixed with export
+
+      export VARIABLE="some value"
+
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v0.5.0...v0.6.0)
 
 ## 0.5.0 - Jan 25, 2013
 

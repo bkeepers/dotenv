@@ -11,7 +11,7 @@ Read more about the [motivation for dotenv at opensoul.org](http://opensoul.org/
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'dotenv', :groups => [:development, :test]
+gem 'dotenv-rails', :groups => [:development, :test]
 ```
 
 And then execute:
