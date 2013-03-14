@@ -1,3 +1,5 @@
+require 'dotenv'
+
 module Dotenv
   class Railtie < Rails::Railtie
     include Rake::DSL if defined?(Rake)
