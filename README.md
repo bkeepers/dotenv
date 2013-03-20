@@ -46,22 +46,22 @@ end
 Add your application configuration to `.env`.
 
 ```shell
-S3_BUCKET=dotenv
-SECRET_KEY=sssshhh!
+S3_BUCKET=YOURS3BUCKET
+SECRET_KEY=YOURSECRETKEYGOESHERE
 ```
 
 You can also create files per environment, such as `.env.test`:
 
 ```shell
-S3_BUCKET=test
-SECRET_KEY=test
+S3_BUCKET=tests3bucket
+SECRET_KEY=testsecretkey
 ```
 
 An alternate yaml-like syntax is supported:
 
 ```yaml
-S3_BUCKET: dotenv
-SECRET_KEY: 'sesame, open'
+S3_BUCKET: yamlstyleforyours3bucket
+SECRET_KEY: thisisalsoanokaysecret
 ```
 
 Whenever your application loads, these variables will be available in `ENV`:
