@@ -43,7 +43,8 @@ end
 
 ## Usage
 
-Add your application configuration to `.env`.
+Add your application configuration to your `.env` file in the root of
+your project:
 
 ```shell
 S3_BUCKET=YOURS3BUCKET
