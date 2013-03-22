@@ -56,6 +56,10 @@ describe Dotenv::Environment do
     expect(env("export OPTION_A=2")).to eql('OPTION_A' => '2')
   end
 
+  it 'expands newlines in quoted strings' do
+    expect(env('FOO="bar\nbaz"')).to eql({"FOO" => "bar\nbaz"})
+  end
+
   require 'tempfile'
   def env(text)
     file = Tempfile.new('dotenv')
