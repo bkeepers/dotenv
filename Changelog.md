@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.6.0 - unreleased
+## 0.6.0 - Mar 22, 2013
 
 * Add dotenv-rails gem for autoloading in a Rails app
 
@@ -8,7 +8,9 @@
 
 * Support for double quotes
 
-      VARIABLE="some value"
+      A="some value"
+      B="with \"escaped\" quotes"
+      C="and newline\n expansion"
 
 * Support for pow-style variables prefixed with export
 
