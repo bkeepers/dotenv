@@ -32,6 +32,16 @@ describe Dotenv do
         expect(subject).to eq(expected)
       end
     end
+
+    context 'when the file does not exist' do
+      subject { Dotenv.load('.env_does_not_exist') }
+
+      it 'fails silently' do
+        expect { subject }.not_to raise_error
+        expect(ENV.keys).to eq(@env_keys)
+      end
+    end
+
   end
 
   def fixture_path(name)

@@ -8,6 +8,12 @@ describe Dotenv::Environment do
       expect(subject['OPTION_A']).to eq('1')
       expect(subject['OPTION_B']).to eq('2')
     end
+
+    it 'fails if file does not exist' do
+      expect {
+        Dotenv::Environment.new('.does_not_exists')
+      }.to raise_error(Errno::ENOENT)
+    end
   end
 
   describe 'apply' do
@@ -20,15 +26,6 @@ describe Dotenv::Environment do
       ENV['OPTION_A'] = 'predefined'
       subject.apply
       expect(ENV['OPTION_A']).to eq('predefined')
-    end
-
-    context 'when the file does not exist' do
-      subject { Dotenv::Environment.new('.env_does_not_exist') }
-
-      it 'fails silently' do
-        expect { subject.apply }.not_to raise_error
-        expect(ENV.keys).to eq(@env_keys)
-      end
     end
   end
 
