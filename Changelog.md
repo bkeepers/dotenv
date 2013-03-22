@@ -8,13 +8,13 @@
 
 * Support for double quotes
 
-      A="some value"
-      B="with \"escaped\" quotes"
-      C="and newline\n expansion"
+        A="some value"
+        B="with \"escaped\" quotes"
+        C="and newline\n expansion"
 
 * Support for pow-style variables prefixed with export
 
-      export VARIABLE="some value"
+        export VARIABLE="some value"
 
 [Full Changelog](https://github.com/bkeepers/dotenv/compare/v0.5.0...v0.6.0)
 
