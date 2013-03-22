@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-gemspec
+gemspec :name => 'dotenv'
 
 gem 'guard-rspec'
 gem 'guard-bundler'
