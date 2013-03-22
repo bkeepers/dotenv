@@ -4,3 +4,4 @@
 .config
 .yardoc
 Gemfile.lock
+tmp
