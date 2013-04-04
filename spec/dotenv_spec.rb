@@ -44,6 +44,22 @@ describe Dotenv do
 
   end
 
+  describe 'load!' do
+    context 'with multiple files' do
+      context 'when one file exists and one does not' do
+        subject { Dotenv.load!('.env', '.env_does_not_exist') }
+
+        it 'raises an Errno::ENOENT error and does not load any files' do
+          expect do
+            expect do
+              subject
+            end.to raise_error(Errno::ENOENT)
+          end.to_not change { ENV.keys }
+        end
+      end
+    end
+  end
+
   def fixture_path(name)
     File.join(File.expand_path('../fixtures', __FILE__), name)
   end
