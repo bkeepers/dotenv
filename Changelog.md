@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0 - unreleased
+
+* Remove deprectated autoloading. Upgrade to 0.6 first and fix any warnings.
+
 ## 0.6.0 - Mar 22, 2013
 
 * Add dotenv-rails gem for autoloading in a Rails app
