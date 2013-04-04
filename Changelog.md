@@ -4,6 +4,8 @@
 
 * Remove deprectated autoloading. Upgrade to 0.6 first and fix any warnings.
 
+* Add Dotenv.load! which raises Errno::ENOENT if the file does not exist
+
 ## 0.6.0 - Mar 22, 2013
 
 * Add dotenv-rails gem for autoloading in a Rails app
