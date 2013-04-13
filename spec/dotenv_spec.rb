@@ -16,7 +16,7 @@ describe Dotenv do
       let(:env_files) { ['~/.env'] }
 
       it 'expands the path' do
-        expected = "#{File.expand_path('~')}/.env"
+        expected = expand("~/.env")
         File.stub(:exists?){ |arg| arg == expected }
         Dotenv::Environment.should_receive(:new).with(expected).
           and_return(mock(:apply => {}))
