@@ -6,7 +6,19 @@ describe Dotenv do
       let(:env_files) { [] }
 
       it 'defaults to .env' do
-        Dotenv::Environment.should_receive(:new).with('.env').
+        Dotenv::Environment.should_receive(:new).with(expand('.env')).
+          and_return(mock(:apply => {}))
+        subject
+      end
+    end
+
+    context 'with a tilde path' do
+      let(:env_files) { ['~/.env'] }
+
+      it 'expands the path' do
+        expected = expand("~/.env")
+        File.stub(:exists?){ |arg| arg == expected }
+        Dotenv::Environment.should_receive(:new).with(expected).
           and_return(mock(:apply => {}))
         subject
       end
@@ -67,5 +79,9 @@ describe Dotenv do
 
   def fixture_path(name)
     File.join(File.expand_path('../fixtures', __FILE__), name)
+  end
+
+  def expand(path)
+    File.expand_path path
   end
 end
