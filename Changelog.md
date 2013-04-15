@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.7.0 - unreleased
+## 0.7.0 - April 15, 2013
 
 * Remove deprectated autoloading. Upgrade to 0.6 first and fix any warnings.
 
