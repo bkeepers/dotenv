@@ -6,6 +6,8 @@
 
 * Add Dotenv.load! which raises Errno::ENOENT if the file does not exist
 
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v0.6.0...v0.7.0)
+
 ## 0.6.0 - Mar 22, 2013
 
 * Add dotenv-rails gem for autoloading in a Rails app
