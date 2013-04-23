@@ -7,7 +7,7 @@ module Dotenv
 
     def load
       read.each do |line|
-        if line =~ /\A(?:export\s+)?(\w+)(?:=|: ?)(.*)\z/
+        if line =~ /\A(?:export\s+)?([\w\.]+)(?:=|: ?)(.*)\z/
           key = $1
           case val = $2
           # Remove single quotes
