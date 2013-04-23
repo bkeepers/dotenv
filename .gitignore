@@ -5,3 +5,4 @@
 .yardoc
 Gemfile.lock
 tmp
+vendor
