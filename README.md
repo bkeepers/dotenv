@@ -65,10 +65,68 @@ S3_BUCKET: yamlstyleforyours3bucket
 SECRET_KEY: thisisalsoanokaysecret
 ```
 
-Whenever your application loads, these variables will be available in `ENV`:
+Whenever your application loads, these variables will be available in `ENV` and a `Doten.env` helper object:
 
 ```ruby
-config.fog_directory  = ENV['S3_BUCKET']
+s3 = AWS::S3.new({
+  :access_key_id     => ENV['S3_ACCESS_KEY'],
+  :secret_access_key => ENV['S3_SECRET_ACCESS_KEY']
+})
+
+# or
+
+s3 = AWS::S3.new({
+  :access_key_id     => Dotenv.env.s3_access_key,
+  :secret_access_key => Dotenv.env.s3_secret_access_key
+})
+```
+
+### Rails
+
+In Rails, `#env` is available on the `Rails.configuration` object, and inside of controllers and views.
+
+```ruby
+class ApplicationController < ActionController::Base
+  before_filter :redirect_unknown_hosts
+
+  def redirect_unknown_hosts
+    if request.host != env.app_host
+      redirect_to "#{env.app_host}#{request.path}"
+    end
+  end
+end
+```
+
+```erb
+  <%= env.google_analytics_id %>
+```
+
+## Configuration
+
+Logic-less configuration is ideal, but unfortunately we don't live in an ideal world. You can add logic to your configuration by extending it with your own module:
+
+```
+# lib/my_app/config.rb
+module MyApp
+  module Config
+    def redis_url
+      self['REDISTOGO_URL'] || self['GH_REDIS_URL'] || "redis://localhost:6379"
+    end
+  end
+end
+
+# config/application.rb
+module MyApp
+  class Application < Rails::Application
+    # ...
+
+    require 'my_app/config'
+    config.env.extend MyApp::Config
+  end
+end
+
+# config/initializers/resque.rb
+Resque.redis = Redis.connect :url => Rails.configuration.env.redis_url
 ```
 
 ## Contributing
