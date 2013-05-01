@@ -51,6 +51,9 @@ S3_BUCKET=YOURS3BUCKET
 SECRET_KEY=YOURSECRETKEYGOESHERE
 ```
 
+In the above syntax, do not use spaces before or after the equals.  Such
+environment variables will be silently ignored.
+
 You can also create files per environment, such as `.env.test`:
 
 ```shell
