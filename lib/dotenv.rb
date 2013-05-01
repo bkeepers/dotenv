@@ -1,4 +1,5 @@
 require 'dotenv/environment'
+require 'dotenv/configuration'
 
 module Dotenv
   def self.load(*filenames)
@@ -16,6 +17,10 @@ module Dotenv
         raise(Errno::ENOENT.new(filename)) unless File.exists?(filename)
       end
     )
+  end
+
+  def self.config
+    @config ||= Dotenv::Configuration.new(ENV)
   end
 
 protected
