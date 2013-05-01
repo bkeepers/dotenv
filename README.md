@@ -98,7 +98,13 @@ end
 ```
 
 ```erb
-  <%= env.google_analytics_id %>
+<!-- app/views/layouts/application.html.erb -->
+<script>
+  // ...
+  _gaq.push(['_setAccount', '<%= env.google_analytics_id %>']);
+  _gaq.push(['_setDomainName', '.<%= env.app_host %>']);
+  // ...
+</script>
 ```
 
 ## Configuration
