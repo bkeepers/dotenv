@@ -19,8 +19,8 @@ module Dotenv
     )
   end
 
-  def self.config
-    @config ||= Dotenv::Configuration.new(ENV)
+  def self.env
+    @env ||= Dotenv::Configuration.new(ENV)
   end
 
 protected

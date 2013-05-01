@@ -10,7 +10,7 @@ module Dotenv
       end
 
       def env
-        Dotenv.config
+        Dotenv.env
       end
     end
 
@@ -18,7 +18,7 @@ module Dotenv
     Dotenv.load ".env.#{Rails.env}", '.env'
 
     # Expose all the environment variables in config.env
-    config.env = Dotenv.config
+    config.env = Dotenv.env
 
     config.to_prepare do
       ActionController::Base.send :include, Dotenv::Railtie::Env
