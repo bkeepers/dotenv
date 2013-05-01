@@ -83,7 +83,7 @@ s3 = AWS::S3.new({
 
 ### Rails
 
-In Rails, `#env` is available on the `Rails.configuration` object, and inside of controllers and views.
+In Rails, `#env` is available on the `Rails.configuration` object, in controllers…
 
 ```ruby
 class ApplicationController < ActionController::Base
@@ -97,6 +97,8 @@ class ApplicationController < ActionController::Base
 end
 ```
 
+…and in views.
+
 ```erb
 <!-- app/views/layouts/application.html.erb -->
 <script>
@@ -107,7 +109,7 @@ end
 </script>
 ```
 
-## Configuration
+## Customization
 
 Logic-less configuration is ideal, but unfortunately we don't live in an ideal world. You can add logic to your configuration by extending it with your own module:
 
