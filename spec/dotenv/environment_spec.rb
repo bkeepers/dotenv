@@ -33,6 +33,11 @@ describe Dotenv::Environment do
     expect(env('FOO=bar')).to eql('FOO' => 'bar')
   end
 
+  it 'parses values with spaces around equal sign' do
+    expect(env("FOO =bar")).to eql('FOO' => 'bar')
+    expect(env("FOO= bar")).to eql('FOO' => 'bar')
+  end
+
   it 'parses double quoted values' do
     expect(env('FOO="bar"')).to eql('FOO' => 'bar')
   end
