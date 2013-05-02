@@ -70,6 +70,27 @@ describe Dotenv::Environment do
     expect(env('foo=bar ')).to eql('foo' => 'bar') # not 'bar '
   end
 
+  it 'throws an error if line format is incorrect' do
+    expect{env('lol$wut')}.to raise_error(Dotenv::FormatError)
+  end
+
+  it 'ignores empty lines' do
+    expect(env("\n \t  \nfoo=bar\n \nfizz=buzz")).to eql('foo' => 'bar', 'fizz' => 'buzz')
+  end
+
+  it 'ignores inline comments' do
+    expect(env("foo=bar # this is foo")).to eql('foo' => 'bar')
+  end
+
+  it 'ignores comment lines' do
+    expect(env("\n\n\n # HERE GOES FOO \nfoo=bar")).to eql('foo' => 'bar')
+  end
+
+  it 'parses # in quoted values' do
+    expect(env('foo="ba#r"')).to eql('foo' => 'ba#r')
+    expect(env("foo='ba#r'")).to eql('foo' => 'ba#r')
+  end
+
   require 'tempfile'
   def env(text)
     file = Tempfile.new('dotenv')
