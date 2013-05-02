@@ -83,7 +83,7 @@ s3 = AWS::S3.new({
 
 ### Rails
 
-In Rails, `#env` is available on the `Rails.configuration` object, in controllers…
+In Rails, `#env` is available on the `Rails.configuration` object, models, mailers, controllers…
 
 ```ruby
 class ApplicationController < ActionController::Base
@@ -97,7 +97,7 @@ class ApplicationController < ActionController::Base
 end
 ```
 
-…and in views.
+…and views.
 
 ```erb
 <!-- app/views/layouts/application.html.erb -->

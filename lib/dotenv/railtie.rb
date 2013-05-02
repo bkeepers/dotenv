@@ -3,12 +3,6 @@ require 'dotenv'
 module Dotenv
   class Railtie < Rails::Railtie
     module Env
-      extend ActiveSupport::Concern
-
-      included do
-        helper_method :env
-      end
-
       def env
         Dotenv.env
       end
@@ -20,11 +14,6 @@ module Dotenv
     # Expose all the environment variables in config.env
     config.env = Dotenv.env
 
-    config.to_prepare do
-      ActionController::Base.send :include, Dotenv::Railtie::Env
-    end
-
-
     rake_tasks do
       desc 'Load environment settings from .env'
       task :dotenv do
@@ -35,3 +24,11 @@ module Dotenv
   end
 end
 
+[:action_controller, :action_view, :active_record, :action_mailer].each do |framework|
+  ActiveSupport.on_load(framework) do |base|
+    base.class_eval do
+      extend Dotenv::Railtie::Env
+      include Dotenv::Railtie::Env
+    end
+  end
+end
