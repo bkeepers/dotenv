@@ -3,20 +3,40 @@ require 'dotenv/configuration'
 
 describe Dotenv::Configuration do
 
-  def config(hash)
-    Dotenv::Configuration.new(hash)
+  subject { Dotenv::Configuration.new({'FOO_BAR' => '1'}) }
+
+  describe 'accessors' do
+    it 'fetches env variables' do
+      expect(subject.foo_bar).to eql('1')
+    end
+
+    it 'raises error for undefined option' do
+      expect { subject.undefined }.to raise_error(Dotenv::UndefinedVariable)
+    end
   end
 
-  it 'fetches env variables' do
-    expect(config('FOO' => 'bar').foo).to eql('bar')
+  describe 'predicate' do
+    it 'returns true if env is defined' do
+      expect(subject.foo_bar?).to eql(true)
+    end
+
+    it 'returns false if env is not defined' do
+      expect(subject.undefined?).to eql(false)
+    end
   end
 
-  it 'works with underscores' do
-    expect(config('UNDER_SCORE' => '1').under_score).to eql('1')
-  end
+  describe 'respond_to?' do
+    it 'returns true for defined variable' do
+      expect(subject.respond_to?(:foo_bar)).to eql(true)
+    end
 
-  it 'returns nil for unknown options' do
-    expect(config({}).undefined).to eql(nil)
+    it 'returns true for predicate method' do
+      expect(subject.respond_to?(:foo_bar?)).to eql(true)
+    end
+
+    it 'returns false for undefined variable' do
+      expect(subject.respond_to?(:undefined)).to eql(false)
+    end
   end
 
 end
