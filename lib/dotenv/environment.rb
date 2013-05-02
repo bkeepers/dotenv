@@ -1,6 +1,6 @@
 module Dotenv
   class Environment < Hash
-    LINE = /\A(?:export\s+)?([\w\.]+)(?:=|: ?)(.*)\z/
+    LINE = /\A(?:export\s+)?([\w\.]+)(?:\s*=\s*|:\s+?)(.*)\z/
 
     def initialize(filename)
       @filename = filename

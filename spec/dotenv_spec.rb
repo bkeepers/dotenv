@@ -28,7 +28,12 @@ describe Dotenv do
       let(:env_files) { ['.env', fixture_path('plain.env')] }
 
       let(:expected) do
-        {'OPTION_A' => '1', 'OPTION_B' => '2', 'DOTENV' => 'true'}
+        { 'OPTION_A' => '1',
+          'OPTION_B' => '2',
+          'OPTION_C' => '3',
+          'OPTION_D' => '4',
+          'OPTION_E' => '5',
+          'DOTENV' => 'true' }
       end
 
       it 'loads all files' do
