@@ -66,6 +66,10 @@ describe Dotenv::Environment do
     expect(env('FOO.BAR=foobar')).to eql('FOO.BAR' => 'foobar')
   end
 
+  it 'strips unquoted values' do
+    expect(env('foo=bar ')).to eql('foo' => 'bar') # not 'bar '
+  end
+
   require 'tempfile'
   def env(text)
     file = Tempfile.new('dotenv')
