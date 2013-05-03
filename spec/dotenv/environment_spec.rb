@@ -30,35 +30,35 @@ describe Dotenv::Environment do
   end
 
   it 'parses unquoted values' do
-    expect(env('FOO=bar')).to eql({'FOO' => 'bar'})
+    expect(env('FOO=bar')).to eql('FOO' => 'bar')
   end
 
   it 'parses double quoted values' do
-    expect(env('FOO="bar"')).to eql({'FOO' => 'bar'})
+    expect(env('FOO="bar"')).to eql('FOO' => 'bar')
   end
 
   it 'parses single quoted values' do
-    expect(env("FOO='bar'")).to eql({'FOO' => 'bar'})
+    expect(env("FOO='bar'")).to eql('FOO' => 'bar')
   end
 
   it 'parses escaped double quotes' do
-    expect(env('FOO="escaped\"bar"')).to eql({'FOO' => 'escaped"bar'})
+    expect(env('FOO="escaped\"bar"')).to eql('FOO' => 'escaped"bar')
   end
 
   it 'parses yaml style options' do
-    expect(env("OPTION_A: 1")).to eql('OPTION_A' => '1')
+    expect(env('OPTION_A: 1')).to eql('OPTION_A' => '1')
   end
 
   it 'parses export keyword' do
-    expect(env("export OPTION_A=2")).to eql('OPTION_A' => '2')
+    expect(env('export OPTION_A=2')).to eql('OPTION_A' => '2')
   end
 
   it 'expands newlines in quoted strings' do
-    expect(env('FOO="bar\nbaz"')).to eql({"FOO" => "bar\nbaz"})
+    expect(env('FOO="bar\nbaz"')).to eql('FOO' => "bar\nbaz")
   end
 
   it 'parses varibales with "." in the name' do
-    expect(env('FOO.BAR=foobar')).to eql({"FOO.BAR" => "foobar"})
+    expect(env('FOO.BAR=foobar')).to eql('FOO.BAR' => 'foobar')
   end
 
   require 'tempfile'
