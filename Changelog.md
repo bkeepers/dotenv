@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.8.0 - unreleased
+
+* Allow inline comments
+
+    VARIABLE=value # this is a comment
+
+* Raises Dotenv::FormatError when parsing fails
+
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v0.7.0...v0.8.0)
+
 ## 0.7.0 - April 15, 2013
 
 * Remove deprectated autoloading. Upgrade to 0.6 first and fix any warnings.
