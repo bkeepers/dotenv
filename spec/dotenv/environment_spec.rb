@@ -82,6 +82,10 @@ describe Dotenv::Environment do
     expect(env("foo=bar # this is foo")).to eql('foo' => 'bar')
   end
 
+  it 'allows # in quoted value' do
+    expect(env('foo="bar#baz" # comment')).to eql('foo' => 'bar#baz')
+  end
+
   it 'ignores comment lines' do
     expect(env("\n\n\n # HERE GOES FOO \nfoo=bar")).to eql('foo' => 'bar')
   end
