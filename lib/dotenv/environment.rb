@@ -26,7 +26,7 @@ module Dotenv
     def load
       read.each do |line|
         if match = line.match(LINE)
-          key, value = match.to_a.drop(1)
+          key, value = match.captures
           value = value.strip.sub(/\A(['"])(.*)\1\z/, '\2')
           value = value.gsub('\n', "\n").gsub(/\\(.)/, '\1') if $1 == '"'
           self[key] = value
