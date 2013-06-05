@@ -5,10 +5,12 @@ module Dotenv
     rake_tasks do
       desc 'Load environment settings from .env'
       task :dotenv do
-        Dotenv.load ".env.#{Rails.env}", '.env'
+        filenames = [".env.#{Rails.env}", '.env']
+        Dotenv.load *(Dotenv.override? ? filenames.reverse : filenames)
       end
     end
   end
 end
 
-Dotenv.load ".env.#{Rails.env}", '.env'
+filenames = [".env.#{Rails.env}", '.env']
+Dotenv.load *(Dotenv.override? ? filenames.reverse : filenames)

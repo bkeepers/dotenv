@@ -82,6 +82,13 @@ describe Dotenv do
     end
   end
 
+  describe 'override?' do
+    it 'returns the value of the @@override class variable' do
+      Dotenv.class_variable_set :@@override, true
+      expect(Dotenv.override?).to eq(true)
+    end
+  end
+
   def fixture_path(name)
     File.join(File.expand_path('../fixtures', __FILE__), name)
   end

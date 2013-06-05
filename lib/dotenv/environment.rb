@@ -41,7 +41,9 @@ module Dotenv
     end
 
     def apply
-      each { |k,v| ENV[k] ||= v }
+      each do |k,v|
+        ENV[k] = v if Dotenv.override? || !ENV.has_key?(k)
+      end
     end
   end
 end

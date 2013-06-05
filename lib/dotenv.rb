@@ -1,6 +1,12 @@
 require 'dotenv/environment'
 
 module Dotenv
+  @@override ||= false
+  
+  def self.override?
+    @@override
+  end
+
   def self.load(*filenames)
     default_if_empty(filenames).inject({}) do |hash, filename|
       filename = File.expand_path filename
