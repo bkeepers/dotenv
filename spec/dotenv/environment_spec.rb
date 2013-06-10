@@ -21,11 +21,23 @@ describe Dotenv::Environment do
       subject.apply
       expect(ENV['OPTION_A']).to eq('1')
     end
+    
+    context 'when not set to override defined variables' do
+      it 'does not override defined variables' do
+        ENV['OPTION_A'] = 'predefined'
+        subject.apply
+        expect(ENV['OPTION_A']).to eq('predefined')
+      end
+    end
 
-    it 'does not override defined variables' do
-      ENV['OPTION_A'] = 'predefined'
-      subject.apply
-      expect(ENV['OPTION_A']).to eq('predefined')
+    context 'when set to override defined variables' do
+      before(:all) { Dotenv.class_variable_set :@@override, true }
+      after(:all) { Dotenv.class_variable_set :@@override, false }
+      it 'does override defined variables' do
+        ENV['OPTION_A'] = 'predefined'
+        subject.apply
+        expect(ENV['OPTION_A']).to eq('1')
+      end
     end
   end
 
