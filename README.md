@@ -71,6 +71,16 @@ Whenever your application loads, these variables will be available in `ENV`:
 config.fog_directory  = ENV['S3_BUCKET']
 ```
 
+## Capistrano integration
+
+In your `config/deploy.rb` file:
+
+```ruby
+require "dotenv/capistrano"
+```
+
+It will symlink the `.env` located in `/path/to/shared` in the new release.
+
 ## Contributing
 
 1. Fork it
