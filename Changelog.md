@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.8.0 - unreleased
+## 0.8.0 - June 12, 2013
+
+* Added a capistrano recipe to symlink in `.env` on deploy.
 
 * Allow inline comments
 
