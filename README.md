@@ -19,6 +19,10 @@ gem 'dotenv-rails', :groups => [:development, :test]
 And then execute:
 
     $ bundle
+    
+And then use the generator to create a `.env` file and add it to the `.gitignore` to keep it out of Git:
+
+    $ rails g dotenv:install
 
 ### Sinatra or Plain ol' Ruby
 
