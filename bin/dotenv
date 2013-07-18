@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require "dotenv"
+
+begin
+  Dotenv.load!
+rescue Errno::ENOENT
+  puts "There aren't any environment files"
+  exit 1
+else
+  exec *ARGV
+end
