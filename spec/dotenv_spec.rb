@@ -7,7 +7,7 @@ describe Dotenv do
 
       it 'defaults to .env' do
         Dotenv::Environment.should_receive(:new).with(expand('.env')).
-          and_return(mock(:apply => {}))
+          and_return(double(:apply => {}))
         subject
       end
     end
@@ -19,7 +19,7 @@ describe Dotenv do
         expected = expand("~/.env")
         File.stub(:exists?){ |arg| arg == expected }
         Dotenv::Environment.should_receive(:new).with(expected).
-          and_return(mock(:apply => {}))
+          and_return(double(:apply => {}))
         subject
       end
     end
