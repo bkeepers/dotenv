@@ -17,6 +17,14 @@ module Dotenv
       (?:\s*\#.*)?      # optional comment
       \z
     /x
+    VARIABLE = /
+      \$
+      (              # collect braces with var for sub
+        \{?          # allow brace wrapping
+        ([A-Z0-9_]+) # match the variable
+        \}?          # closing brace
+      )
+    /xi
 
     def initialize(filename)
       @filename = filename
@@ -29,6 +37,13 @@ module Dotenv
           key, value = match.captures
           value = (value || '').strip.sub(/\A(['"])(.*)\1\z/, '\2')
           value = value.gsub('\n', "\n").gsub(/\\(.)/, '\1') if $1 == '"'
+
+          # Process embedded variables
+          value.scan(VARIABLE).each do |parts|
+            replace = self.fetch(parts.last) { ENV[parts.last] }
+            value.sub!("$#{parts.first}", replace || '')
+          end
+
           self[key] = value
         elsif line !~ /\A\s*(?:#.*)?\z/ # not comment or blank line
           raise FormatError, "Line #{line.inspect} doesn't match format"
