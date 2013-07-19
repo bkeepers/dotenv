@@ -50,6 +50,10 @@ describe Dotenv::Environment do
     expect(env('FOO="escaped\"bar"')).to eql('FOO' => 'escaped"bar')
   end
 
+  it 'parses empty values' do
+    expect(env('FOO=')).to eql('FOO' => '')
+  end
+
   it 'parses yaml style options' do
     expect(env('OPTION_A: 1')).to eql('OPTION_A' => '1')
   end

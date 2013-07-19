@@ -7,13 +7,13 @@ module Dotenv
       (?:export\s+)?    # optional export
       ([\w\.]+)         # key
       (?:\s*=\s*|:\s+?) # separator
-      (                 # value begin
+      (                 # optional value begin
         '(?:\'|[^'])*'  #   single quoted value
         |               #   or
         "(?:\"|[^"])*"  #   double quoted value
         |               #   or
         [^#\n]+         #   unquoted value
-      )                 # value end
+      )?                # value end
       (?:\s*\#.*)?      # optional comment
       \z
     /x
@@ -27,7 +27,7 @@ module Dotenv
       read.each do |line|
         if match = line.match(LINE)
           key, value = match.captures
-          value = value.strip.sub(/\A(['"])(.*)\1\z/, '\2')
+          value = (value || '').strip.sub(/\A(['"])(.*)\1\z/, '\2')
           value = value.gsub('\n', "\n").gsub(/\\(.)/, '\1') if $1 == '"'
           self[key] = value
         elsif line !~ /\A\s*(?:#.*)?\z/ # not comment or blank line
