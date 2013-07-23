@@ -41,7 +41,7 @@ module Dotenv
     end
 
     def apply
-      each { |k,v| ENV[k] ||= v }
+      each { |k,v| ENV[k] = v }
     end
   end
 end
