@@ -1,12 +1,18 @@
 # Changelog
 
+## Unreleased
+
+* Add `dotenv` executable to load `.env` for other scripts.
+
+        $ dotenv ./script.py
+
 ## 0.8.0 - June 12, 2013
 
 * Added a capistrano recipe to symlink in `.env` on deploy.
 
 * Allow inline comments
 
-    VARIABLE=value # this is a comment
+        VARIABLE=value # this is a comment
 
 * Raises Dotenv::FormatError when parsing fails
 
