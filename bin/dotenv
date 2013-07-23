@@ -4,8 +4,8 @@ require "dotenv"
 
 begin
   Dotenv.load!
-rescue Errno::ENOENT
-  puts "There aren't any environment files"
+rescue Errno::ENOENT => e
+  warn e.message
   exit 1
 else
   exec *ARGV
