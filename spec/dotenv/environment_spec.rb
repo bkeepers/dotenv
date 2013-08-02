@@ -75,6 +75,11 @@ describe Dotenv::Environment do
     expect(env("FOO=test\nBAR='quote $FOO'")).to eql('FOO' => 'test', 'BAR' => 'quote test')
   end
 
+  it 'does not expand escaped variables' do
+    expect(env('FOO="foo\$BAR"')).to eql('FOO' => 'foo$BAR')
+    expect(env('FOO="foo\${BAR}"')).to eql('FOO' => 'foo${BAR}')
+  end
+
   it 'parses yaml style options' do
     expect(env('OPTION_A: 1')).to eql('OPTION_A' => '1')
   end
