@@ -18,7 +18,8 @@ module Dotenv
       \z
     /x
     VARIABLE = /
-      \$
+      (\\)?
+      (\$)
       (              # collect braces with var for sub
         \{?          # allow brace wrapping
         ([A-Z0-9_]+) # match the variable
@@ -35,13 +36,26 @@ module Dotenv
       read.each do |line|
         if match = line.match(LINE)
           key, value = match.captures
-          value = (value || '').strip.sub(/\A(['"])(.*)\1\z/, '\2')
-          value = value.gsub('\n', "\n").gsub(/\\(.)/, '\1') if $1 == '"'
+
+          value ||= ''
+          # Remove surrounding quotes
+          value = value.strip.sub(/\A(['"])(.*)\1\z/, '\2')
+
+          if $1 == '"'
+            value = value.gsub('\n', "\n")
+            # Unescape all characters except $ so variables can be escaped properly
+            value = value.gsub(/\\([^$])/, '\1')
+          end
 
           # Process embedded variables
           value.scan(VARIABLE).each do |parts|
-            replace = self.fetch(parts.last) { ENV[parts.last] }
-            value.sub!("$#{parts.first}", replace || '')
+            if parts.first == '\\'
+              replace = parts[1...-1].join('')
+            else
+              replace = self.fetch(parts.last) { ENV[parts.last] }
+            end
+
+            value = value.sub(parts[0...-1].join(''), replace || '')
           end
 
           self[key] = value
