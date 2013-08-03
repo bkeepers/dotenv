@@ -50,6 +50,36 @@ describe Dotenv::Environment do
     expect(env('FOO="escaped\"bar"')).to eql('FOO' => 'escaped"bar')
   end
 
+  it 'parses empty values' do
+    expect(env('FOO=')).to eql('FOO' => '')
+  end
+
+  it 'expands variables found in values' do
+    expect(env("FOO=test\nBAR=$FOO")).to eql('FOO' => 'test', 'BAR' => 'test')
+  end
+
+  it 'parses variables wrapped in brackets' do
+    expect(env("FOO=test\nBAR=${FOO}bar")).to eql('FOO' => 'test', 'BAR' => 'testbar')
+  end
+
+  it 'reads variables from ENV when expanding if not found in local env' do
+    ENV['FOO'] = 'test'
+    expect(env('BAR=$FOO')).to eql('BAR' => 'test')
+  end
+
+  it 'expands undefined variables to an empty string' do
+    expect(env('BAR=$FOO')).to eql('BAR' => '')
+  end
+
+  it 'expands variables in quoted strings' do
+    expect(env("FOO=test\nBAR='quote $FOO'")).to eql('FOO' => 'test', 'BAR' => 'quote test')
+  end
+
+  it 'does not expand escaped variables' do
+    expect(env('FOO="foo\$BAR"')).to eql('FOO' => 'foo$BAR')
+    expect(env('FOO="foo\${BAR}"')).to eql('FOO' => 'foo${BAR}')
+  end
+
   it 'parses yaml style options' do
     expect(env('OPTION_A: 1')).to eql('OPTION_A' => '1')
   end
