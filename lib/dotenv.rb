@@ -4,7 +4,7 @@ module Dotenv
   def self.load(*filenames)
     default_if_empty(filenames).inject({}) do |hash, filename|
       filename = File.expand_path filename
-      hash.merge(File.exists?(filename) ? Environment.new(filename).apply : {})
+      @loaded = hash.merge(File.exists?(filename) ? Environment.new(filename).apply : {})
     end
   end
 
@@ -16,6 +16,10 @@ module Dotenv
         raise(Errno::ENOENT.new(filename)) unless File.exists?(filename)
       end
     )
+  end
+
+  def self.loaded
+    @loaded ||= {}
   end
 
 protected

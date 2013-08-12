@@ -62,6 +62,18 @@ describe Dotenv do
         expect(ENV.keys).to eq(@env_keys)
       end
     end
+
+    context 'when the file does exist' do
+      let(:env_files) { [fixture_path('plain.env')] }
+
+      it 'remembers loaded variables' do
+        prev_env = ENV.to_hash
+        subject
+        added = ENV.to_hash.reject { |key, value| value == prev_env[key] }
+
+        expect(Dotenv.loaded).to eq(added)
+      end
+    end
   end
 
   describe 'load!' do
