@@ -1,10 +1,22 @@
 # Changelog
 
-## Unreleased
+## 0.9.0 - Aug 29, 2013
+
+* Add support for variable expansion.
+
+        HOST="example.com"
+        URL="http://${USER}@${HOST}"
+        ESCAPED_VARIABLE="this is \$NOT replaced"
+
+* Allow setting variables without a value.
+
+        BLANK=
 
 * Add `dotenv` executable to load `.env` for other scripts.
 
         $ dotenv ./script.py
+
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v0.8.0...v0.9.0)
 
 ## 0.8.0 - June 12, 2013
 
