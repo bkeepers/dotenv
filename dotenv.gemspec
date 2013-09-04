@@ -8,6 +8,7 @@ Gem::Specification.new do |gem|
   gem.description   = %q{Loads environment variables from `.env`.}
   gem.summary       = %q{Loads environment variables from `.env`.}
   gem.homepage      = "https://github.com/bkeepers/dotenv"
+  gem.license       = 'MIT'
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
