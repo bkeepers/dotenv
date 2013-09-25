@@ -82,6 +82,17 @@ describe Dotenv do
     end
   end
 
+  describe 'overload' do
+    it 'overrides any existing ENV variables' do
+      ENV['OPTION_A'] = 'predefined'
+      path = fixture_path 'plain.env'
+
+      Dotenv.overload(path)
+
+      expect(ENV['OPTION_A']).to eq('1')
+    end
+  end
+
   def fixture_path(name)
     File.join(File.expand_path('../fixtures', __FILE__), name)
   end
