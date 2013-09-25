@@ -8,6 +8,14 @@ module Dotenv
     end
   end
 
+  # same as `load`, but will override existing values in `ENV`
+  def self.overload(*filenames)
+    default_if_empty(filenames).inject({}) do |hash, filename|
+      filename = File.expand_path filename
+      hash.merge(File.exists?(filename) ? Environment.new(filename).apply! : {})
+    end
+  end
+
   # same as `load`, but raises Errno::ENOENT if any files don't exist
   def self.load!(*filenames)
     load(
