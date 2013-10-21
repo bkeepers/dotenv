@@ -80,7 +80,13 @@ In your `config/deploy.rb` file:
 require "dotenv/capistrano"
 ```
 
-It will symlink the `.env` located in `/path/to/shared` in the new release.
+It will symlink the `.env` located in `/path/to/shared` in the new release. 
+
+Remember to add :production group to the dotenv-rails gem in your application's Gemfile:
+
+```ruby
+gem 'dotenv-rails', :groups => [:development, :test, :production]
+```
 
 ## Should I commit my .env file?
 
