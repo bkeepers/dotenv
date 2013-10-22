@@ -74,6 +74,8 @@ config.fog_directory  = ENV['S3_BUCKET']
 
 ## Capistrano integration
 
+If you use `2.x.x` version:
+
 In your `config/deploy.rb` file:
 
 ```ruby
@@ -86,6 +88,18 @@ Remember to add :production group to the dotenv-rails gem in your application's 
 
 ```ruby
 gem 'dotenv-rails', :groups => [:development, :test, :production]
+```
+
+---
+
+If you use `3.x.x` version:
+
+In your `config/deploy.rb` file:
+
+add .env to the list of linked files, similar to:
+
+```ruby
+set :linked_files, %w{config/database.yml .env}
 ```
 
 ## Should I commit my .env file?
