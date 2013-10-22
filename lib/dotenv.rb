@@ -1,6 +1,8 @@
 require 'dotenv/environment'
 
 module Dotenv
+  class MissingEnvironmentVariable < StandardError; end
+
   def self.load(*filenames)
     default_if_empty(filenames).inject({}) do |hash, filename|
       filename = File.expand_path filename
@@ -16,6 +18,13 @@ module Dotenv
         raise(Errno::ENOENT.new(filename)) unless File.exists?(filename)
       end
     )
+  end
+
+  def self.ensure(key)
+    if ENV[key].nil?
+      raise MissingEnvironmentVariable,
+        "Missing required environment variable #{key}"
+    end
   end
 
 protected
