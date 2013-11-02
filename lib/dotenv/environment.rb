@@ -67,14 +67,16 @@ module Dotenv
             value = value.sub(parts[0...-1].join(''), replace || '')
           end
 
-          # Process interpolated shell commands
-          value.gsub!(INTERPOLATED_SHELL_COMMAND) do |*|
-            command = $~[:cmd][1..-2] # Eliminate opening and closing parentheses
+          if RUBY_VERSION > '1.8.7'
+            # Process interpolated shell commands
+            value.gsub!(INTERPOLATED_SHELL_COMMAND) do |*|
+              command = $~[:cmd][1..-2] # Eliminate opening and closing parentheses
 
-            if $~[:backslash]
-              $~[0][1..-1]
-            else
-              `#{command}`.chomp
+              if $~[:backslash]
+                $~[0][1..-1]
+              else
+                `#{command}`.chomp
+              end
             end
           end
 
