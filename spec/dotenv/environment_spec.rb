@@ -125,6 +125,26 @@ describe Dotenv::Environment do
     expect(env("foo='ba#r'")).to eql('foo' => 'ba#r')
   end
 
+  it 'parses shell commands interpolated in $()' do
+    expect(env('ruby_v=$(ruby -v)')).to eql('ruby_v' => RUBY_DESCRIPTION)
+  end
+
+  it 'allows balanced parentheses within interpolated shell commands' do
+    expect(env('ruby_v=$(echo "$(echo "$(echo "$(ruby -v)")")")')).to eql('ruby_v' => RUBY_DESCRIPTION)
+  end
+
+  it "doesn't interpolate shell commands when escape says not to" do
+    expect(env('ruby_v=escaped-\$(ruby -v)')).to eql('ruby_v' => 'escaped-$(ruby -v)')
+  end
+
+  it 'is not thrown off by quotes in interpolated shell commands' do
+    expect(env('interp=$(echo "Quotes won\'t be a problem")')['interp']).to eql("Quotes won't be a problem")
+  end
+
+  it 'substitutes shell variables within interpolated shell commands' do
+    expect(env(%(VAR1=var1\ninterp=$(echo "VAR1 is $VAR1")))['interp']).to eql("VAR1 is var1")
+  end
+
   require 'tempfile'
   def env(text)
     file = Tempfile.new('dotenv')
