@@ -1,6 +1,6 @@
 require 'capistrano/version'
 
-if defined?(Capistrano::VERSION) && Capistrano::VERSION => '3.0'
+if defined?(Capistrano::VERSION) && Capistrano::VERSION >= '3.0'
   raise 'Please read https://github.com/bkeepers/dotenv#capistrano-integration to update your dotenv configuration for new Capistrano version'
 else
   require 'dotenv/capistrano/recipes'
