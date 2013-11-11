@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.10.0 - unreleased
+
+* Add support for executing interpolated commands.
+
+        HEAD_SHA=$(git rev-parse HEAD)
+
+* Add `dotenv_role` option in Capistrano.
+
+        set :dotenv_role, [:app web]
+
 ## 0.9.0 - Aug 29, 2013
 
 * Add support for variable expansion.
