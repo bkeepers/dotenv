@@ -26,6 +26,15 @@ module Dotenv
         \}?          # closing brace
       )
     /xi
+    INTERPOLATED_SHELL_COMMAND = /
+      (?<backslash>\\)?
+      \$
+      (?<cmd>             # collect command content for eval
+        \(                # require opening paren
+        ([^()]|\g<cmd>)+  # allow any number of non-parens, or balanced parens (by nesting the <cmd> expression recursively)
+        \)                # require closing paren
+      )
+    /x
 
     def initialize(filename)
       @filename = filename
@@ -56,6 +65,19 @@ module Dotenv
             end
 
             value = value.sub(parts[0...-1].join(''), replace || '')
+          end
+
+          if RUBY_VERSION > '1.8.7'
+            # Process interpolated shell commands
+            value.gsub!(INTERPOLATED_SHELL_COMMAND) do |*|
+              command = $~[:cmd][1..-2] # Eliminate opening and closing parentheses
+
+              if $~[:backslash]
+                $~[0][1..-1]
+              else
+                `#{command}`.chomp
+              end
+            end
           end
 
           self[key] = value
