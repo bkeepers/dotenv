@@ -6,6 +6,8 @@ end
 
 module Dotenv
   class Environment < Hash
+    @load_extensions = []
+
     LINE = /
       \A
       (?:export\s+)?    # optional export
@@ -30,6 +32,14 @@ module Dotenv
         \}?          # closing brace
       )
     /xi
+
+    def self.load_extensions
+      @load_extensions
+    end
+
+    def self.register_load_extension(proc)
+      @load_extensions += [proc]
+    end
 
     if defined?(::Dotenv::EnvironmentExtensions)
       ::Dotenv::EnvironmentExtensions.constants.each do |extension|
@@ -69,8 +79,8 @@ module Dotenv
             value = value.sub(parts[0...-1].join(''), replace || '')
           end
 
-          if respond_to?(:process_interpolated_shell_commands)
-            value = process_interpolated_shell_commands(value)
+          self.class.load_extensions.each do |extension_proc|
+            value = extension_proc.call(value)
           end
 
           self[key] = value
