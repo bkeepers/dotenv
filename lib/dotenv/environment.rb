@@ -1,7 +1,7 @@
 require 'dotenv/format_error'
 
 if RUBY_VERSION > '1.8.7'
-  require 'dotenv/environment_modern'
+  require 'dotenv/environment_extensions/interpolated_shell_commands'
 end
 
 module Dotenv
@@ -31,8 +31,11 @@ module Dotenv
       )
     /xi
 
-    if RUBY_VERSION > '1.8.7'
-      include ::Dotenv::EnvironmentModern
+    if defined?(::Dotenv::EnvironmentExtensions)
+      ::Dotenv::EnvironmentExtensions.constants.each do |extension|
+        extension = ::Dotenv::EnvironmentExtensions.const_get(extension)
+        include extension if extension.is_a?(Module)
+      end
     end
 
     def initialize(filename)
