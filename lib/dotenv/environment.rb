@@ -1,5 +1,9 @@
 require 'dotenv/format_error'
 
+if RUBY_VERSION > '1.8.7'
+  require 'dotenv/environment_modern'
+end
+
 module Dotenv
   class Environment < Hash
     LINE = /
@@ -26,15 +30,10 @@ module Dotenv
         \}?          # closing brace
       )
     /xi
-    INTERPOLATED_SHELL_COMMAND = /
-      (?<backslash>\\)?
-      \$
-      (?<cmd>             # collect command content for eval
-        \(                # require opening paren
-        ([^()]|\g<cmd>)+  # allow any number of non-parens, or balanced parens (by nesting the <cmd> expression recursively)
-        \)                # require closing paren
-      )
-    /x
+
+    if RUBY_VERSION > '1.8.7'
+      include ::Dotenv::EnvironmentModern
+    end
 
     def initialize(filename)
       @filename = filename
@@ -67,17 +66,8 @@ module Dotenv
             value = value.sub(parts[0...-1].join(''), replace || '')
           end
 
-          if RUBY_VERSION > '1.8.7'
-            # Process interpolated shell commands
-            value.gsub!(INTERPOLATED_SHELL_COMMAND) do |*|
-              command = $~[:cmd][1..-2] # Eliminate opening and closing parentheses
-
-              if $~[:backslash]
-                $~[0][1..-1]
-              else
-                `#{command}`.chomp
-              end
-            end
+          if respond_to?(:process_interpolated_shell_commands)
+            value = process_interpolated_shell_commands(value)
           end
 
           self[key] = value
