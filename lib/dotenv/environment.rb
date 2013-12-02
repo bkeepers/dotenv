@@ -1,7 +1,13 @@
 require 'dotenv/format_error'
 
+if RUBY_VERSION > '1.8.7'
+  require 'dotenv/environment_extensions/interpolated_shell_commands'
+end
+
 module Dotenv
   class Environment < Hash
+    @load_extensions = []
+
     LINE = /
       \A
       (?:export\s+)?    # optional export
@@ -26,15 +32,21 @@ module Dotenv
         \}?          # closing brace
       )
     /xi
-    INTERPOLATED_SHELL_COMMAND = /
-      (?<backslash>\\)?
-      \$
-      (?<cmd>             # collect command content for eval
-        \(                # require opening paren
-        ([^()]|\g<cmd>)+  # allow any number of non-parens, or balanced parens (by nesting the <cmd> expression recursively)
-        \)                # require closing paren
-      )
-    /x
+
+    def self.load_extensions
+      @load_extensions
+    end
+
+    def self.register_load_extension(proc)
+      @load_extensions += [proc]
+    end
+
+    if defined?(::Dotenv::EnvironmentExtensions)
+      ::Dotenv::EnvironmentExtensions.constants.each do |extension|
+        extension = ::Dotenv::EnvironmentExtensions.const_get(extension)
+        include extension if extension.is_a?(Module)
+      end
+    end
 
     def initialize(filename)
       @filename = filename
@@ -67,17 +79,8 @@ module Dotenv
             value = value.sub(parts[0...-1].join(''), replace || '')
           end
 
-          if RUBY_VERSION > '1.8.7'
-            # Process interpolated shell commands
-            value.gsub!(INTERPOLATED_SHELL_COMMAND) do |*|
-              command = $~[:cmd][1..-2] # Eliminate opening and closing parentheses
-
-              if $~[:backslash]
-                $~[0][1..-1]
-              else
-                `#{command}`.chomp
-              end
-            end
+          self.class.load_extensions.each do |extension_proc|
+            value = extension_proc.call(value)
           end
 
           self[key] = value
