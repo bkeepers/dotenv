@@ -3,6 +3,7 @@ require 'dotenv/format_error'
 if RUBY_VERSION > '1.8.7'
   require 'dotenv/environment_extensions/interpolated_shell_commands'
 end
+require 'dotenv/environment_extensions/variable'
 
 module Dotenv
   class Environment < Hash
@@ -23,15 +24,6 @@ module Dotenv
       (?:\s*\#.*)?      # optional comment
       \z
     /x
-    VARIABLE = /
-      (\\)?
-      (\$)
-      (              # collect braces with var for sub
-        \{?          # allow brace wrapping
-        ([A-Z0-9_]+) # match the variable
-        \}?          # closing brace
-      )
-    /xi
 
     def self.load_extensions
       @load_extensions
@@ -68,19 +60,8 @@ module Dotenv
             value = value.gsub(/\\([^$])/, '\1')
           end
 
-          # Process embedded variables
-          value.scan(VARIABLE).each do |parts|
-            if parts.first == '\\'
-              replace = parts[1...-1].join('')
-            else
-              replace = self.fetch(parts.last) { ENV[parts.last] }
-            end
-
-            value = value.sub(parts[0...-1].join(''), replace || '')
-          end
-
           self.class.load_extensions.each do |extension_proc|
-            value = extension_proc.call(value)
+            value = extension_proc.call(value, self)
           end
 
           self[key] = value
