@@ -1,8 +1,6 @@
 module Dotenv
-  module EnvironmentExtensions
-
+  module Substitutions
     module Variable
-
       class << self
 
         VARIABLE = /
@@ -15,11 +13,7 @@ module Dotenv
           )
         /xi
 
-        def included(base)
-          base.register_load_extension(method(:process_variables))
-        end
-
-        def process_variables(value, env)
+        def call(value, env)
           # Process embedded variables
           value.scan(VARIABLE).each do |parts|
             if parts.first == '\\'
