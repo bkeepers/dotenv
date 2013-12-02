@@ -1,8 +1,6 @@
 module Dotenv
-  module EnvironmentExtensions
-
-    module IterpolatedShellCommands
-
+  module Substitutions
+    module Command
       class << self
 
         INTERPOLATED_SHELL_COMMAND = /
@@ -15,11 +13,7 @@ module Dotenv
           )
         /x
 
-        def included(base)
-          base.register_load_extension(method(:process_interpolated_shell_commands))
-        end
-
-        def process_interpolated_shell_commands(value, env)
+        def call(value, env)
           # Process interpolated shell commands
           value.gsub(INTERPOLATED_SHELL_COMMAND) do |*|
             command = $~[:cmd][1..-2] # Eliminate opening and closing parentheses

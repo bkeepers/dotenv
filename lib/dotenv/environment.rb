@@ -1,13 +1,12 @@
 require 'dotenv/format_error'
-
+require 'dotenv/substitutions/variable'
 if RUBY_VERSION > '1.8.7'
-  require 'dotenv/environment_extensions/interpolated_shell_commands'
+  require 'dotenv/substitutions/command'
 end
-require 'dotenv/environment_extensions/variable'
 
 module Dotenv
   class Environment < Hash
-    @load_extensions = []
+    @@substitutions = Substitutions.constants.map { |const| Substitutions.const_get(const) }
 
     LINE = /
       \A
@@ -24,21 +23,6 @@ module Dotenv
       (?:\s*\#.*)?      # optional comment
       \z
     /x
-
-    def self.load_extensions
-      @load_extensions
-    end
-
-    def self.register_load_extension(proc)
-      @load_extensions += [proc]
-    end
-
-    if defined?(::Dotenv::EnvironmentExtensions)
-      ::Dotenv::EnvironmentExtensions.constants.each do |extension|
-        extension = ::Dotenv::EnvironmentExtensions.const_get(extension)
-        include extension if extension.is_a?(Module)
-      end
-    end
 
     def initialize(filename)
       @filename = filename
@@ -60,8 +44,8 @@ module Dotenv
             value = value.gsub(/\\([^$])/, '\1')
           end
 
-          self.class.load_extensions.each do |extension_proc|
-            value = extension_proc.call(value, self)
+          @@substitutions.each do |proc|
+            value = proc.call(value, self)
           end
 
           self[key] = value
