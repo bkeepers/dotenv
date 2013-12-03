@@ -1,7 +1,13 @@
 require 'dotenv/format_error'
+require 'dotenv/substitutions/variable'
+if RUBY_VERSION > '1.8.7'
+  require 'dotenv/substitutions/command'
+end
 
 module Dotenv
   class Environment < Hash
+    @@substitutions = Substitutions.constants.map { |const| Substitutions.const_get(const) }
+
     LINE = /
       \A
       (?:export\s+)?    # optional export
@@ -16,24 +22,6 @@ module Dotenv
       )?                # value end
       (?:\s*\#.*)?      # optional comment
       \z
-    /x
-    VARIABLE = /
-      (\\)?
-      (\$)
-      (              # collect braces with var for sub
-        \{?          # allow brace wrapping
-        ([A-Z0-9_]+) # match the variable
-        \}?          # closing brace
-      )
-    /xi
-    INTERPOLATED_SHELL_COMMAND = /
-      (?<backslash>\\)?
-      \$
-      (?<cmd>             # collect command content for eval
-        \(                # require opening paren
-        ([^()]|\g<cmd>)+  # allow any number of non-parens, or balanced parens (by nesting the <cmd> expression recursively)
-        \)                # require closing paren
-      )
     /x
 
     def initialize(filename)
@@ -56,28 +44,8 @@ module Dotenv
             value = value.gsub(/\\([^$])/, '\1')
           end
 
-          # Process embedded variables
-          value.scan(VARIABLE).each do |parts|
-            if parts.first == '\\'
-              replace = parts[1...-1].join('')
-            else
-              replace = self.fetch(parts.last) { ENV[parts.last] }
-            end
-
-            value = value.sub(parts[0...-1].join(''), replace || '')
-          end
-
-          if RUBY_VERSION > '1.8.7'
-            # Process interpolated shell commands
-            value.gsub!(INTERPOLATED_SHELL_COMMAND) do |*|
-              command = $~[:cmd][1..-2] # Eliminate opening and closing parentheses
-
-              if $~[:backslash]
-                $~[0][1..-1]
-              else
-                `#{command}`.chomp
-              end
-            end
+          @@substitutions.each do |proc|
+            value = proc.call(value, self)
           end
 
           self[key] = value
