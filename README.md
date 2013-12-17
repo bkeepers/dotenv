@@ -10,7 +10,7 @@ But it is not always practical to set environment variables on development machi
 
 ### Rails
 
-Add this line to your application's Gemfile:
+Add this line to the top of your application's Gemfile:
 
 ```ruby
 gem 'dotenv-rails', :groups => [:development, :test]
@@ -19,6 +19,8 @@ gem 'dotenv-rails', :groups => [:development, :test]
 And then execute:
 
     $ bundle
+
+It should be listed in the Gemfile before any other gems that use environment variables, otherwise those gems will get initialized with the wrong values.
 
 ### Sinatra or Plain ol' Ruby
 
