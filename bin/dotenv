@@ -2,11 +2,19 @@
 
 require "dotenv"
 
-begin
-  Dotenv.load!
-rescue Errno::ENOENT => e
-  warn e.message
-  exit 1
+if ARGV[0] == 'example:load'
+  # Load keys from your .env file into .env.example
+  # Usage: `$ dotenv example:load`
+  keys = Dotenv.load.keys.map{|key| key + ':'}
+  File.open('.env.example', 'w+') {|f| f.write(keys.join("\n")) }
+  puts "Copied keys from .env to .env.example"
 else
-  exec *ARGV
+  begin
+    Dotenv.load!
+  rescue Errno::ENOENT => e
+    warn e.message
+    exit 1
+  else
+    exec *ARGV
+  end
 end
