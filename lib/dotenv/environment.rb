@@ -56,6 +56,9 @@ module Dotenv
     end
 
     def read
+      content = File.read(@filename)
+      ERB.new(content).result.split("\n")
+    rescue
       File.read(@filename).split("\n")
     end
 

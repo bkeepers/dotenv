@@ -125,6 +125,16 @@ describe Dotenv::Environment do
     expect(env("foo='ba#r'")).to eql('foo' => 'ba#r')
   end
 
+  describe "ERB" do
+    it 'calculate values with valid content' do
+      expect(env("two=<%= 1 + 1 %>")).to eql('two' => '2')
+    end
+
+    it 'skip wrong erb-code' do
+      expect(env("invalid=<%= 1 / 0 %>")).to eql('invalid' => '<%= 1 / 0 %>')
+    end
+  end
+
   if RUBY_VERSION > '1.8.7'
     it 'parses shell commands interpolated in $()' do
       expect(env('ruby_v=$(ruby -v)')).to eql('ruby_v' => RUBY_DESCRIPTION)
