@@ -76,15 +76,11 @@ config.fog_directory  = ENV['S3_BUCKET']
 
 ## Capistrano integration
 
-First, you should add the :production group to the dotenv-rails gem in your application's Gemfile:
-
-```ruby
-gem 'dotenv-rails', :groups => [:development, :test, :production]
-```
+If you want to use Dotenv with Capistrano in your production environment, make sure the dotenv gem is included in your Gemfile `:production` group.
 
 ### Capistrano version 2.x.x
 
-In your `config/deploy.rb` file:
+Add the gem to your `config/deploy.rb` file:
 
 ```ruby
 require "dotenv/capistrano"
@@ -95,9 +91,7 @@ It will symlink the `.env` located in `/path/to/shared` in the new release.
 
 ### Capistrano version 3.x.x
 
-In your `config/deploy.rb` file:
-
-add .env to the list of linked files, similar to:
+Just add `.env` to the list of linked files, for example:
 
 ```ruby
 set :linked_files, %w{config/database.yml .env}
