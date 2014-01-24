@@ -18,7 +18,16 @@ module Dotenv
     )
   end
 
-protected
+  def self.add(key_value, filename = nil)
+    filename = File.expand_path(filename || default_filename)
+    f = File.open(filename, File.exists?(filename) ? 'a' : 'w')
+    f.puts key_value
+    key, value = key_value.split('=')
+    ENV[key] = value
+  end
+
+  protected
+
   def self.default_if_empty(filenames)
     filenames.empty? ? (filenames << default_filename) : filenames
   end
