@@ -20,6 +20,10 @@ module Dotenv
 
 protected
   def self.default_if_empty(filenames)
-    filenames.empty? ? (filenames << '.env') : filenames
+    filenames.empty? ? (filenames << default_filename) : filenames
+  end
+
+  def self.default_filename
+    '.env'
   end
 end
