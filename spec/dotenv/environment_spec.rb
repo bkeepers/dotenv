@@ -29,6 +29,19 @@ describe Dotenv::Environment do
     end
   end
 
+  describe 'apply!' do
+    it 'sets variables in the ENV' do
+      subject.apply
+      expect(ENV['OPTION_A']).to eq('1')
+    end
+
+    it 'overrides defined variables' do
+      ENV['OPTION_A'] = 'predefined'
+      subject.apply!
+      expect(ENV['OPTION_A']).to eq('1')
+    end
+  end
+
   it 'parses unquoted values' do
     expect(env('FOO=bar')).to eql('FOO' => 'bar')
   end
