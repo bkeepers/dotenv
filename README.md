@@ -54,6 +54,13 @@ S3_BUCKET=YOURS3BUCKET
 SECRET_KEY=YOURSECRETKEYGOESHERE
 ```
 
+Also you can use erb code:
+
+```erb
+PI=<%= Math::PI %>
+RANDOM_CODE=<%= Time.now.to_i %>
+```
+
 You can also create files per environment, such as `.env.test`.
 
 ```shell
