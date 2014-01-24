@@ -142,8 +142,11 @@ describe Dotenv::Environment do
       expect(env('interp=$(echo "Quotes won\'t be a problem")')['interp']).to eql("Quotes won't be a problem")
     end
 
-    it 'substitutes shell variables within interpolated shell commands' do
-      expect(env(%(VAR1=var1\ninterp=$(echo "VAR1 is $VAR1")))['interp']).to eql("VAR1 is var1")
+    # This functionality is not supported on JRuby or Rubinius
+    if (!defined?(RUBY_ENGINE) || RUBY_ENGINE != 'jruby') && !defined?(Rubinius)
+      it 'substitutes shell variables within interpolated shell commands' do
+        expect(env(%(VAR1=var1\ninterp=$(echo "VAR1 is $VAR1")))['interp']).to eql("VAR1 is var1")
+      end
     end
   end
 

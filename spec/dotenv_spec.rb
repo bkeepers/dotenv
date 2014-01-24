@@ -6,7 +6,7 @@ describe Dotenv do
       let(:env_files) { [] }
 
       it 'defaults to .env' do
-        Dotenv::Environment.should_receive(:new).with(expand('.env')).
+        expect(Dotenv::Environment).to receive(:new).with(expand('.env')).
           and_return(double(:apply => {}))
         subject
       end
@@ -17,8 +17,8 @@ describe Dotenv do
 
       it 'expands the path' do
         expected = expand("~/.env")
-        File.stub(:exists?){ |arg| arg == expected }
-        Dotenv::Environment.should_receive(:new).with(expected).
+        allow(File).to receive(:exists?){ |arg| arg == expected }
+        expect(Dotenv::Environment).to receive(:new).with(expected).
           and_return(double(:apply => {}))
         subject
       end
