@@ -83,7 +83,8 @@ describe Dotenv do
   end
 
   describe 'add' do
-    let(:key_value) { 'GITHUB_TOKEN=68e74e7895cf774e97ad12282f7bec8937fb65a4' }
+    let(:key) { 'GITHUB_TOKEN'}
+    let(:value) { '68e74e7895cf774e97ad12282f7bec8937fb65a4'}
     let(:dotenv_path) { "/var/www/app/.env" }
 
     context 'when no filename' do
@@ -91,7 +92,7 @@ describe Dotenv do
         expect(File).to receive(:expand_path) { dotenv_path }
         expect(File).to receive(:exists?) { true }
         expect(File).to receive(:open).with(dotenv_path, 'a') { double(:puts => nil) }
-        Dotenv.add key_value
+        Dotenv.add "#{key}=#{value}"
       end
     end
 
@@ -100,7 +101,7 @@ describe Dotenv do
         expect(File).to receive(:expand_path) { dotenv_path }
         expect(File).to receive(:exists?) { false }
         expect(File).to receive(:open).with(dotenv_path, 'w') { double(:puts => nil) }
-        Dotenv.add key_value
+        Dotenv.add "#{key}=#{value}"
       end
     end
 
@@ -111,7 +112,7 @@ describe Dotenv do
         expect(File).to receive(:expand_path) { dotenv_path }
         expect(File).to receive(:exists?) { true }
         expect(File).to receive(:open).with(dotenv_path, 'a') { double(:puts => nil) }
-        Dotenv.add key_value, 'plain.env'
+        Dotenv.add "#{key}=#{value}", 'plain.env'
       end
     end
   end
