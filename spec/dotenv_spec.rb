@@ -94,6 +94,16 @@ describe Dotenv do
         expect(File).to receive(:open).with(dotenv_path, 'a') { double(:puts => nil) }
         Dotenv.add "#{key}=#{value}"
       end
+
+      it 'sets to ENV' do
+        expect(File).to receive(:expand_path) { dotenv_path }
+        expect(File).to receive(:exists?) { true }
+        expect(File).to receive(:open).with(dotenv_path, 'a') { double(:puts => nil) }
+        expect {
+          Dotenv.add "#{key}=#{value}"
+        }.to change { ENV.keys }
+        expect(ENV[key]).to eq value
+      end
     end
 
     context 'when file not exists' do
