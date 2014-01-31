@@ -23,10 +23,10 @@ describe Dotenv do
         subject
       end
     end
-    
+
     context 'with multiple files' do
       let(:env_files) { ['.env', fixture_path('plain.env')] }
-      
+
       let(:expected) do
         { 'OPTION_A' => '1',
           'OPTION_B' => '2',
@@ -35,7 +35,7 @@ describe Dotenv do
           'OPTION_E' => '5',
           'DOTENV' => 'true' }
       end
-      
+
       it 'loads all files' do
         subject
         expected.each do |key, value|
