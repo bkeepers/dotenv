@@ -1,4 +1,5 @@
 require 'dotenv/environment'
+require 'yaml'
 
 module Dotenv
   def self.load(*filenames)
@@ -24,6 +25,14 @@ module Dotenv
         raise(Errno::ENOENT.new(filename)) unless File.exists?(filename)
       end
     )
+  end
+  
+  # same as `load`, but will not apply to ENV
+  def self.parse(*filenames)
+    default_if_empty(filenames).inject({}) do |hash, filename|
+      filename = File.expand_path filename
+      hash.merge(File.exists?(filename) ? Environment.new(filename) : {})
+    end
   end
 
 protected
