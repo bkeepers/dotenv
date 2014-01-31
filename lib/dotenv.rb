@@ -34,6 +34,16 @@ module Dotenv
       hash.merge(File.exists?(filename) ? Environment.new(filename) : {})
     end
   end
+  
+  # same as `parse`, but raises Errno::ENOENT if any files don't exist
+  def self.parse!(*filenames)
+    parse(
+      *default_if_empty(filenames).each do |filename|
+        filename = File.expand_path filename
+        raise(Errno::ENOENT.new(filename)) unless File.exists?(filename)
+      end
+    )
+  end
 
 protected
   def self.default_if_empty(filenames)
