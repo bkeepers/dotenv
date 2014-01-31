@@ -1,5 +1,4 @@
 require 'dotenv/environment'
-require 'yaml'
 
 module Dotenv
   def self.load(*filenames)
