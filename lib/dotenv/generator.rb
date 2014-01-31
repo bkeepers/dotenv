@@ -1,7 +1,7 @@
 require 'dotenv'
 module Dotenv
   class Generator
-    attr_reader :target_file
+    attr_reader :environment, :example_file, :target_file
 
     def [](key)
       values[key.to_s]
