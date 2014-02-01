@@ -9,7 +9,7 @@ namespace :dotenv do
   task :generate, :target_env do |t, args|
     require 'dotenv/generator'
     
-    g = Dotenv::Generator.new(args[:target_env], nil, (args[:target_env].nil? ? '.env' : nil))
+    g = Dotenv::Generator.new(args[:target_env])
     g.prompt
     
     if g.values.empty?
