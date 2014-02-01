@@ -50,6 +50,7 @@ module Dotenv
       @environment = environment.to_s
       @example_file = File.expand_path(example_file || '.env.example')
       @target_file = File.expand_path(target_file || ".env.#{@environment}")
+      @target_file = File.expand_path('.env') if target_file.nil? && environment.nil?
     end
 
     def longest_key
