@@ -78,7 +78,7 @@ config.fog_directory  = ENV['S3_BUCKET']
 
 You may use the built-in generator rake task along with example and/or environment-default dotenv files. This makes it easy for developers to get started with your project without needing to check your sensitive dotenv files into your project repository.
 
-When you run the generator rake task, you will be prompted to edit values for all the provided example keys and default keys, and your filled out dotenv file will be generated.
+When you run the generator rake task you will be prompted to enter values for all the provided example keys and default keys, and the target dotenv file will be generated for you.
 
 The default example file is `.env.example`, which should contain all the keys needed to get started with your project. The values for each key in this file may optionally be a description of the key or a default value.
 
@@ -99,7 +99,9 @@ PORT=3000
 
 In this example, the `PORT` key is self explanatory and therefore is not defined in `.env.example` above, so it will be included in the prompts and the generated file, but it will not have a description when the user is prompted. `AWS_ACCESS_KEY` and `AWS_SECRET_KEY` both have descriptions but no default values, while `AWS_S3_BUCKET` has both a description **and** a default value provided.
 
-To generate your `.env.development` you would run `rake dotenv:generate['development']` and enter the values for each key when prompted. Of course if `.env.development` is checked into your project with safe defaults, and you're overwriting it by generating a localized `.env.development`, that might be an issue. If you're providing defaults in this way, it is suggested you ignore your local changes to your dotenv file so you don't accidentally commit them.
+To generate your `.env.development` you would run `rake dotenv:generate['development']` and enter the values for each key when prompted. 
+
+Of course if `.env.development` is checked into your project with safe defaults, and you're overwriting it by generating a localized `.env.development`, that might be an issue. If you're providing defaults in this way, it is suggested you ignore your local changes to your dotenv file so you don't accidentally commit them.
 
 If you **are** using Rails and do not provide the task with an environment, the current `Rails.env` will be used by default.
 
@@ -146,11 +148,11 @@ input_value = g.prompt_for('SOME_KEY')
 g['SOME_KEY'] = input_value
 
 # you can then write everything to the file
-g.write
+file = g.write
 # and maybe push that file up to your production servers
 
 # or you can get the raw string
-g.to_s
+raw = g.to_s
 # so that you can manually dump that into a file on your remote servers
 ```
 
