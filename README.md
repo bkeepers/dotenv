@@ -18,7 +18,9 @@ gem 'dotenv-rails', :groups => [:development, :test]
 
 And then execute:
 
-    $ bundle
+```shell
+$ bundle
+```
 
 It should be listed in the Gemfile before any other gems that use environment variables, otherwise those gems will get initialized with the wrong values.
 
@@ -26,7 +28,9 @@ It should be listed in the Gemfile before any other gems that use environment va
 
 Install the gem:
 
-    $ gem install dotenv
+```shell
+$ gem install dotenv
+```
 
 As early as possible in your application bootstrap process, load `.env`:
 
