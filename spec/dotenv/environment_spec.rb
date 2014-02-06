@@ -105,7 +105,7 @@ describe Dotenv::Environment do
     expect(env('FOO="bar\nbaz"')).to eql('FOO' => "bar\nbaz")
   end
 
-  it 'parses varibales with "." in the name' do
+  it 'parses variables with "." in the name' do
     expect(env('FOO.BAR=foobar')).to eql('FOO.BAR' => 'foobar')
   end
 
