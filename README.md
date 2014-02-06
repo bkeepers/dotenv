@@ -39,6 +39,12 @@ require 'dotenv'
 Dotenv.load
 ```
 
+Alternatively, you can use the `dotenv` executable to launch your application:
+
+```shell
+$ dotenv ./script.py
+```
+
 To ensure `.env` is loaded in rake, load the tasks:
 
 ```ruby
