@@ -1,12 +1,11 @@
 #!/usr/bin/env ruby
 
-require "dotenv"
+require 'dotenv'
 
 begin
   Dotenv.load!
 rescue Errno::ENOENT => e
-  warn e.message
-  exit 1
+  abort e.message
 else
-  exec *ARGV
+  exec *ARGV unless ARGV.empty?
 end
