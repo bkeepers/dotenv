@@ -7,5 +7,5 @@ begin
 rescue Errno::ENOENT => e
   abort e.message
 else
-  exec *ARGV
+  exec *ARGV unless ARGV.empty?
 end
