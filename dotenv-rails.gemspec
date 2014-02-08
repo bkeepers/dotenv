@@ -8,6 +8,7 @@ Gem::Specification.new do |gem|
   gem.description   = %q{Autoload dotenv in Rails.}
   gem.summary       = %q{Autoload dotenv in Rails.}
   gem.homepage      = "https://github.com/bkeepers/dotenv"
+  gem.license       = 'MIT'
 
   gem.files         = ["lib/dotenv-rails.rb"]
   gem.name          = "dotenv-rails"
