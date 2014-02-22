@@ -1,14 +1,16 @@
 # Changelog
 
-## 0.10.0 - unreleased
+## 0.10.0 - Feb 22, 2014
 
-* Add support for executing interpolated commands.
+* Add support for executing interpolated commands. (Ruby >= 1.9 only)
 
         HEAD_SHA=$(git rev-parse HEAD)
 
 * Add `dotenv_role` option in Capistrano.
 
-        set :dotenv_role, [:app web]
+        set :dotenv_role, [:app, web]
+
+* Add `Dotenv.overload` to overwrite existing environment values.
 
 ## 0.9.0 - Aug 29, 2013
 
