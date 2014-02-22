@@ -1,3 +1,4 @@
+require 'dotenv/parser'
 require 'dotenv/environment'
 
 module Dotenv
