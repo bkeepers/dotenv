@@ -1,10 +1,11 @@
-require 'dotenv/format_error'
 require 'dotenv/substitutions/variable'
 if RUBY_VERSION > '1.8.7'
   require 'dotenv/substitutions/command'
 end
 
 module Dotenv
+  class FormatError < SyntaxError; end
+
   class Parser
     @@substitutions = Substitutions.constants.map { |const| Substitutions.const_get(const) }
 
