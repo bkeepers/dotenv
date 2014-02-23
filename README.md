@@ -84,29 +84,6 @@ Whenever your application loads, these variables will be available in `ENV`:
 config.fog_directory  = ENV['S3_BUCKET']
 ```
 
-## Capistrano integration
-
-If you want to use Dotenv with Capistrano in your production environment, make sure the dotenv gem is included in your Gemfile `:production` group.
-
-### Capistrano version 2.x.x
-
-Add the gem to your `config/deploy.rb` file:
-
-```ruby
-require "dotenv/capistrano"
-```
-
-It will symlink the `.env` located in `/path/to/shared` in the new release. 
-
-
-### Capistrano version 3.x.x
-
-Just add `.env` to the list of linked files, for example:
-
-```ruby
-set :linked_files, %w{config/database.yml .env}
-```
-
 ## Should I commit my .env file?
 
 It is recommended that you store development-only settings in your `.env` file, and commit it to your repository. Make sure that all your credentials for your development environment are different from your other deployments. This makes it easy for other developers to get started on your project, without compromising your credentials for other environments.
