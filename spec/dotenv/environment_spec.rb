@@ -27,6 +27,14 @@ describe Dotenv::Environment do
       subject.apply
       expect(ENV['OPTION_A']).to eq('predefined')
     end
+    
+    it 'overrides defined variables when DOTENV_OVERRIDE==yes' do
+      subject = env("OPTION_A=1\nOPTION_B=2\nDOTENV_OVERRIDE=yes")
+      ENV['OPTION_A'] = 'predefined'
+      ENV['DOTENV_OVERRIDE'] = 'yes'
+      subject.apply
+      expect(ENV['OPTION_A']).to eq('1')
+    end
   end
 
   describe 'apply!' do

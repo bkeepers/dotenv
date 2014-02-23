@@ -60,7 +60,11 @@ module Dotenv
     end
 
     def apply
-      each { |k,v| ENV[k] ||= v }
+      if self.key?('DOTENV_OVERRIDE') && self['DOTENV_OVERRIDE']=="yes"
+        each { |k,v| ENV[k] = v }
+      else
+        each { |k,v| ENV[k] ||= v }
+      end
     end
 
     def apply!
