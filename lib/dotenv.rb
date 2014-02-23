@@ -2,32 +2,27 @@ require 'dotenv/environment'
 
 module Dotenv
   def self.load(*filenames)
-    default_if_empty(filenames).inject({}) do |hash, filename|
-      filename = File.expand_path filename
-      hash.merge(File.exists?(filename) ? Environment.new(filename).apply : {})
-    end
-  end
-
-  # same as `load`, but will override existing values in `ENV`
-  def self.overload(*filenames)
-    default_if_empty(filenames).inject({}) do |hash, filename|
-      filename = File.expand_path filename
-      hash.merge(File.exists?(filename) ? Environment.new(filename).apply! : {})
-    end
+    with(*filenames) { |f| Environment.new(f).apply if File.exists?(f) }
   end
 
   # same as `load`, but raises Errno::ENOENT if any files don't exist
   def self.load!(*filenames)
-    load(
-      *default_if_empty(filenames).each do |filename|
-        filename = File.expand_path filename
-        raise(Errno::ENOENT.new(filename)) unless File.exists?(filename)
-      end
-    )
+    with(*filenames) { |f| Environment.new(f).apply }
+  end
+
+  # same as `load`, but will override existing values in `ENV`
+  def self.overload(*filenames)
+    with(*filenames) { |f| Environment.new(f).apply! if File.exists?(f) }
   end
 
 protected
-  def self.default_if_empty(filenames)
-    filenames.empty? ? (filenames << '.env') : filenames
+
+  def self.with(*filenames, &block)
+    filenames << '.env' if filenames.empty?
+
+    filenames.inject({}) do |hash, filename|
+      filename = File.expand_path filename
+      hash.merge block.call(filename) || {}
+    end
   end
 end
