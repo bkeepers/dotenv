@@ -1,10 +1,13 @@
 # dotenv [![Build Status](https://secure.travis-ci.org/bkeepers/dotenv.png?branch=master)](https://travis-ci.org/bkeepers/dotenv)
 
-Dotenv loads environment variables from `.env` into `ENV`.
+Shim to load environment variables from `.env` into `ENV` in *development*.
 
 Storing [configuration in the environment](http://www.12factor.net/config) is one of the tenets of a [twelve-factor app](http://www.12factor.net/). Anything that is likely to change between deployment environments–such as resource handles for databases or credentials for external services–should be extracted from the code into environment variables.
 
-But it is not always practical to set environment variables on development machines or continuous integration servers where multiple projects are run. Dotenv load variables from a `.env` file into `ENV` when the environment is bootstrapped.
+But it is not always practical to set environment variables on development machines or continuous integration servers where multiple projects are run. dotenv loads variables from a `.env` file into `ENV` when the environment is bootstrapped.
+
+dotenv is intended to be used in development. If you would like to use it in production or other environments, see [dotenv-deployment](https://github.com/bkeepers/dotenv-deployment)
+
 
 ## Installation
 
@@ -62,13 +65,6 @@ Add your application configuration to your `.env` file in the root of your proje
 ```shell
 S3_BUCKET=YOURS3BUCKET
 SECRET_KEY=YOURSECRETKEYGOESHERE
-```
-
-You can also create files per environment, such as `.env.test`.
-
-```shell
-S3_BUCKET=tests3bucket
-SECRET_KEY=testsecretkey
 ```
 
 An alternate yaml-like syntax is supported:
