@@ -7,7 +7,7 @@ describe Dotenv do
 
       it 'defaults to .env' do
         expect(Dotenv::Environment).to receive(:new).with(expand('.env')).
-          and_return(double(:apply => {}))
+          and_return(double(:apply => {}, :apply! => {}))
         subject
       end
     end
@@ -19,7 +19,7 @@ describe Dotenv do
         expected = expand("~/.env")
         allow(File).to receive(:exists?){ |arg| arg == expected }
         expect(Dotenv::Environment).to receive(:new).with(expected).
-          and_return(double(:apply => {}))
+          and_return(double(:apply => {}, :apply! => {}))
         subject
       end
     end
@@ -72,22 +72,21 @@ describe Dotenv do
     context 'when one file exists and one does not' do
       let(:env_files) { ['.env', '.env_does_not_exist'] }
 
-      it 'raises an Errno::ENOENT error and does not load any files' do
-        expect do
-          expect do
-            subject
-          end.to raise_error(Errno::ENOENT)
-        end.to_not change { ENV.keys }
+      it 'raises an Errno::ENOENT error' do
+        expect { subject }.to raise_error(Errno::ENOENT)
       end
     end
   end
 
   describe 'overload' do
+    let(:env_files) { [fixture_path('plain.env')] }
+    subject { Dotenv.overload(*env_files) }
+    it_behaves_like 'load'
+
     it 'overrides any existing ENV variables' do
       ENV['OPTION_A'] = 'predefined'
-      path = fixture_path 'plain.env'
 
-      Dotenv.overload(path)
+      subject
 
       expect(ENV['OPTION_A']).to eq('1')
     end
