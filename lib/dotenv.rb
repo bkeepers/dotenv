@@ -22,7 +22,7 @@ protected
 
     filenames.inject({}) do |hash, filename|
       filename = File.expand_path filename
-      hash.merge block.call(filename) || {}
+      hash.merge(block.call(filename) || {})
     end
   end
 end
