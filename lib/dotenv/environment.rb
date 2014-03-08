@@ -7,7 +7,7 @@ module Dotenv
     end
 
     def load
-      update Parser.parse(read)
+      update Parser.call(read)
     end
 
     def read

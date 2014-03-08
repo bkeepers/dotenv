@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Dotenv::Parser do
   def env(string)
-    Dotenv::Parser.parse(string)
+    Dotenv::Parser.call(string)
   end
 
   it 'parses unquoted values' do
