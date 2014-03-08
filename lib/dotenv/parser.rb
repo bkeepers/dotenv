@@ -25,15 +25,15 @@ module Dotenv
       \z
     /x
 
-    def self.parse(string)
-      new(string).parse
+    def self.call(string)
+      new(string).call
     end
 
     def initialize(string)
       @string = string
     end
 
-    def parse
+    def call
       @string.split("\n").inject({}) do |hash, line|
         if match = line.match(LINE)
           key, value = match.captures
