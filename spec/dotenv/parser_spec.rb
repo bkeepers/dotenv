@@ -101,6 +101,15 @@ describe Dotenv::Parser do
     expect(env("foo='ba#r'")).to eql('foo' => 'ba#r')
   end
 
+  it 'support square-brackets as key names both lower and uppercase' do
+    expect(env('foo[one]="two"')).to eql('foo[one]' => 'two')
+    expect(env('FOO[BAR]="one"')).to eql('FOO[BAR]' => 'one')
+  end
+
+  it 'support multi-dimensional square-brackets as key name' do
+    expect(env('foo[one][two]="three"')).to eql('foo[one][two]' => 'three')
+  end
+
   if RUBY_VERSION > '1.8.7'
     it 'parses shell commands interpolated in $()' do
       expect(env('ruby_v=$(ruby -v)')).to eql('ruby_v' => RUBY_DESCRIPTION)

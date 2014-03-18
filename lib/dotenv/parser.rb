@@ -12,7 +12,7 @@ module Dotenv
     LINE = /
       \A
       (?:export\s+)?    # optional export
-      ([\w\.]+)         # key
+      ([\w\.\]\[]+)     # key
       (?:\s*=\s*|:\s+?) # separator
       (                 # optional value begin
         '(?:\'|[^'])*'  #   single quoted value
