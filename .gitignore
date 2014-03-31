@@ -3,6 +3,7 @@
 .bundle
 .config
 .yardoc
+.idea
 Gemfile.lock
 tmp
 vendor
