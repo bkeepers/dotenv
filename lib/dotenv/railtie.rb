@@ -3,12 +3,10 @@ require 'dotenv'
 module Dotenv
   class Railtie < Rails::Railtie
     rake_tasks do
-      desc 'Load environment settings from .env'
       task :dotenv do
-        Dotenv.load ".env.#{Rails.env}", '.env'
+        # If the dotenv task is defined, then dotenv has already been loaded.
+        warn "The `dotenv` task is no longer needed and will be removed in 1.0."
       end
     end
   end
 end
-
-Dotenv.load ".env.#{Rails.env}", '.env'

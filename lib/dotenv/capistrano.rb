@@ -1,11 +1,6 @@
-require 'capistrano/version'
+warn "Capistrano support has been moved to the dotenv-deployment gem. Add it " +
+  "to your Gemfile and change the require to 'dotenv/deployment/capistrano'. " +
+  "See https://github.com/bkeepers/dotenv-deployment#capistrano."
 
-if defined?(Capistrano::VERSION) && Capistrano::VERSION >= '3.0'
-  raise 'Please read https://github.com/bkeepers/dotenv#capistrano-integration to update your dotenv configuration for new Capistrano version'
-else
-  require 'dotenv/capistrano/recipes'
-
-  Capistrano::Configuration.instance(:must_exist).load do
-    before "deploy:finalize_update", "dotenv:symlink"
-  end
-end
+# This will be removed in 1.0
+require 'dotenv/deployment/capistrano'
