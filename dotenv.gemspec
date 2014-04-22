@@ -16,6 +16,8 @@ Gem::Specification.new do |gem|
   gem.name          = "dotenv"
   gem.require_paths = ["lib"]
 
+  gem.add_dependency "dotenv-deployment", "0.0.1"
+
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
 end
