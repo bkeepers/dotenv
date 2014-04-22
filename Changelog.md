@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.11.1 - Apr 22, 2014
+
+* Depend on dotenv-deployment ~>0.0.2, which fixes issues with 0.0.1
+
 ## 0.11.0 - Apr 21, 2014
 
 * Extract dotenv-deployment gem. https://github.com/bkeepers/dotenv-deployment
