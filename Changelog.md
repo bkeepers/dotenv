@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.11.0 - Apr 21, 2014
+
+* Extract dotenv-deployment gem. https://github.com/bkeepers/dotenv-deployment
+
 ## 0.10.0 - Feb 22, 2014
 
 * Add support for executing interpolated commands. (Ruby >= 1.9 only)
