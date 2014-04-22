@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 gemspec :name => 'dotenv'
 
+gem 'dotenv-deployment', :github => 'bkeepers/dotenv-deployment'
+
 group :guard do
   gem 'guard-rspec'
   gem 'guard-bundler'
