@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0 - Unreleased
+
+* Remove deprecated features. Upgrade to 0.11.0 and fix deprecation warnings before upgrading to 1.0.0.
+
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v0.11.0...v1.0.0)
+
 ## 0.11.0 - Apr 21, 2014
 
 * Extract dotenv-deployment gem. https://github.com/bkeepers/dotenv-deployment
