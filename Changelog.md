@@ -4,6 +4,8 @@
 
 * Extract dotenv-deployment gem. https://github.com/bkeepers/dotenv-deployment
 
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v0.10.0...v0.11.0)
+
 ## 0.10.0 - Feb 22, 2014
 
 * Add support for executing interpolated commands. (Ruby >= 1.9 only)
@@ -15,6 +17,8 @@
         set :dotenv_role, [:app, web]
 
 * Add `Dotenv.overload` to overwrite existing environment values.
+
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v0.9.0...v0.10.0)
 
 ## 0.9.0 - Aug 29, 2013
 
