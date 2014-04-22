@@ -8,7 +8,6 @@ But it is not always practical to set environment variables on development machi
 
 dotenv is intended to be used in development. If you would like to use it in production or other environments, see [dotenv-deployment](https://github.com/bkeepers/dotenv-deployment)
 
-
 ## Installation
 
 ### Rails
@@ -82,7 +81,9 @@ config.fog_directory  = ENV['S3_BUCKET']
 
 ## Should I commit my .env file?
 
-It is recommended that you store development-only settings in your `.env` file, and commit it to your repository. Make sure that all your credentials for your development environment are different from your other deployments. This makes it easy for other developers to get started on your project, without compromising your credentials for other environments.
+Credentials should only be accessible on the machines that need access to them. Never commit sensitive information to a repository that is not needed by every development machine and server.
+
+Personally, I prefer to commit the `.env` file with development-only settings. This makes it easy for other developers to get started on the project without compromising credentials for other environments. If you follow this advice, make sure that all the credentials for your development environment are different from your other deployments and that the development credentials do not have access to any confidential data.
 
 ## Contributing
 
