@@ -9,3 +9,4 @@ if File.exists?(env_file) && !defined?(Dotenv::Deployment)
 end
 
 Dotenv.load '.env'
+Dotenv.overload('.env.personal') if Rails.env.development?
