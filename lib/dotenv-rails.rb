@@ -8,4 +8,4 @@ if File.exists?(env_file) && !defined?(Dotenv::Deployment)
   Dotenv.load ".env.#{Rails.env}"
 end
 
-Dotenv.load '.env'
+Dotenv.load '.env', '.env.local'
