@@ -9,3 +9,5 @@ if File.exists?(env_file) && !defined?(Dotenv::Deployment)
 end
 
 Dotenv.load '.env'
+
+Spring.watch '.env' if defined?(Spring)
