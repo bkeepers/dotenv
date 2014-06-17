@@ -11,4 +11,4 @@ envs = *Dir.glob("#{Rails.root}/config/**/*.#{Rails.env}.env").push(
 Dotenv.overload *envs
 
 # Allow local overrides in .env.local or config/local.env
-Dotenv.overload Rails.root.join('.env.local'), Rails.root.join("config/local.env")
+Dotenv.overload Rails.root.join('.local.env'), Rails.root.join("config/local.env")
