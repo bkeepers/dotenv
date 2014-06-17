@@ -1,13 +1,16 @@
 require 'dotenv/railtie'
 
-env_file = ".env.#{Rails.env}"
-if File.exists?(env_file) && !defined?(Dotenv::Deployment)
-  warn "Auto-loading of `#{env_file}` will be removed in 1.0. See " +
-    "https://github.com/bkeepers/dotenv-deployment if you would like to " +
-    "continue using this feature."
-  Dotenv.load ".env.#{Rails.env}"
-end
+# Load defaults from config/*.env or .env
+Dotenv.load *Dir.glob("#{Rails.root}/config/**/*.env").push('.env')
 
-Dotenv.load '.env'
+# Override any existing variables if an environment-specific file exists
+envs = *Dir.glob("#{Rails.root}/config/**/*.#{Rails.env}.env").push(
+  ".#{Rails.env}.env",
+  ".env.#{Rails.env}"
+)
+Dotenv.overload *envs
+
+# Allow local overrides in .env.local or config/local.env
+Dotenv.overload Rails.root.join('.local.env'), Rails.root.join("config/local.env")
 
 Spring.watch '.env' if defined?(Spring)
