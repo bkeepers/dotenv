@@ -67,6 +67,13 @@ S3_BUCKET=YOURS3BUCKET
 SECRET_KEY=YOURSECRETKEYGOESHERE
 ```
 
+You may also add `export` in front of each line so you can `source` the file in bash:
+
+```shell
+export S3_BUCKET=YOURS3BUCKET
+export SECRET_KEY=YOURSECRETKEYGOESHERE
+```
+
 An alternate yaml-like syntax is supported:
 
 ```yaml

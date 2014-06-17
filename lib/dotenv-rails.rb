@@ -12,3 +12,5 @@ Dotenv.overload *envs
 
 # Allow local overrides in .env.local or config/local.env
 Dotenv.overload Rails.root.join('.local.env'), Rails.root.join("config/local.env")
+
+Spring.watch '.env' if defined?(Spring)
