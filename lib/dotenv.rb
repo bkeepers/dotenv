@@ -3,7 +3,7 @@ require 'dotenv/environment'
 
 module Dotenv
   def self.load(*filenames)
-    with(*filenames) { |f| Environment.new(f).apply if File.exists?(f) }
+    with(*filenames) { |f| Environment.new(f).apply if File.exist?(f) }
   end
 
   # same as `load`, but raises Errno::ENOENT if any files don't exist
@@ -13,7 +13,7 @@ module Dotenv
 
   # same as `load`, but will override existing values in `ENV`
   def self.overload(*filenames)
-    with(*filenames) { |f| Environment.new(f).apply! if File.exists?(f) }
+    with(*filenames) { |f| Environment.new(f).apply! if File.exist?(f) }
   end
 
 protected
