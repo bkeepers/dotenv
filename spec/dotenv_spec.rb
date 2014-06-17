@@ -17,7 +17,7 @@ describe Dotenv do
 
       it 'expands the path' do
         expected = expand("~/.env")
-        allow(File).to receive(:exists?){ |arg| arg == expected }
+        allow(File).to receive(:exist?){ |arg| arg == expected }
         expect(Dotenv::Environment).to receive(:new).with(expected).
           and_return(double(:apply => {}, :apply! => {}))
         subject
