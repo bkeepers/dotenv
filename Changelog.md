@@ -1,5 +1,9 @@
 # Changelog
 
+## unreleased
+
+* Support -f option to dotenv binary, e.g. dotenv -f /path/to/.env,/path/to/another/.env
+
 ## 0.11.1 - Apr 22, 2014
 
 * Depend on dotenv-deployment ~>0.0.2, which fixes issues with 0.0.1
