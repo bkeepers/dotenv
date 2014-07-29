@@ -1,13 +1,10 @@
 # dotenv [![Build Status](https://secure.travis-ci.org/bkeepers/dotenv.png?branch=master)](https://travis-ci.org/bkeepers/dotenv)
 
-Shim to load environment variables from `.env` into `ENV` in *development*.
+Shim to load environment variables from `.env` into `ENV`.
 
 Storing [configuration in the environment](http://www.12factor.net/config) is one of the tenets of a [twelve-factor app](http://www.12factor.net/). Anything that is likely to change between deployment environments–such as resource handles for databases or credentials for external services–should be extracted from the code into environment variables.
 
 But it is not always practical to set environment variables on development machines or continuous integration servers where multiple projects are run. dotenv loads variables from a `.env` file into `ENV` when the environment is bootstrapped.
-
-dotenv is intended to be used in development. If you would like to use it in production or other environments, see [dotenv-deployment](https://github.com/bkeepers/dotenv-deployment)
-
 
 ## Installation
 
@@ -86,6 +83,14 @@ Whenever your application loads, these variables will be available in `ENV`:
 ```ruby
 config.fog_directory  = ENV['S3_BUCKET']
 ```
+
+## Multiple Rails Environments
+
+dotenv was originally created to load configuration variables into `ENV` in *development*. There are typically better ways to manage configuration in production environments environments—such as `/etc/environment` managed by [Puppet](https://github.com/puppetlabs/puppet) or [Chef](https://github.com/opscode/chef), `heroku config`, etc.
+
+However, some find dotenv to be a convenient way to configure applications in staging and production environments, and you can do that by defining environment-specific files like `.env.production` or `.env.test`.
+
+Values defined in `.env` will not override existing environment variables, but values defined in environment-specific files will override any existing environment variables.
 
 ## Should I commit my .env file?
 
