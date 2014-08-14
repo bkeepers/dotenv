@@ -16,8 +16,7 @@ module Dotenv
     with(*filenames) { |f| Environment.new(f).apply! if File.exist?(f) }
   end
 
-protected
-
+  # Internal: Helper to expand list of filenames.
   def self.with(*filenames, &block)
     filenames << '.env' if filenames.empty?
 
