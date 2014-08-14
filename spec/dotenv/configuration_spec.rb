@@ -2,9 +2,7 @@ require "spec_helper"
 
 describe Dotenv::Configuration do
   let(:config) do
-    Class.new do
-      extend Dotenv::Configuration
-
+    Class.new(Dotenv::Configuration) do
       def env
         @env ||= {}
       end
