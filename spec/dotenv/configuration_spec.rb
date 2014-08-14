@@ -79,6 +79,16 @@ describe Dotenv::Configuration do
       instance.env["BOOL"] = 'false'
       expect(instance.bool?).to be(false)
     end
+
+    it "instance evals block for default value" do
+      self_in_block = nil
+      config.integer(:magic_number) do
+        self_in_block = self
+        10
+      end
+      expect(instance.magic_number).to be(10)
+      expect(self_in_block).to be(instance)
+    end
   end
 
   describe ":required" do

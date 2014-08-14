@@ -1,11 +1,11 @@
 module Dotenv
   class Configuration
-    def self.string(name, options = {})
-      define_accessor(name, options) { |value| value }
+    def self.string(name, options = {}, &default_block)
+      define_accessor(name, options, default_block) { |value| value }
     end
 
-    def self.integer(name, options = {})
-      define_accessor(name, options) { |value| Integer(value) if value }
+    def self.integer(name, options = {}, &default_block)
+      define_accessor(name, options, default_block) { |value| Integer(value) if value }
     end
 
     BOOLEANS = {
@@ -14,9 +14,9 @@ module Dotenv
       '1' => true, 'true' => true
     }
 
-    def self.boolean(name, options = {})
+    def self.boolean(name, options = {}, &default_block)
       options = {:suffix => "?"}.merge(options)
-      define_accessor(name, options) do |value|
+      define_accessor(name, options, default_block) do |value|
         BOOLEANS.fetch(value) do
           raise ArgumentError, "invalid value for boolean: #{value.inspect}"
         end
@@ -32,9 +32,10 @@ module Dotenv
     #
     # name - the name of the config variable.
     # options[:suffix] - the suffix that gets append to the method name
-    def self.define_accessor(name, options = {}, &block)
+    def self.define_accessor(name, options = {}, default_block = nil, &cast_block)
+      default_block ||= Proc.new { options[:default] }
       accessors.send :define_method, "#{name}#{options[:suffix]}" do
-        block.call(variable(name, options[:default])).tap do |value|
+        cast_block.call(variable(name, &default_block)).tap do |value|
           raise ArgumentError, "#{name} is required" if options[:required] && value.nil?
         end
       end
@@ -48,9 +49,9 @@ module Dotenv
     # Fetch the variable from the environment. Override in sublass to customize.
     #
     # name - the name of an environment variable.
-    # default - the default value if the variable is not defined.
-    def variable(name, default = nil)
-      env.fetch(name.to_s.upcase) { default }
+    # default - a block that returns a default if the variable is not defined.
+    def variable(name, &default)
+      env.fetch(name.to_s.upcase) { instance_eval(&default) }
     end
 
     # Internal: Include accessors into subclass when inheriting this class.
