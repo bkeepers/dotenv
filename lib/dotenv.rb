@@ -1,5 +1,6 @@
 require 'dotenv/parser'
 require 'dotenv/environment'
+require 'dotenv/configuration'
 
 module Dotenv
   def self.load(*filenames)
