@@ -17,6 +17,8 @@ module Dotenv
   end
 
   # Internal: Helper to expand list of filenames.
+  #
+  # Returns a hash of all the loaded environment variables.
   def self.with(*filenames, &block)
     filenames << '.env' if filenames.empty?
 
