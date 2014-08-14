@@ -41,14 +41,14 @@ describe Dotenv::Configuration do
   describe "boolean" do
     before { config.boolean :bool }
 
-    ["0", "false"].each do |input|
+    ["0", "false", false].each do |input|
       it "casts #{input.inspect} to false" do
         instance.env["BOOL"] = input
         expect(instance.bool?).to be(false)
       end
     end
 
-    ["1", "true"].each do |input|
+    ["1", "true", true].each do |input|
       it "casts #{input.inspect} to true" do
         instance.env["BOOL"] = input
         expect(instance.bool?).to be(true)

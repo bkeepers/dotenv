@@ -10,8 +10,8 @@ module Dotenv
 
     BOOLEANS = {
       nil => nil, '' => nil,
-      '0' => false, 'false' => false,
-      '1' => true, 'true' => true
+      '0' => false, 'false' => false, false => false,
+      '1' => true, 'true' => true, true => true
     }
 
     def self.boolean(name, options = {}, &default_block)
