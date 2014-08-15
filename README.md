@@ -74,13 +74,6 @@ export S3_BUCKET=YOURS3BUCKET
 export SECRET_KEY=YOURSECRETKEYGOESHERE
 ```
 
-An alternate yaml-like syntax is supported:
-
-```yaml
-S3_BUCKET: yamlstyleforyours3bucket
-SECRET_KEY: thisisalsoanokaysecret
-```
-
 Whenever your application loads, these variables will be available in `ENV`:
 
 ```ruby
