@@ -30,8 +30,10 @@ module Dotenv
       end
     end
 
-    def env
-      ENV
+    attr_reader :env
+
+    def initialize(env = ENV)
+      @env = env
     end
 
     class Variable

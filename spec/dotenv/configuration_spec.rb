@@ -1,21 +1,19 @@
 require "spec_helper"
 
 describe Dotenv::Configuration do
+  let(:env) { {} }
+
   let(:config) do
-    Class.new(Dotenv::Configuration) do
-      def env
-        @env ||= {}
-      end
-    end
+    Class.new(Dotenv::Configuration)
   end
 
-  let(:instance) { config.new }
+  let(:instance) { config.new(env) }
 
   describe "string" do
     before { config.string :str }
 
     it "returns the value" do
-      instance.env["STR"] = "a string"
+      env["STR"] = "a string"
       expect(instance.str).to eql("a string")
     end
   end
@@ -28,12 +26,12 @@ describe Dotenv::Configuration do
     end
 
     it "casts a string to an integer" do
-      instance.env["INT"] = "1"
+      env["INT"] = "1"
       expect(instance.int).to be(1)
     end
 
     it "raises an error if it can't cast it" do
-      instance.env["INT"] = "nope"
+      env["INT"] = "nope"
       expect { instance.int }.to raise_error(ArgumentError, /invalid value for Integer()/)
     end
   end
@@ -43,27 +41,27 @@ describe Dotenv::Configuration do
 
     ["0", "false", false].each do |input|
       it "casts #{input.inspect} to false" do
-        instance.env["BOOL"] = input
+        env["BOOL"] = input
         expect(instance.bool?).to be(false)
       end
     end
 
     ["1", "true", true].each do |input|
       it "casts #{input.inspect} to true" do
-        instance.env["BOOL"] = input
+        env["BOOL"] = input
         expect(instance.bool?).to be(true)
       end
     end
 
     [nil, ''].each do |input|
       it "casts #{input.inspect} to nil" do
-        instance.env["BOOL"] = input
+        env["BOOL"] = input
         expect(instance.bool?).to be(nil)
       end
     end
 
     it "raises an error if it can't cast it" do
-      instance.env["BOOL"] = "nope"
+      env["BOOL"] = "nope"
       expect { instance.bool? }.to raise_error(ArgumentError, /invalid value for boolean/)
     end
   end
@@ -76,7 +74,7 @@ describe Dotenv::Configuration do
 
     it "does not return the default if a value is provided" do
       config.boolean :bool, :default => true
-      instance.env["BOOL"] = 'false'
+      env["BOOL"] = 'false'
       expect(instance.bool?).to be(false)
     end
 
