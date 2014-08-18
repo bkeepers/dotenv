@@ -12,6 +12,11 @@ module Dotenv
       add Boolean.new(name, options, &default)
     end
 
+    def self.eval(filename)
+      contents = File.read(filename)
+      class_eval contents, filename, 1
+    end
+
     def self.add(variable)
       accessors.send :define_method, variable.accessor_name do
         variable.accessor(self)

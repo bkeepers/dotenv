@@ -95,4 +95,11 @@ describe Dotenv::Configuration do
       expect { instance.required_thing }.to raise_error(ArgumentError, /is required/)
     end
   end
+
+  describe "eval" do
+    it "evaluates the given file" do
+      config.eval(fixture_path("Envfile"))
+      instance.respond_to?(:from_envfile)
+    end
+  end
 end
