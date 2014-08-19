@@ -1,44 +1,46 @@
 module Dotenv
   class Configuration
-    def self.string(name, options = {}, &default)
-      add Variable.new(name, options, &default)
-    end
+    class DSL
+      attr_reader :configuration
 
-    def self.integer(name, options = {}, &default)
-      add Integer.new(name, options, &default)
-    end
-
-    def self.boolean(name, options = {}, &default)
-      add Boolean.new(name, options, &default)
-    end
-
-    def self.eval(filename)
-      contents = File.read(filename)
-      class_eval contents, filename, 1
-    end
-
-    def self.add(variable)
-      accessors.send :define_method, variable.accessor_name do
-        variable.accessor(self)
+      def initialize(configuration)
+        @configuration = configuration
       end
-    end
 
-    # Internal: Include accessors into subclass when inheriting this class.
-    def self.inherited(subclass)
-      subclass.send :include, subclass.accessors
-    end
-
-    class << self
-      # Internal: Module that the accessors get defined on
-      def accessors
-        @accessors ||= Module.new
+      def string(name, options = {}, &default)
+        configuration.add Variable.new(name, options, &default)
       end
+
+      def integer(name, options = {}, &default)
+        configuration.add Integer.new(name, options, &default)
+      end
+
+      def boolean(name, options = {}, &default)
+        configuration.add Boolean.new(name, options, &default)
+      end
+
+      def eval(filename)
+        contents = File.read(filename)
+        super contents, binding, filename.to_s, 1
+      end
+      public :eval
     end
 
     attr_reader :env
 
     def initialize(env = ENV)
       @env = env
+      extend accessors
+    end
+
+    def accessors
+      @accessors ||= Module.new
+    end
+
+    def add(variable)
+      accessors.send :define_method, variable.accessor_name do
+        variable.accessor(self)
+      end
     end
 
     class Variable
