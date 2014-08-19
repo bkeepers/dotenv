@@ -92,6 +92,16 @@ describe Dotenv do
     end
   end
 
+  describe 'configure' do
+    subject { Dotenv.configure(fixture_path('Envfile')) }
+
+    it 'loads the envfile' do
+      subject
+
+      expect(Dotenv.env).to respond_to(:from_envfile)
+    end
+  end
+
   def expand(path)
     File.expand_path path
   end
