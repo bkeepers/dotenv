@@ -52,8 +52,12 @@ module Dotenv
         @default = default
       end
 
-      def required?
-        !!options[:required]
+      def required?(context)
+        if options[:required].respond_to?(:to_proc)
+          context.instance_eval(&options[:required])
+        else
+          !!options[:required]
+        end
       end
 
       def accessor_name
@@ -62,7 +66,7 @@ module Dotenv
 
       def accessor(context)
         cast(value(context)).tap do |result|
-          raise ArgumentError, "#{name} is required" if required? && result.nil?
+          raise ArgumentError, "#{name} is required" if required?(context) && result.nil?
         end
       end
 

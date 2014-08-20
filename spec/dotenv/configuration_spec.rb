@@ -90,6 +90,19 @@ describe Dotenv::Configuration do
       dsl.string :required_thing, :required => true
       expect { config.required_thing }.to raise_error(ArgumentError, /is required/)
     end
+
+    it "raises an error if symbol returns true" do
+      dsl.string :conditionally_required, :required => :conditional?
+      expect(config).to receive(:conditional?).and_return(true)
+      expect { config.conditionally_required }.to raise_error(ArgumentError, /is required/)
+    end
+
+    it "does not raise an error if symbol returns false" do
+      dsl.string :conditionally_required, :required => :conditional?
+      expect(config).to receive(:conditional?).and_return(false)
+      expect(config.conditionally_required).to be(nil)
+    end
+
   end
 
   describe "eval" do
