@@ -59,7 +59,7 @@ describe Dotenv do
 
       it 'fails silently' do
         expect { subject }.not_to raise_error
-        expect(ENV.to_h).to eq(@env)
+        expect({}.merge(ENV)).to eq(@env)
       end
     end
   end

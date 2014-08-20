@@ -8,7 +8,7 @@ end
 
 RSpec.configure do |config|
   # Restore the state of ENV after each spec
-  config.before { @env = ENV.to_h }
+  config.before { @env = {}.merge(ENV) }
   config.after  { ENV.replace @env }
   config.include Fixtures
 end
