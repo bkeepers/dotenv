@@ -59,7 +59,7 @@ describe Dotenv do
 
       it 'fails silently' do
         expect { subject }.not_to raise_error
-        expect(ENV.keys).to eq(@env_keys)
+        expect({}.merge(ENV)).to eq(@env)
       end
     end
   end
@@ -92,8 +92,14 @@ describe Dotenv do
     end
   end
 
-  def fixture_path(name)
-    File.join(File.expand_path('../fixtures', __FILE__), name)
+  describe 'configure' do
+    subject { Dotenv.configure(fixture_path('Envfile')) }
+
+    it 'loads the envfile' do
+      subject
+
+      expect(Dotenv.env).to respond_to(:from_envfile)
+    end
   end
 
   def expand(path)

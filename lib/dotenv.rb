@@ -1,7 +1,16 @@
 require 'dotenv/parser'
 require 'dotenv/environment'
+require 'dotenv/configuration'
 
 module Dotenv
+  def self.env
+    @env ||= Dotenv::Configuration.new
+  end
+
+  def self.configure(filename = "Envfile")
+    Dotenv::Configuration::DSL.new(env).eval(filename)
+  end
+
   def self.load(*filenames)
     with(*filenames) { |f| Environment.new(f).apply if File.exist?(f) }
   end
