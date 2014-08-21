@@ -7,16 +7,20 @@ module Dotenv
         @configuration = configuration
       end
 
+      def desc(description)
+        @last_description = description
+      end
+
       def string(name, options = {}, &default)
-        configuration.add Variable.new(name, options, &default)
+        add Variable.new(name, options, &default)
       end
 
       def integer(name, options = {}, &default)
-        configuration.add Integer.new(name, options, &default)
+        add Integer.new(name, options, &default)
       end
 
       def boolean(name, options = {}, &default)
-        configuration.add Boolean.new(name, options, &default)
+        add Boolean.new(name, options, &default)
       end
 
       def eval(filename)
@@ -24,12 +28,22 @@ module Dotenv
         super contents, binding, filename.to_s, 1
       end
       public :eval
+
+      def add(variable)
+        variable.options[:description] ||= last_description
+        configuration.add variable
+      end
+
+      def last_description
+        @last_description.tap { @last_description = nil }
+      end
     end
 
     attr_reader :env
 
     def initialize(env = ENV)
       @env = env
+      @variables = {}
       extend accessors
     end
 
@@ -38,9 +52,14 @@ module Dotenv
     end
 
     def add(variable)
+      @variables[variable.name] = variable
       accessors.send :define_method, variable.accessor_name do
         variable.accessor(self)
       end
+    end
+
+    def [](name)
+      @variables[name]
     end
 
     class Variable
