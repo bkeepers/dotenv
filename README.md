@@ -67,6 +67,12 @@ S3_BUCKET=YOURS3BUCKET
 SECRET_KEY=YOURSECRETKEYGOESHERE
 ```
 
+If you need multiline variables, for example private keys, you can double quote strings and use the `\n` character for newlines:
+
+```shell
+PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\nHkVN9…\n-----END DSA PRIVATE KEY-----\n"
+```
+
 You may also add `export` in front of each line so you can `source` the file in bash:
 
 ```shell
