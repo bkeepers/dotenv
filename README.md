@@ -35,20 +35,20 @@ Install the gem:
 $ gem install dotenv
 ```
 
-As early as possible in your application bootstrap process, load `.env`:
+As early as possible in your application bootstrap process (for Rails apps this could be in config/application.rb), load `.env` by adding the following lines:
 
 ```ruby
 require 'dotenv'
 Dotenv.load
 ```
 
-Alternatively, you can use the `dotenv` executable to launch your application:
+If you don't wish to do this, however, you can do the following instead. First, use the `dotenv` executable to launch your application:
 
 ```shell
 $ dotenv ./script.py
 ```
 
-To ensure `.env` is loaded in rake, load the tasks:
+Then, to ensure `.env` is loaded in rake, load the tasks:
 
 ```ruby
 require 'dotenv/tasks'
@@ -60,7 +60,7 @@ end
 
 ## Usage
 
-Add your application configuration to your `.env` file in the root of your project:
+For Rails users, create a file named '.env' in the root folder of your app if it doesn't already exist. Next, add your application configuration to your '.env' file. Use the format YOUR_TITLE_HERE=YOUR_SECRET_KEY_HERE (the title can be whatever you want) as in the following examples:
 
 ```shell
 S3_BUCKET=YOURS3BUCKET
