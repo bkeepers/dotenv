@@ -47,8 +47,12 @@ describe Dotenv::Parser do
     expect(env('BAR=$FOO')).to eql('BAR' => '')
   end
 
-  it 'expands variables in quoted strings' do
-    expect(env("FOO=test\nBAR='quote $FOO'")).to eql('FOO' => 'test', 'BAR' => 'quote test')
+  it 'expands variables in double quoted strings' do
+    expect(env("FOO=test\nBAR=\"quote $FOO\"")).to eql('FOO' => 'test', 'BAR' => 'quote test')
+  end
+
+  it 'does not expand variables in single quoted strings' do
+    expect(env("BAR='quote $FOO'")).to eql('BAR' => 'quote $FOO')
   end
 
   it 'does not expand escaped variables' do

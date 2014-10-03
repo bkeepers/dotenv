@@ -66,11 +66,17 @@ S3_BUCKET=YOURS3BUCKET
 SECRET_KEY=YOURSECRETKEYGOESHERE
 ```
 
-An alternate yaml-like syntax is supported:
+If you need multiline variables, for example private keys, you can double quote strings and use the `\n` character for newlines:
 
-```yaml
-S3_BUCKET: yamlstyleforyours3bucket
-SECRET_KEY: thisisalsoanokaysecret
+```shell
+PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\nHkVN9…\n-----END DSA PRIVATE KEY-----\n"
+```
+
+You may also add `export` in front of each line so you can `source` the file in bash:
+
+```shell
+export S3_BUCKET=YOURS3BUCKET
+export SECRET_KEY=YOURSECRETKEYGOESHERE
 ```
 
 Whenever your application loads, these variables will be available in `ENV`:
@@ -86,6 +92,8 @@ Credentials should only be accessible on the machines that need access to them. 
 Personally, I prefer to commit the `.env` file with development-only settings. This makes it easy for other developers to get started on the project without compromising credentials for other environments. If you follow this advice, make sure that all the credentials for your development environment are different from your other deployments and that the development credentials do not have access to any confidential data.
 
 ## Contributing
+
+If you want a better idea of how dotenv works, check out the [Ruby Rogues Code Reading of dotenv](https://www.youtube.com/watch?v=lKmY_0uY86s).
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)

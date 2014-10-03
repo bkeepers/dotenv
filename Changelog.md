@@ -4,7 +4,11 @@
 
 * Remove deprecated features. Upgrade to 0.11.0 and fix deprecation warnings before upgrading to 1.0.0.
 
-[Full Changelog](https://github.com/bkeepers/dotenv/compare/v0.11.0...v1.0.0)
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v0.11.1...v1.0.0)
+
+## 0.11.1 - Apr 22, 2014
+
+* Depend on dotenv-deployment ~>0.0.2, which fixes issues with 0.0.1
 
 ## 0.11.0 - Apr 21, 2014
 
