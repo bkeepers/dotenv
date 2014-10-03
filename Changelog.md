@@ -1,14 +1,24 @@
 # Changelog
 
-## 1.0.0 - Unreleased
+## 1.0.0 - Oct 3, 2014
 
 * Remove deprecated features. Upgrade to 0.11.0 and fix deprecation warnings before upgrading to 1.0.0.
+
+* Watch .env for changes with Spring in Rails 4 ([#118](https://github.com/bkeepers/dotenv/pull/118))
+
+* Fix deprecation warnings for `File.exists?` ([#121](https://github.com/bkeepers/dotenv/pull/121/))
+
+* Use `Rails.root` to find `.env` ([#122](https://github.com/bkeepers/dotenv/pull/122/files))
+
+* Avoid substitutions inside single quotes ([#124](https://github.com/bkeepers/dotenv/pull/124))
 
 [Full Changelog](https://github.com/bkeepers/dotenv/compare/v0.11.1...v1.0.0)
 
 ## 0.11.1 - Apr 22, 2014
 
 * Depend on dotenv-deployment ~>0.0.2, which fixes issues with 0.0.1
+
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v0.11.0...v0.11.1)
 
 ## 0.11.0 - Apr 21, 2014
 
