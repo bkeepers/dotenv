@@ -33,6 +33,7 @@ describe Dotenv do
           'OPTION_C' => '3',
           'OPTION_D' => '4',
           'OPTION_E' => '5',
+          'PLAIN' => 'true',
           'DOTENV' => 'true' }
       end
 
