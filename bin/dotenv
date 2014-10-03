@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 
 require 'dotenv/cli'
-Dotenv::CLI.new(ARGV.dup).run
+Dotenv::CLI.new(ARGV).run

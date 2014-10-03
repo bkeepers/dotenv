@@ -4,8 +4,8 @@ module Dotenv
   class CLI
     attr_reader :argv
 
-    def initialize(argv)
-      @argv = argv
+    def initialize(argv = [])
+      @argv = argv.dup
     end
 
     def run
