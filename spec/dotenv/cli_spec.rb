@@ -9,7 +9,6 @@ describe 'dotenv binary' do
 
   before do
     @last_dir = Dir.pwd
-    @last_bundle_gemfile = ENV.has_key?('BUNDLE_GEMFILE') ? ENV['BUNDLE_GEMFILE'] : false
     Dir.chdir tmpdir
     IO.write('Gemfile.tmp', "source 'https://rubygems.org'\ngemspec :name => 'dotenv', :path => '#{File.expand_path('../../..', __FILE__)}'")
     ENV['BUNDLE_GEMFILE'] = 'Gemfile.tmp'
@@ -17,11 +16,6 @@ describe 'dotenv binary' do
 
   after do
     Dir.chdir @last_dir
-    if @last_bundle_gemfile
-      ENV['BUNDLE_GEMFILE'] = @last_bundle_gemfile
-    else
-      ENV.delete 'BUNDLE_GEMFILE'
-    end
   end
 
   it "won't have a special env var without dotenv" do
