@@ -1,24 +1,4 @@
 #!/usr/bin/env ruby
 
-require 'dotenv'
-
-# don't bork input args
-argv = ARGV.dup
-
-filenames = if (pos = ARGV.index('-f'))
-  # drop the -f
-  argv.delete_at pos
-  # parse one or more comma-separated .env files
-  require 'csv'
-  CSV.parse_line argv.delete_at(pos)
-else
-  []
-end
-
-begin
-  Dotenv.load! *filenames
-rescue Errno::ENOENT => e
-  abort e.message
-else
-  exec *argv unless argv.empty?
-end
+require 'dotenv/cli'
+Dotenv::CLI.new(ARGV.dup).run

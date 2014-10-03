@@ -59,5 +59,4 @@ describe 'dotenv binary' do
     expect(out).to include("SPECIAL2=#{special}")
   end
 
-
 end
