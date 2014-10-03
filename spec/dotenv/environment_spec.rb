@@ -31,7 +31,7 @@ describe Dotenv::Environment do
 
   describe 'apply!' do
     it 'sets variables in the ENV' do
-      subject.apply
+      subject.apply!
       expect(ENV['OPTION_A']).to eq('1')
     end
 

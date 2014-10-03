@@ -48,8 +48,10 @@ module Dotenv
             value = value.gsub(/\\([^$])/, '\1')
           end
 
-          @@substitutions.each do |proc|
-            value = proc.call(value, hash)
+          if $1 != "'"
+            @@substitutions.each do |proc|
+              value = proc.call(value, hash)
+            end
           end
 
           hash[key] = value
