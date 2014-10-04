@@ -1,4 +1,5 @@
 require 'dotenv'
+require 'spring/watcher' if defined?(Spring)
 
 module Dotenv
   class Railtie < Rails::Railtie
