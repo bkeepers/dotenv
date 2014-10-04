@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1 - Oct 4, 2014
+
+* Fix load error with Spring when running `rails server` ([#140](https://github.com/bkeepers/dotenv/issues/140))
+
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v1.0.0...v1.0.1)
+
 ## 1.0.0 - Oct 3, 2014
 
 * Remove deprecated features. Upgrade to 0.11.0 and fix deprecation warnings before upgrading to 1.0.0.
