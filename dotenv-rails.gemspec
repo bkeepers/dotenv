@@ -15,4 +15,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency 'dotenv', Dotenv::VERSION
+
+  gem.add_development_dependency 'spring'
+  gem.add_development_dependency 'railties'
 end
