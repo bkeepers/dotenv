@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.homepage      = "https://github.com/bkeepers/dotenv"
   gem.license       = 'MIT'
 
-  gem.files         = `git ls-files`.split($\)
+  gem.files         = `git ls-files | grep -v rails`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.name          = "dotenv"
