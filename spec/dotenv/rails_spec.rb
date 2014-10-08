@@ -1,6 +1,6 @@
 require 'spec_helper'
 require 'rails'
-require 'dotenv/railtie'
+require 'dotenv/rails'
 
 describe Dotenv::Railtie do
   # Fake watcher for Spring
