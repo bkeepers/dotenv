@@ -7,7 +7,9 @@ end
 
 module Dotenv
   class Railtie < Rails::Railtie
-    config.before_configuration do
+    config.before_configuration { load }
+
+    def load
       Dotenv.load Rails.root.join('.env')
       Spring.watch Rails.root.join('.env') if defined?(Spring)
     end
