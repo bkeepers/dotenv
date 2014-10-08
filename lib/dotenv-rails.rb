@@ -1,1 +1,1 @@
-require "dotenv/railtie"
+require "dotenv/rails"
