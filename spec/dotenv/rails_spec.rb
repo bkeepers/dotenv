@@ -1,6 +1,6 @@
 require 'spec_helper'
 require 'rails'
-require 'dotenv/railtie'
+require 'dotenv/rails'
 
 describe Dotenv::Railtie do
   # Fake watcher for Spring
@@ -20,8 +20,15 @@ describe Dotenv::Railtie do
     Spring.watcher = SpecWatcher.new
   end
 
-  context 'on initializiation' do
-    before { ActiveSupport.run_load_hooks(:before_configuration) }
+  context 'before_configuration' do
+    it 'calls #load' do
+      expect(Dotenv::Railtie.instance).to receive(:load)
+      ActiveSupport.run_load_hooks(:before_configuration)
+    end
+  end
+
+  context 'load' do
+    before { Dotenv::Railtie.load }
 
     it 'watches .env with Spring' do
       Spring.watcher.include? Rails.root.join('.env')
