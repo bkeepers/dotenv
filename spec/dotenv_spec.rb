@@ -1,17 +1,17 @@
 require 'spec_helper'
 
 describe Dotenv do
-  shared_examples 'load' do
-    context 'with no args' do
-      let(:env_files) { [] }
+  shared_examples 'loading without filenames' do
+    let(:env_files) { [] }
 
-      it 'defaults to .env' do
-        expect(Dotenv::Environment).to receive(:new).with(expand('.env')).
-          and_return(double(:apply => {}, :apply! => {}))
-        subject
-      end
+    it 'defaults to .env' do
+      expect(Dotenv::Environment).to receive(:new).with(expand('.env')).
+        and_return(double(:apply => {}, :apply! => {}))
+      subject
     end
+  end
 
+  shared_examples 'load' do
     context 'with a tilde path' do
       let(:env_files) { ['~/.env'] }
 
@@ -53,6 +53,7 @@ describe Dotenv do
     subject { Dotenv.load(*env_files) }
 
     it_behaves_like 'load'
+    it_behaves_like 'loading without filenames'
 
     context 'when the file does not exist' do
       let(:env_files) { ['.env_does_not_exist'] }
@@ -68,6 +69,7 @@ describe Dotenv do
     subject { Dotenv.load!(*env_files) }
 
     it_behaves_like 'load'
+    it_behaves_like 'loading without filenames'
 
     context 'when one file exists and one does not' do
       let(:env_files) { ['.env', '.env_does_not_exist'] }
