@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.3 - unreleased
+
+* Define `#load` on `Dotenv::Railtie`, which can be called to manually load `dotenv` before Rails has initialized.
+
+* add `dotenv/rails-now`, which can be required in the `Gemfile` to immidately load dotenv.
+
+    gem 'dotenv-rails', :require => 'dotenv/rails-now'
+    gem 'gem-that-requires-env-variables'
+
 ## 1.0.1 - Oct 4, 2014
 
 * Fix load error with Spring when running `rails server` ([#140](https://github.com/bkeepers/dotenv/issues/140))
@@ -7,6 +16,8 @@
 [Full Changelog](https://github.com/bkeepers/dotenv/compare/v1.0.0...v1.0.1)
 
 ## 1.0.0 - Oct 3, 2014
+
+* dotenv-rails is now loaded during the `before_configuration` callback, which is fired when the `Application` constant is defined (`class Application < Rails::Application`).
 
 * Remove deprecated features. Upgrade to 0.11.0 and fix deprecation warnings before upgrading to 1.0.0.
 

@@ -24,7 +24,25 @@ And then execute:
 $ bundle
 ```
 
-It should be listed in the Gemfile before any other gems that use environment variables, otherwise those gems will get initialized with the wrong values.
+#### Note on load order
+
+dotenv is initialized in your Rails app during the `before_configuration` callback, which is fired when the `Application` constant is defined in `config/application.rb` with `class Application < Rails::Application`. If you need it to be initialized sooner, you can manually call `Dotenv::Railtie.load`.
+
+```ruby
+# config/application.rb
+Bundler.require(*Rails.groups)
+
+Dotenv::Railtie.load
+
+HOSTNAME = ENV['HOSTNAME']
+```
+
+If you use gems that require environment variables to be set before they are loaded, then list `dotenv-rails` in the `Gemfile` before those other gems and require `dotenv/rails-now`.
+
+```ruby
+gem 'dotenv-rails', :require => 'dotenv/rails-now'
+gem 'gem-that-requires-env-variables'
+```
 
 ### Sinatra or Plain ol' Ruby
 
