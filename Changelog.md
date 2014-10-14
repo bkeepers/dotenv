@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.3 - unreleased
+## 1.0.2 - Oct 14, 2014
 
 * Define `#load` on `Dotenv::Railtie`, which can be called to manually load `dotenv` before Rails has initialized.
 
@@ -8,6 +8,8 @@
 
     gem 'dotenv-rails', :require => 'dotenv/rails-now'
     gem 'gem-that-requires-env-variables'
+
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v1.0.1...v1.0.2)
 
 ## 1.0.1 - Oct 4, 2014
 
