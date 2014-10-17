@@ -8,7 +8,6 @@ But it is not always practical to set environment variables on development machi
 
 dotenv is intended to be used in development. If you would like to use it in production or other environments, see [dotenv-deployment](https://github.com/bkeepers/dotenv-deployment)
 
-
 ## Installation
 
 ### Rails
@@ -25,7 +24,25 @@ And then execute:
 $ bundle
 ```
 
-It should be listed in the Gemfile before any other gems that use environment variables, otherwise those gems will get initialized with the wrong values.
+#### Note on load order
+
+dotenv is initialized in your Rails app during the `before_configuration` callback, which is fired when the `Application` constant is defined in `config/application.rb` with `class Application < Rails::Application`. If you need it to be initialized sooner, you can manually call `Dotenv::Railtie.load`.
+
+```ruby
+# config/application.rb
+Bundler.require(*Rails.groups)
+
+Dotenv::Railtie.load
+
+HOSTNAME = ENV['HOSTNAME']
+```
+
+If you use gems that require environment variables to be set before they are loaded, then list `dotenv-rails` in the `Gemfile` before those other gems and require `dotenv/rails-now`.
+
+```ruby
+gem 'dotenv-rails', :require => 'dotenv/rails-now'
+gem 'gem-that-requires-env-variables'
+```
 
 ### Sinatra or Plain ol' Ruby
 
@@ -88,7 +105,9 @@ config.fog_directory  = ENV['S3_BUCKET']
 
 ## Should I commit my .env file?
 
-It is recommended that you store development-only settings in your `.env` file, and commit it to your repository. Make sure that all your credentials for your development environment are different from your other deployments. This makes it easy for other developers to get started on your project, without compromising your credentials for other environments.
+Credentials should only be accessible on the machines that need access to them. Never commit sensitive information to a repository that is not needed by every development machine and server.
+
+Personally, I prefer to commit the `.env` file with development-only settings. This makes it easy for other developers to get started on the project without compromising credentials for other environments. If you follow this advice, make sure that all the credentials for your development environment are different from your other deployments and that the development credentials do not have access to any confidential data.
 
 ## Contributing
 
