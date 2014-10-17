@@ -1,14 +1,7 @@
 require 'dotenv'
 
-Dotenv.instrumenter = ActiveSupport::Notifications
-
 begin
   require 'spring/watcher'
-
-  ActiveSupport::Notifications.subscribe(/^dotenv/) do |*args|
-    event = ActiveSupport::Notifications::Event.new(*args)
-    Spring.watch event.payload[:env].filename
-  end
 rescue LoadError
   # Spring is not available
 end
@@ -22,8 +15,18 @@ module Dotenv
     # This will get called during the `before_configuration` callback, but you
     # can manually call `Dotenv::Railtie.load` if you needed it sooner.
     def load
+      Dotenv.instrumenter = ActiveSupport::Notifications
+      configure_spring if defined?(Spring)
+
       Dotenv.load Rails.root.join('.env')
-      Spring.watch Rails.root.join('.env') if defined?(Spring)
+    end
+
+    # Internal: subscribe to
+    def configure_spring
+      @spring_subscriber = ActiveSupport::Notifications.subscribe(/^dotenv/) do |*args|
+        event = ActiveSupport::Notifications::Event.new(*args)
+        Spring.watch event.payload[:env].filename
+      end
     end
 
     # Rails uses `#method_missing` to delegate all class methods to the

@@ -4,7 +4,9 @@ require 'dotenv/rails'
 
 describe Dotenv::Railtie do
   # Fake watcher for Spring
-  class SpecWatcher < Struct.new(:items)
+  class SpecWatcher
+    attr_reader :items
+
     def initialize
       @items = Set.new
     end
@@ -20,6 +22,13 @@ describe Dotenv::Railtie do
     Spring.watcher = SpecWatcher.new
   end
 
+  after do
+    # Reset
+    Dotenv.instrumenter = nil
+    ActiveSupport::Notifications.notifier = ActiveSupport::Notifications::Fanout.new
+    Spring.watcher = nil
+  end
+
   context 'before_configuration' do
     it 'calls #load' do
       expect(Dotenv::Railtie.instance).to receive(:load)
@@ -31,7 +40,13 @@ describe Dotenv::Railtie do
     before { Dotenv::Railtie.load }
 
     it 'watches .env with Spring' do
-      Spring.watcher.include? Rails.root.join('.env')
+      expect(Spring.watcher.items).to include(Rails.root.join('.env').to_s)
+    end
+
+    it 'watches other loaded files with Spring' do
+      path = fixture_path('plain.env')
+      Dotenv.load(path)
+      expect(Spring.watcher.items).to include(path)
     end
 
     it 'loads .env' do
