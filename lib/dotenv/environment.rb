@@ -1,5 +1,6 @@
 module Dotenv
   class Environment < Hash
+    attr_reader :filename
 
     def initialize(filename)
       @filename = filename

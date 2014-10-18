@@ -92,8 +92,26 @@ describe Dotenv do
     end
   end
 
-  def fixture_path(name)
-    File.join(File.expand_path('../fixtures', __FILE__), name)
+  describe 'with an instrumenter' do
+    let(:instrumenter) { double('instrumenter', :instrument => {}) }
+    before { Dotenv.instrumenter = instrumenter }
+    after { Dotenv.instrumenter = nil }
+
+    describe "load" do
+      it 'instruments if the file exists' do
+        expect(instrumenter).to receive(:instrument) do |name, payload|
+          expect(name).to eq('dotenv.load')
+          expect(payload[:env]).to be_instance_of(Dotenv::Environment)
+          {}
+        end
+        Dotenv.load
+      end
+
+      it 'does not instrument if file does not exist' do
+        expect(instrumenter).to receive(:instrument).never
+        Dotenv.load '.doesnotexist'
+      end
+    end
   end
 
   def expand(path)
