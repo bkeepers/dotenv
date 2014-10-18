@@ -5,3 +5,7 @@ RSpec.configure do |config|
   config.before { @env_keys = ENV.keys }
   config.after  { ENV.delete_if { |k,v| !@env_keys.include?(k) } }
 end
+
+def fixture_path(name)
+  File.join(File.expand_path('../fixtures', __FILE__), name)
+end
