@@ -21,9 +21,9 @@ module Dotenv
       Dotenv.load Rails.root.join('.env')
     end
 
-    # Internal: subscribe to
+    # Internal: Watch all loaded env files with spring
     def configure_spring
-      @spring_subscriber = ActiveSupport::Notifications.subscribe(/^dotenv/) do |*args|
+      ActiveSupport::Notifications.subscribe(/^dotenv/) do |*args|
         event = ActiveSupport::Notifications::Event.new(*args)
         Spring.watch event.payload[:env].filename
       end
