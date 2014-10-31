@@ -6,8 +6,8 @@
 
 * add `dotenv/rails-now`, which can be required in the `Gemfile` to immidately load dotenv.
 
-    gem 'dotenv-rails', :require => 'dotenv/rails-now'
-    gem 'gem-that-requires-env-variables'
+        gem 'dotenv-rails', :require => 'dotenv/rails-now'
+        gem 'gem-that-requires-env-variables'
 
 [Full Changelog](https://github.com/bkeepers/dotenv/compare/v1.0.1...v1.0.2)
 
