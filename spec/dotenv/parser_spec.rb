@@ -64,6 +64,10 @@ describe Dotenv::Parser do
     expect(env('OPTION_A: 1')).to eql('OPTION_A' => '1')
   end
 
+  it 'parses [/] keys' do
+    expect(env('F[O][O]=bar')).to eql('F[O][O]' => 'bar')
+  end
+
   it 'parses export keyword' do
     expect(env('export OPTION_A=2')).to eql('OPTION_A' => '2')
   end
