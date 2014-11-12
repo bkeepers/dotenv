@@ -36,7 +36,7 @@ describe Dotenv::Railtie do
     end
   end
 
-  context 'load' do
+  context 'load methods' do
     before { Dotenv::Railtie.load }
 
     it 'watches .env with Spring' do
@@ -51,6 +51,24 @@ describe Dotenv::Railtie do
 
     it 'loads .env' do
       expect(ENV).to have_key('DOTENV')
+    end
+
+    context 'load' do
+      before { ENV['DOTENV'] = 'false' }
+
+      it 'does not overload .env' do
+        Dotenv::Railtie.load
+        expect(ENV['DOTENV']).to eq 'false'
+      end
+    end
+
+    context 'overload' do
+      before { ENV['DOTENV'] = 'false' }
+
+      it 'overloads .env' do
+        Dotenv::Railtie.overload
+        expect(ENV['DOTENV']).to eq 'true'
+      end
     end
   end
 end
