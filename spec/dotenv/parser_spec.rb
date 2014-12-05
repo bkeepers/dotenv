@@ -68,6 +68,16 @@ describe Dotenv::Parser do
     expect(env('export OPTION_A=2')).to eql('OPTION_A' => '2')
   end
 
+  it 'allows export line if you want to do it that way' do
+    expect(env('OPTION_A=2
+export OPTION_A')).to eql('OPTION_A' => '2')
+  end
+
+  it 'allows export line if you want to do it that way and checks for unset variables' do
+    expect{env('OPTION_A=2
+export OH_NO_NOT_SET')}.to raise_error(Dotenv::FormatError, 'Line "export OH_NO_NOT_SET" has a variable that is not set')
+  end
+
   it 'expands newlines in quoted strings' do
     expect(env('FOO="bar\nbaz"')).to eql('FOO' => "bar\nbaz")
   end
