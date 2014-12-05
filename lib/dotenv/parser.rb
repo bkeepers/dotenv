@@ -55,6 +55,9 @@ module Dotenv
           end
 
           hash[key] = value
+        elsif line.split.first == 'export'
+          # looks like you want to export after declaration, I guess that is ok
+          raise FormatError, "Line #{line.inspect} has a variable that is not set" unless line.split[1..-1].all?{ |var| hash.member?(var) }
         elsif line !~ /\A\s*(?:#.*)?\z/ # not comment or blank line
           raise FormatError, "Line #{line.inspect} doesn't match format"
         end
