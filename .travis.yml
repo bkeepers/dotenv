@@ -10,3 +10,6 @@ rvm:
 sudo: false
 
 bundler_args: --without=guard
+
+notifications:
+  disabled: true
