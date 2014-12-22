@@ -1,7 +1,17 @@
 language: ruby
+
 rvm:
-  - 2.1.0
+  - 2.2
+  - 2.1
   - 2.0.0
   - 1.9.3
   - rbx-2
+
+sudo: false
+
 bundler_args: --without=guard
+
+matrix:
+  allow_failures:
+    - rvm: 1.8.7
+    - rvm: ree
