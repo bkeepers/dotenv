@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.0 - unreleased
+
+* Drop official support for Ruby 1.8.7 and REE. They may still continue to work, but will not be tested against. Lock to version "<= 1.1" if you are using Ruby 1.8.
+
 ## 1.0.2 - Oct 14, 2014
 
 * Define `#load` on `Dotenv::Railtie`, which can be called to manually load `dotenv` before Rails has initialized.
