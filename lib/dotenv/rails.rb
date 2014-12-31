@@ -18,7 +18,7 @@ module Dotenv
       Dotenv.instrumenter = ActiveSupport::Notifications
       configure_spring if defined?(Spring)
 
-      Dotenv.load Rails.root.join('.env')
+      Dotenv.load Rails.root.join(".env.#{Rails.env}"), Rails.root.join('.env')
     end
 
     # Internal: Watch all loaded env files with spring
