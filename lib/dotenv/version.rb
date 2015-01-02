@@ -1,3 +1,3 @@
 module Dotenv
-  VERSION = '0.11.1'
+  VERSION = '1.0.2'
 end

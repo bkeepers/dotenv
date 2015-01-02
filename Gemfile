@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 gemspec :name => 'dotenv'
+gemspec :name => 'dotenv-rails'
 
 gem 'dotenv-deployment', :github => 'bkeepers/dotenv-deployment'
 

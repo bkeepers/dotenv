@@ -1,12 +1,52 @@
 # Changelog
 
-## unreleased
+## 1.1.0 - unreleased
 
-* Support -f option to dotenv binary, e.g. dotenv -f /path/to/.env,/path/to/another/.env
+* Drop official support for Ruby 1.8.7 and REE. They may still continue to work, but will not be tested against. Lock to version "<= 1.1" if you are using Ruby 1.8.
+
+* Support -f option to dotenv executable
+
+        dotenv -f /path/to/.env,/path/to/another/.env
+
+## 1.0.2 - Oct 14, 2014
+
+* Define `#load` on `Dotenv::Railtie`, which can be called to manually load `dotenv` before Rails has initialized.
+
+* add `dotenv/rails-now`, which can be required in the `Gemfile` to immidately load dotenv.
+
+        gem 'dotenv-rails', :require => 'dotenv/rails-now'
+        gem 'gem-that-requires-env-variables'
+
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v1.0.1...v1.0.2)
+
+## 1.0.1 - Oct 4, 2014
+
+* Fix load error with Spring when running `rails server` ([#140](https://github.com/bkeepers/dotenv/issues/140))
+
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v1.0.0...v1.0.1)
+
+## 1.0.0 - Oct 3, 2014
+
+* dotenv-rails is now loaded during the `before_configuration` callback, which is fired when the `Application` constant is defined (`class Application < Rails::Application`).
+
+* Remove deprecated features. Upgrade to 0.11.0 and fix deprecation warnings before upgrading to 1.0.0.
+
+* Watch .env for changes with Spring in Rails 4 ([#118](https://github.com/bkeepers/dotenv/pull/118))
+
+* Fix deprecation warnings for `File.exists?` ([#121](https://github.com/bkeepers/dotenv/pull/121/))
+
+* Use `Rails.root` to find `.env` ([#122](https://github.com/bkeepers/dotenv/pull/122/files))
+
+* Avoid substitutions inside single quotes ([#124](https://github.com/bkeepers/dotenv/pull/124))
+
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v0.11.1...v1.0.0)
+>>>>>>> origin/master
 
 ## 0.11.1 - Apr 22, 2014
 
 * Depend on dotenv-deployment ~>0.0.2, which fixes issues with 0.0.1
+
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v0.11.0...v0.11.1)
 
 ## 0.11.0 - Apr 21, 2014
 
