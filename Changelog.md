@@ -8,11 +8,13 @@
 
         dotenv -f /path/to/.env,/path/to/another/.env
 
+* Fix issue calling `Dotenv::Railtie.load` in Rails 4.1 before application is defined (#155)
+
 ## 1.0.2 - Oct 14, 2014
 
 * Define `#load` on `Dotenv::Railtie`, which can be called to manually load `dotenv` before Rails has initialized.
 
-* add `dotenv/rails-now`, which can be required in the `Gemfile` to immidately load dotenv.
+* add `dotenv/rails-now`, which can be required in the `Gemfile` to immediately load dotenv.
 
         gem 'dotenv-rails', :require => 'dotenv/rails-now'
         gem 'gem-that-requires-env-variables'
