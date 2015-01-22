@@ -1,4 +1,5 @@
 require 'spec_helper'
+ENV["RAILS_ENV"] = "test"
 require 'rails'
 require 'dotenv/rails'
 
@@ -8,11 +9,11 @@ describe Dotenv::Railtie do
     attr_reader :items
 
     def initialize
-      @items = Set.new
+      @items = []
     end
 
     def add(*items)
-      @items.merge items
+      @items |= items
     end
   end
 
@@ -48,8 +49,16 @@ describe Dotenv::Railtie do
       expect(Spring.watcher.items).to include(path)
     end
 
-    it 'loads .env' do
-      expect(ENV).to have_key('DOTENV')
+    it 'loads .env, .env.local, and .env.#{Rails.env}' do
+      expect(Spring.watcher.items).to eql([
+        Rails.root.join('.env.local').to_s,
+        Rails.root.join('.env.test').to_s,
+        Rails.root.join('.env').to_s
+      ])
+    end
+
+    it 'loads .env.local before .env' do
+      expect(ENV["DOTENV"]).to eql("local")
     end
   end
 end
