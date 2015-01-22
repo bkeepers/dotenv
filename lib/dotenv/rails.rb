@@ -18,7 +18,7 @@ module Dotenv
       Dotenv.instrumenter = ActiveSupport::Notifications
       configure_spring if defined?(Spring)
 
-      Dotenv.load Rails.root.join('.env')
+      Dotenv.load root.join('.env')
     end
 
     # Internal: Watch all loaded env files with spring
@@ -27,6 +27,13 @@ module Dotenv
         event = ActiveSupport::Notifications::Event.new(*args)
         Spring.watch event.payload[:env].filename
       end
+    end
+
+    # Internal: `Rails.root` is nil in Rails 4.1 before the application is
+    # initialized, so this falls back to the `RAILS_ROOT` environment variable,
+    # or the current workding directory.
+    def root
+      Rails.root || Pathname.new(ENV["RAILS_ROOT"] || Dir.pwd)
     end
 
     # Rails uses `#method_missing` to delegate all class methods to the
