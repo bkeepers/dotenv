@@ -60,5 +60,16 @@ describe Dotenv::Railtie do
     it 'loads .env.local before .env' do
       expect(ENV["DOTENV"]).to eql("local")
     end
+
+    context "when Rails.root is nil" do
+      before do
+        allow(Rails).to receive(:root).and_return(nil)
+      end
+
+      it "falls back to RAILS_ROOT" do
+        ENV["RAILS_ROOT"] = "/tmp"
+        expect(Dotenv::Railtie.root.to_s).to eql("/tmp")
+      end
+    end
   end
 end
