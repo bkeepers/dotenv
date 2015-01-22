@@ -1,11 +1,4 @@
 #!/usr/bin/env ruby
 
-require 'dotenv'
-
-begin
-  Dotenv.load!
-rescue Errno::ENOENT => e
-  abort e.message
-else
-  exec *ARGV unless ARGV.empty?
-end
+require 'dotenv/cli'
+Dotenv::CLI.new(ARGV).run
