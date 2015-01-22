@@ -11,5 +11,5 @@ Gem::Specification.new "dotenv-rails", Dotenv::VERSION do |gem|
   gem.add_dependency 'dotenv', Dotenv::VERSION
 
   gem.add_development_dependency 'spring'
-  gem.add_development_dependency 'railties'
+  gem.add_development_dependency 'railties', '~>4.0'
 end

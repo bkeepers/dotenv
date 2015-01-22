@@ -1,6 +1,8 @@
 # Changelog
 
-## 1.1.0 - unreleased
+## 2.0.0 - unreleased
+
+* `.env.local` and `.env.#{Rails.env}` will be automatically be loaded with the `dotenv-rails` gem.
 
 * Drop official support for Ruby 1.8.7 and REE. They may still continue to work, but will not be tested against. Lock to version "<= 1.1" if you are using Ruby 1.8.
 
