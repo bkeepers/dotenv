@@ -18,15 +18,14 @@ describe Dotenv::Railtie do
 
   before do
     allow(Rails).to receive(:root).and_return Pathname.new(File.expand_path('../../../', __FILE__))
-    allow(Spring).to receive(:application_root_path).and_return(Rails.root)
+    Rails.application = double(:application)
     Spring.watcher = SpecWatcher.new
   end
 
   after do
     # Reset
-    Dotenv.instrumenter = nil
-    ActiveSupport::Notifications.notifier = ActiveSupport::Notifications::Fanout.new
     Spring.watcher = nil
+    Rails.application = nil
   end
 
   context 'before_configuration' do
