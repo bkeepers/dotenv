@@ -1,7 +1,14 @@
 require 'dotenv'
 
+Dotenv.instrumenter = ActiveSupport::Notifications
+
+# Watch all loaded env files with Spring
 begin
   require 'spring/watcher'
+  ActiveSupport::Notifications.subscribe(/^dotenv/) do |*args|
+    event = ActiveSupport::Notifications::Event.new(*args)
+    Spring.watch event.payload[:env].filename if Rails.application
+  end
 rescue LoadError
   # Spring is not available
 end
@@ -15,18 +22,11 @@ module Dotenv
     # This will get called during the `before_configuration` callback, but you
     # can manually call `Dotenv::Railtie.load` if you needed it sooner.
     def load
-      Dotenv.instrumenter = ActiveSupport::Notifications
-      configure_spring if defined?(Spring)
-
-      Dotenv.load root.join('.env')
-    end
-
-    # Internal: Watch all loaded env files with spring
-    def configure_spring
-      ActiveSupport::Notifications.subscribe(/^dotenv/) do |*args|
-        event = ActiveSupport::Notifications::Event.new(*args)
-        Spring.watch event.payload[:env].filename
-      end
+      Dotenv.load(
+        root.join(".env.local"),
+        root.join(".env.#{Rails.env}"),
+        root.join('.env')
+      )
     end
 
     # Internal: `Rails.root` is nil in Rails 4.1 before the application is

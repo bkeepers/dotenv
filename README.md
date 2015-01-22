@@ -6,8 +6,6 @@ Storing [configuration in the environment](http://www.12factor.net/config) is on
 
 But it is not always practical to set environment variables on development machines or continuous integration servers where multiple projects are run. dotenv loads variables from a `.env` file into `ENV` when the environment is bootstrapped.
 
-dotenv is intended to be used in development. If you would like to use it in production or other environments, see [dotenv-deployment](https://github.com/bkeepers/dotenv-deployment)
-
 ## Installation
 
 ### Rails
@@ -102,6 +100,14 @@ Whenever your application loads, these variables will be available in `ENV`:
 ```ruby
 config.fog_directory  = ENV['S3_BUCKET']
 ```
+
+## Multiple Rails Environments
+
+dotenv was originally created to load configuration variables into `ENV` in *development*. There are typically better ways to manage configuration in production environments environments—such as `/etc/environment` managed by [Puppet](https://github.com/puppetlabs/puppet) or [Chef](https://github.com/opscode/chef), `heroku config`, etc.
+
+However, some find dotenv to be a convenient way to configure Rails applications in staging and production environments, and you can do that by defining environment-specific files like `.env.production` or `.env.test`.
+
+You can also `.env.local` for local overrides.
 
 ## Should I commit my .env file?
 

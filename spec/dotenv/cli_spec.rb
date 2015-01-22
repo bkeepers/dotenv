@@ -2,6 +2,10 @@ require 'spec_helper'
 require 'dotenv/cli'
 
 describe 'dotenv binary' do
+  before do
+    Dir.chdir(File.expand_path("../../fixtures", __FILE__))
+  end
+
   def run(*args)
     Dotenv::CLI.new(args).run
   end
@@ -14,7 +18,7 @@ describe 'dotenv binary' do
 
   it "loads from file specified by -f" do
     expect(ENV).not_to have_key("OPTION_A")
-    run "-f", "spec/fixtures/plain.env"
+    run "-f", "plain.env"
     expect(ENV).to have_key("OPTION_A")
   end
 
@@ -28,7 +32,7 @@ describe 'dotenv binary' do
     expect(ENV).not_to have_key("PLAIN")
     expect(ENV).not_to have_key("QUOTED")
 
-    run "-f", "spec/fixtures/plain.env,spec/fixtures/quoted.env"
+    run "-f", "plain.env,quoted.env"
 
     expect(ENV).to have_key("PLAIN")
     expect(ENV).to have_key("QUOTED")
