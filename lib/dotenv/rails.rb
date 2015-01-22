@@ -23,10 +23,17 @@ module Dotenv
     # can manually call `Dotenv::Railtie.load` if you needed it sooner.
     def load
       Dotenv.load(
-        Rails.root.join(".env.local"),
-        Rails.root.join(".env.#{Rails.env}"),
-        Rails.root.join('.env')
+        root.join(".env.local"),
+        root.join(".env.#{Rails.env}"),
+        root.join('.env')
       )
+    end
+
+    # Internal: `Rails.root` is nil in Rails 4.1 before the application is
+    # initialized, so this falls back to the `RAILS_ROOT` environment variable,
+    # or the current workding directory.
+    def root
+      Rails.root || Pathname.new(ENV["RAILS_ROOT"] || Dir.pwd)
     end
 
     # Rails uses `#method_missing` to delegate all class methods to the
