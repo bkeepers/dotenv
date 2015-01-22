@@ -17,7 +17,7 @@ describe Dotenv::Railtie do
   end
 
   before do
-    allow(Rails).to receive(:root).and_return Pathname.new(File.expand_path('../../../', __FILE__))
+    allow(Rails).to receive(:root).and_return Pathname.new(File.expand_path('../../fixtures', __FILE__))
     Rails.application = double(:application)
     Spring.watcher = SpecWatcher.new
   end
