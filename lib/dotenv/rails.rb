@@ -22,7 +22,11 @@ module Dotenv
     # This will get called during the `before_configuration` callback, but you
     # can manually call `Dotenv::Railtie.load` if you needed it sooner.
     def load
-      Dotenv.load Rails.root.join('.env')
+      Dotenv.load(
+        Rails.root.join(".env.local"),
+        Rails.root.join(".env.#{Rails.env}"),
+        Rails.root.join('.env')
+      )
     end
 
     # Rails uses `#method_missing` to delegate all class methods to the
