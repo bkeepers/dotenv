@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe Dotenv do
+  before do
+    Dir.chdir(File.expand_path("../fixtures", __FILE__))
+  end
+
   shared_examples 'load' do
     context 'with no args' do
       let(:env_files) { [] }
