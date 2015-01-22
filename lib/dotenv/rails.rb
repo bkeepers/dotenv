@@ -15,10 +15,18 @@ module Dotenv
     # This will get called during the `before_configuration` callback, but you
     # can manually call `Dotenv::Railtie.load` if you needed it sooner.
     def load
-      Dotenv.instrumenter = ActiveSupport::Notifications
-      configure_spring if defined?(Spring)
-
+      configure_load_options
       Dotenv.load Rails.root.join('.env')
+    end
+
+    # Public: Overload dotenv
+    #
+    # Manually called if you need to overload the values of existing
+    # environment variables. Useful if you are reloading environment as
+    # part of a zero-downtime deployment.
+    def overload
+      configure_load_options
+      Dotenv.overload Rails.root.join('.env')
     end
 
     # Internal: Watch all loaded env files with spring
@@ -33,6 +41,14 @@ module Dotenv
     # instance, which means `Kernel#load` gets called here. We don't want that.
     def self.load
       instance.load
+    end
+
+  private
+
+    # Internal: set up the instrumenter and configure Spring if Spring is loaded.
+    def configure_load_options
+      Dotenv.instrumenter = ActiveSupport::Notifications
+      configure_spring if defined?(Spring)
     end
   end
 end

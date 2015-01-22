@@ -59,6 +59,13 @@ require 'dotenv'
 Dotenv.load
 ```
 
+If you need to overload environment variables:
+
+```ruby
+require 'dotenv'
+Dotenv.overload
+```
+
 Alternatively, you can use the `dotenv` executable to launch your application:
 
 ```shell
