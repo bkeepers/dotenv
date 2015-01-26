@@ -101,6 +101,15 @@ Whenever your application loads, these variables will be available in `ENV`:
 config.fog_directory  = ENV['S3_BUCKET']
 ```
 
+Comments may be added to your file as such:
+
+```comments
+#here is a comment
+SECRET_KEY=YOURSECRETKEYGOESHERE # comment
+```
+
+Variable names may not contain the # symbol.
+
 ## Multiple Rails Environments
 
 dotenv was originally created to load configuration variables into `ENV` in *development*. There are typically better ways to manage configuration in production environments environments—such as `/etc/environment` managed by [Puppet](https://github.com/puppetlabs/puppet) or [Chef](https://github.com/opscode/chef), `heroku config`, etc.
