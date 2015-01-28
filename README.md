@@ -108,7 +108,7 @@ Comments may be added to your file as such:
 SECRET_KEY=YOURSECRETKEYGOESHERE # comment
 ```
 
-Variable names may not contain the # symbol.
+Variable names may not contain the # symbol, however values can.
 
 ## Multiple Rails Environments
 
