@@ -33,8 +33,31 @@ module Dotenv
 
         # ==[ Method 2: OpenSSL commands to encrypt and decrypt ]==
         #
-        # openssl aes-256-cbc    -a -pass file:.envcryptkey -in .env > .envcrypt
-        # openssl aes-256-cbc -d -a -pass env:DOTENVCRYPT -in .envcrypt
+        # To encrypt files on your development machine, first store your key,
+        # also called a password, in a UNVERSIONED file called .encryptkey
+        #
+        # One option is to store a random 256-bit Base64-encoded value:
+        #
+        #   openssl rand -base64 32 -out .envcryptkey
+        #
+        # Another option is to just store your key directly:
+        #
+        #   echo "My_K3wLsEKr!t" > .envcryptkey
+        #
+        # Only the first line of .envcryptkey is used, so trailing newlines are ok.
+        #
+        # Then, on your development machine, encrypt with the following command:
+        #
+        #   openssl aes-256-cbc -a -pass file:.envcryptkey -in .env -out .envcrypt
+        #
+        # Verify the decrypted output on your development machine with:
+        #
+        #   openssl aes-256-cbc -d -a -pass file:.envcryptkey -in .envcrypt
+        #
+        # You can then store your encrypted .envcrypt file in your repo.
+        #
+        # In production, set the DOTENVCRYPT environment variable to the contents of
+        # your .envcryptkey file and files will be decrypted as follows:
 
         `openssl aes-256-cbc -d -a -pass env:DOTENVCRYPT -in "#{@filename}"`.chomp
 
