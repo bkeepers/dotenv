@@ -33,7 +33,7 @@ module Dotenv
 
         # ==[ Method 2: OpenSSL commands to encrypt and decrypt ]==
         #
-        # openssl aes-256-cbc    -a -pass env:DOTENVCRYPT -in .env > .envcrypt
+        # openssl aes-256-cbc    -a -pass file:.envcryptkey -in .env > .envcrypt
         # openssl aes-256-cbc -d -a -pass env:DOTENVCRYPT -in .envcrypt
 
         `openssl aes-256-cbc -d -a -pass env:DOTENVCRYPT -in "#{@filename}"`.chomp
