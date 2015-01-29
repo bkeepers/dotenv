@@ -12,7 +12,7 @@ module Dotenv
     end
 
     def read
-      if @filename =~ /crypt$/
+      if @filename =~ /\.crypt$/
 
         # ==[ Method 1: Ruby methods to mimic openssl's quirky approach ]==
         #

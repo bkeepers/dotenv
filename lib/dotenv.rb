@@ -10,7 +10,7 @@ module Dotenv
 
     # determine filename, return if not found and optional
     if !File.exist?(filename)
-      if ENV.key?("DOTENVCRYPT") && File.exist?(dotenvcrypt = "#{filename}crypt")
+      if ENV.key?("DOTENVCRYPT") && File.exist?(dotenvcrypt = "#{filename}.crypt")
         filename = dotenvcrypt
       elsif optional
         return
