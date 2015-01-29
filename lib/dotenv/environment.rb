@@ -12,7 +12,61 @@ module Dotenv
     end
 
     def read
-      File.read(@filename)
+      if @filename =~ /\.crypt$/
+
+        # ==[ Method 1: Ruby methods to mimic openssl's quirky approach ]==
+        #
+        # require 'openssl'
+        #
+        # data = File.read(@filename).unpack('m').first
+        # pass = ENV['DOTENVCRYPT']
+        # salt = data.slice!(0,16)[8,8]
+        #
+        # k1 = OpenSSL::Digest::MD5.new(     pass + salt).digest
+        # k2 = OpenSSL::Digest::MD5.new(k1 + pass + salt).digest
+        # iv = OpenSSL::Digest::MD5.new(k2 + pass + salt).digest
+        #
+        # aes = OpenSSL::Cipher.new('aes-256-cbc').decrypt
+        # aes.key = k1 + k2
+        # aes.iv = iv
+        # aes.update(data) + aes.final
+
+        # ==[ Method 2: OpenSSL commands to encrypt and decrypt ]==
+        #
+        # -- On your development machine --
+        #
+        # First, create an unversioned file that contains your key (password):
+        #
+        # One option is to store a random 256-bit Base64-encoded value:
+        #
+        #   openssl rand -base64 32 -out .env.cryptkey
+        #
+        # Another option is to just store your key directly:
+        #
+        #   echo "My_K3wLsEKr!t" > .env.cryptkey
+        #
+        # Only the first line of .env.cryptkey is used, so trailing newlines are ok.
+        #
+        # Second, encrypt your files using this key:
+        #
+        #   openssl aes-256-cbc -a -pass file:.env.cryptkey -in .env -out .env.crypt
+        #
+        # Third, verify the process with:
+        #
+        #   openssl aes-256-cbc -d -a -pass file:.env.cryptkey -in .env.crypt
+        #
+        # Lastly, store your encrypted .env.crypt file in your repo.
+        #
+        # -- On your production machine --
+        #
+        # Simply set the DOTENVCRYPT environment variable to the contents of your
+        # .env.cryptkey file and files will be automatically decrypted with:
+
+        `openssl aes-256-cbc -d -a -pass env:DOTENVCRYPT -in "#{@filename}"`.chomp
+
+      else
+        File.read(@filename)
+      end
     end
 
     def apply

@@ -6,32 +6,25 @@ module Dotenv
 
   attr_accessor :instrumenter
 
-  def load(*filenames)
-    with(*filenames) do |f|
-      if File.exist?(f)
-        env = Environment.new(f)
-        instrument('dotenv.load', :env => env) { env.apply }
+  def process(filename, optional, override)
+
+    # determine filename, return if not found and optional
+    if !File.exist?(filename)
+      if ENV.key?("DOTENVCRYPT") && File.exist?(dotenvcrypt = "#{filename}.crypt")
+        filename = dotenvcrypt
+      elsif optional
+        return
       end
     end
+
+    # load environment as requested, with optional decryption
+    env = Environment.new(filename)
+    instrument('dotenv.load', :env => env) { override ? env.apply! : env.apply }
   end
 
-  # same as `load`, but raises Errno::ENOENT if any files don't exist
-  def load!(*filenames)
-    with(*filenames) do |f|
-      env = Environment.new(f)
-      instrument('dotenv.load', :env => env) { env.apply }
-    end
-  end
-
-  # same as `load`, but will override existing values in `ENV`
-  def overload(*filenames)
-    with(*filenames) do |f|
-      if File.exist?(f)
-        env = Environment.new(f)
-        instrument('dotenv.overload', :env => env) { env.apply! }
-      end
-    end
-  end
+  def load     *filenames; with(*filenames) {|f| process(f, true , false) }; end
+  def load!    *filenames; with(*filenames) {|f| process(f, false, false) }; end
+  def overload *filenames; with(*filenames) {|f| process(f, true , true ) }; end
 
   # Internal: Helper to expand list of filenames.
   #
