@@ -39,28 +39,28 @@ module Dotenv
         #
         # One option is to store a random 256-bit Base64-encoded value:
         #
-        #   openssl rand -base64 32 -out .envcryptkey
+        #   openssl rand -base64 32 -out .env.cryptkey
         #
         # Another option is to just store your key directly:
         #
-        #   echo "My_K3wLsEKr!t" > .envcryptkey
+        #   echo "My_K3wLsEKr!t" > .env.cryptkey
         #
-        # Only the first line of .envcryptkey is used, so trailing newlines are ok.
+        # Only the first line of .env.cryptkey is used, so trailing newlines are ok.
         #
         # Second, encrypt your files using this key:
         #
-        #   openssl aes-256-cbc -a -pass file:.envcryptkey -in .env -out .envcrypt
+        #   openssl aes-256-cbc -a -pass file:.env.cryptkey -in .env -out .env.crypt
         #
         # Third, verify the process with:
         #
-        #   openssl aes-256-cbc -d -a -pass file:.envcryptkey -in .envcrypt
+        #   openssl aes-256-cbc -d -a -pass file:.env.cryptkey -in .env.crypt
         #
-        # Lastly, store your encrypted .envcrypt file in your repo.
+        # Lastly, store your encrypted .env.crypt file in your repo.
         #
         # -- On your production machine --
         #
         # Simply set the DOTENVCRYPT environment variable to the contents of your
-        # .envcryptkey file and files will be automatically decrypted with:
+        # .env.cryptkey file and files will be automatically decrypted with:
 
         `openssl aes-256-cbc -d -a -pass env:DOTENVCRYPT -in "#{@filename}"`.chomp
 
