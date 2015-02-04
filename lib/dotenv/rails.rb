@@ -31,7 +31,7 @@ module Dotenv
 
     # Internal: `Rails.root` is nil in Rails 4.1 before the application is
     # initialized, so this falls back to the `RAILS_ROOT` environment variable,
-    # or the current workding directory.
+    # or the current working directory.
     def root
       Rails.root || Pathname.new(ENV["RAILS_ROOT"] || Dir.pwd)
     end
