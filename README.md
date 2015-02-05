@@ -103,7 +103,7 @@ config.fog_directory  = ENV['S3_BUCKET']
 
 ## Multiple Rails Environments
 
-dotenv was originally created to load configuration variables into `ENV` in *development*. There are typically better ways to manage configuration in production environments environments—such as `/etc/environment` managed by [Puppet](https://github.com/puppetlabs/puppet) or [Chef](https://github.com/opscode/chef), `heroku config`, etc.
+dotenv was originally created to load configuration variables into `ENV` in *development*. There are typically better ways to manage configuration in production environments - such as `/etc/environment` managed by [Puppet](https://github.com/puppetlabs/puppet) or [Chef](https://github.com/opscode/chef), `heroku config`, etc.
 
 However, some find dotenv to be a convenient way to configure Rails applications in staging and production environments, and you can do that by defining environment-specific files like `.env.production` or `.env.test`.
 
