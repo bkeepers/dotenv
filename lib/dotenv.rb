@@ -39,10 +39,8 @@ module Dotenv
   def with(*filenames, &block)
     filenames << '.env' if filenames.empty?
 
-    {}.tap do |hash|
-      filenames.each do |filename|
-        hash.merge! block.call(File.expand_path(filename)) || {}
-      end
+    filenames.reduce({}) do |hash, filename|
+      hash.merge! block.call(File.expand_path(filename)) || {}
     end
   end
 
