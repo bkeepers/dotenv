@@ -1,9 +1,9 @@
-guard 'bundler' do
-  watch('Gemfile')
+guard "bundler" do
+  watch("Gemfile")
 end
 
-guard 'rspec', :cmd => 'bundle exec rspec' do
-  watch(%r{^spec/.+_spec\.rb$})
-  watch(%r{^spec/spec_helper.rb$})    { "spec" }
-  watch(%r{^lib/(.+)\.rb$})           { |m| "spec/#{m[1]}_spec.rb" }
+guard "rspec", :cmd => "bundle exec rspec" do
+  watch(/^spec\/.+_spec\.rb$/)
+  watch(/^spec\/spec_helper.rb$/)    { "spec" }
+  watch(/^lib\/(.+)\.rb$/)           { |m| "spec/#{m[1]}_spec.rb" }
 end

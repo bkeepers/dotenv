@@ -1,13 +1,14 @@
-require 'dotenv/substitutions/variable'
-if RUBY_VERSION > '1.8.7'
-  require 'dotenv/substitutions/command'
+require "dotenv/substitutions/variable"
+if RUBY_VERSION > "1.8.7"
+  require "dotenv/substitutions/command"
 end
 
 module Dotenv
   class FormatError < SyntaxError; end
 
   class Parser
-    @@substitutions = Substitutions.constants.map { |const| Substitutions.const_get(const) }
+    @@substitutions =
+      Substitutions.constants.map { |const| Substitutions.const_get(const) }
 
     LINE = /
       \A
@@ -38,28 +39,32 @@ module Dotenv
         if match = line.match(LINE)
           key, value = match.captures
 
-          value ||= ''
+          value ||= ""
           # Remove surrounding quotes
           value = value.strip.sub(/\A(['"])(.*)\1\z/, '\2')
 
-          if $1 == '"'
+          if Regexp.last_match(1) == '"'
             value = value.gsub('\n', "\n")
-            # Unescape all characters except $ so variables can be escaped properly
+            # Unescape all characters except $ so variables can be escaped
+            # properly
             value = value.gsub(/\\([^$])/, '\1')
           end
 
-          if $1 != "'"
+          if Regexp.last_match(1) != "'"
             @@substitutions.each do |proc|
               value = proc.call(value, hash)
             end
           end
 
           hash[key] = value
-        elsif line.split.first == 'export'
+        elsif line.split.first == "export"
           # looks like you want to export after declaration, I guess that is ok
-          raise FormatError, "Line #{line.inspect} has a variable that is not set" unless line.split[1..-1].all?{ |var| hash.member?(var) }
+          unless line.split[1..-1].all? { |var| hash.member?(var) }
+            fail FormatError,
+                 "Line #{line.inspect} has a variable that is not set"
+          end
         elsif line !~ /\A\s*(?:#.*)?\z/ # not comment or blank line
-          raise FormatError, "Line #{line.inspect} doesn't match format"
+          fail FormatError, "Line #{line.inspect} doesn't match format"
         end
         hash
       end
