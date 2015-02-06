@@ -1,7 +1,7 @@
-require 'spec_helper'
-require 'dotenv/cli'
+require "spec_helper"
+require "dotenv/cli"
 
-describe 'dotenv binary' do
+describe "dotenv binary" do
   before do
     Dir.chdir(File.expand_path("../../fixtures", __FILE__))
   end
@@ -23,9 +23,9 @@ describe 'dotenv binary' do
   end
 
   it "dies if file specified by -f doesn't exist" do
-    expect {
+    expect do
       capture_output { run "-f", ".doesnotexist" }
-    }.to raise_error(SystemExit, /No such file/)
+    end.to raise_error(SystemExit, /No such file/)
   end
 
   it "loads from multiple files specified by -f" do
@@ -39,7 +39,7 @@ describe 'dotenv binary' do
   end
 
   # Capture output to $stdout and $stderr
-  def capture_output(&block)
+  def capture_output(&_block)
     original_stderr, original_stdout = $stderr, $stdout
     output = $stderr = $stdout = StringIO.new
 

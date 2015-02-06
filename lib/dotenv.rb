@@ -1,5 +1,5 @@
-require 'dotenv/parser'
-require 'dotenv/environment'
+require "dotenv/parser"
+require "dotenv/environment"
 
 module Dotenv
   extend self
@@ -10,7 +10,7 @@ module Dotenv
     with(*filenames) do |f|
       if File.exist?(f)
         env = Environment.new(f)
-        instrument('dotenv.load', :env => env) { env.apply }
+        instrument("dotenv.load", :env => env) { env.apply }
       end
     end
   end
@@ -19,7 +19,7 @@ module Dotenv
   def load!(*filenames)
     with(*filenames) do |f|
       env = Environment.new(f)
-      instrument('dotenv.load', :env => env) { env.apply }
+      instrument("dotenv.load", :env => env) { env.apply }
     end
   end
 
@@ -28,7 +28,7 @@ module Dotenv
     with(*filenames) do |f|
       if File.exist?(f)
         env = Environment.new(f)
-        instrument('dotenv.overload', :env => env) { env.apply! }
+        instrument("dotenv.overload", :env => env) { env.apply! }
       end
     end
   end
@@ -37,7 +37,7 @@ module Dotenv
   #
   # Returns a hash of all the loaded environment variables.
   def with(*filenames, &block)
-    filenames << '.env' if filenames.empty?
+    filenames << ".env" if filenames.empty?
 
     filenames.reduce({}) do |hash, filename|
       hash.merge! block.call(File.expand_path(filename)) || {}

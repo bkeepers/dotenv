@@ -1,10 +1,10 @@
-require 'dotenv'
+require "dotenv"
 
 Dotenv.instrumenter = ActiveSupport::Notifications
 
 # Watch all loaded env files with Spring
 begin
-  require 'spring/watcher'
+  require "spring/watcher"
   ActiveSupport::Notifications.subscribe(/^dotenv/) do |*args|
     event = ActiveSupport::Notifications::Event.new(*args)
     Spring.watch event.payload[:env].filename if Rails.application
@@ -25,7 +25,7 @@ module Dotenv
       Dotenv.load(
         root.join(".env.local"),
         root.join(".env.#{Rails.env}"),
-        root.join('.env')
+        root.join(".env")
       )
     end
 

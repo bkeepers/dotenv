@@ -1,6 +1,6 @@
-desc 'Load environment settings from .env'
+desc "Load environment settings from .env"
 task :dotenv do
-  require 'dotenv'
+  require "dotenv"
   Dotenv.load
 end
 

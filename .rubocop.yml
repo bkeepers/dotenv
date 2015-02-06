@@ -1,0 +1,7 @@
+inherit_from: .rubocop_todo.yml
+
+Style/StringLiterals:
+  EnforcedStyle: 'double_quotes'
+
+Style/HashSyntax:
+  EnforcedStyle: 'hash_rockets'
