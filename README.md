@@ -101,6 +101,42 @@ Whenever your application loads, these variables will be available in `ENV`:
 config.fog_directory  = ENV['S3_BUCKET']
 ```
 
+## WrappedEnv
+
+`ENV` is a simple hash containing all environment variables.  The
+`WrappedEnv` class adds a few convenience methods for accessing
+your environment variables.
+
+```ruby
+Dotenv.load
+
+# []
+WrappedEnv['MY_VAR'] # => 'abc'
+WrappedEnv['FAKE_VAR'] # => nil
+
+# fetch
+WrappedEnv.fetch('MY_VAR') # => 'abc'
+WrappedEnv.fetch('FAKE_VAR') # => KeyError: key not found "FAKE_VAR"
+
+# cast
+# ENV = { 'INT' => '1', 'BOOL' => 'true' }
+WrappedEnv.cast('INT') # => 1
+WrappedEnv.fetch('INT') # => '1'
+
+WrappedEnv.cast('BOOL') # => true
+
+WrappedEnv.cast('FAKE_VAR') # => nil
+WrappedEnv.cast!('FAKE_VAR') # => KeyError: key not found "FAKE_VAR"
+
+# override/reset (for temporary changes and testing)
+WrappedEnv.fetch('MY_VAR') # => 'abc'
+WrappedEnv.override('MY_VAR') # => 'def'
+WrappedEnv.fetch('MY_VAR') # => 'def'
+WrappedEnv.reset
+WrappedEnv.fetch('MY_VAR') # => 'abc'
+
+```
+
 ## Multiple Rails Environments
 
 dotenv was originally created to load configuration variables into `ENV` in *development*. There are typically better ways to manage configuration in production environments - such as `/etc/environment` managed by [Puppet](https://github.com/puppetlabs/puppet) or [Chef](https://github.com/opscode/chef), `heroku config`, etc.

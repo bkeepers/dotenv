@@ -1,3 +1,4 @@
+require 'wrapped_env'
 require 'dotenv/parser'
 require 'dotenv/environment'
 
