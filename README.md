@@ -103,7 +103,7 @@ config.fog_directory  = ENV['S3_BUCKET']
 
 Comments may be added to your file as such:
 
-```comments
+```shell
 #here is a comment
 SECRET_KEY=YOURSECRETKEYGOESHERE # comment
 ```
