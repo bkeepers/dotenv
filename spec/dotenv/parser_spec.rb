@@ -81,7 +81,7 @@ export OPTION_A')).to eql("OPTION_A" => "2")
       env('OPTION_A=2
 export OH_NO_NOT_SET')
     end.to raise_error(Dotenv::FormatError, 'Line "export OH_NO_NOT_SET"'\
-                                            " has a variable that is not set")
+                                            " has an unset variable")
   end
 
   it "expands newlines in quoted strings" do

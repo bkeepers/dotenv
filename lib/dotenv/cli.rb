@@ -1,6 +1,8 @@
 require "dotenv"
 
 module Dotenv
+  # The CLI is a class responsible of handling all the command line interface
+  # logic.
   class CLI
     attr_reader :argv
 

@@ -1,6 +1,7 @@
 require "dotenv/parser"
 require "dotenv/environment"
 
+# The top level Dotenv module. The entrypoint for the application logic.
 module Dotenv
   class << self
     attr_accessor :instrumenter
