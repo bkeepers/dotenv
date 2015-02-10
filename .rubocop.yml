@@ -1,7 +1,11 @@
 inherit_from: .rubocop_todo.yml
 
-Style/StringLiterals:
-  EnforcedStyle: 'double_quotes'
+Lint/HandleExceptions:
+  Exclude:
+    - 'lib/dotenv/rails.rb'
 
 Style/HashSyntax:
   EnforcedStyle: 'hash_rockets'
+
+Style/StringLiterals:
+  EnforcedStyle: 'double_quotes'

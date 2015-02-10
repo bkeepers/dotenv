@@ -2,9 +2,11 @@ require "dotenv/parser"
 require "dotenv/environment"
 
 module Dotenv
-  extend self
+  class << self
+    attr_accessor :instrumenter
+  end
 
-  attr_accessor :instrumenter
+  module_function
 
   def load(*filenames)
     with(*filenames) do |f|

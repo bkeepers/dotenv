@@ -1,13 +1,11 @@
 require "dotenv/substitutions/variable"
-if RUBY_VERSION > "1.8.7"
-  require "dotenv/substitutions/command"
-end
+require "dotenv/substitutions/command" if RUBY_VERSION > "1.8.7"
 
 module Dotenv
   class FormatError < SyntaxError; end
 
   class Parser
-    @@substitutions =
+    @substitutions =
       Substitutions.constants.map { |const| Substitutions.const_get(const) }
 
     LINE = /
@@ -26,8 +24,12 @@ module Dotenv
       \z
     /x
 
-    def self.call(string)
-      new(string).call
+    class << self
+      attr_accessor :substitutions
+
+      def call(string)
+        new(string).call
+      end
     end
 
     def initialize(string)
@@ -35,8 +37,9 @@ module Dotenv
     end
 
     def call
-      @string.split("\n").inject({}) do |hash, line|
-        if match = line.match(LINE)
+      @string.split("\n").each_with_object({}) do |line, hash|
+        match = line.match(LINE)
+        if match
           key, value = match.captures
 
           value ||= ""
@@ -51,7 +54,7 @@ module Dotenv
           end
 
           if Regexp.last_match(1) != "'"
-            @@substitutions.each do |proc|
+            self.class.substitutions.each do |proc|
               value = proc.call(value, hash)
             end
           end
@@ -66,7 +69,6 @@ module Dotenv
         elsif line !~ /\A\s*(?:#.*)?\z/ # not comment or blank line
           fail FormatError, "Line #{line.inspect} doesn't match format"
         end
-        hash
       end
     end
   end
