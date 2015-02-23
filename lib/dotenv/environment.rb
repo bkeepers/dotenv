@@ -1,4 +1,6 @@
 module Dotenv
+  # This class inherits from Hash and represents the environemnt into which
+  # Dotenv will load key value pairs from a file.
   class Environment < Hash
     attr_reader :filename
 
@@ -16,11 +18,11 @@ module Dotenv
     end
 
     def apply
-      each { |k,v| ENV[k] ||= v }
+      each { |k, v| ENV[k] ||= v }
     end
 
     def apply!
-      each { |k,v| ENV[k] = v }
+      each { |k, v| ENV[k] = v }
     end
   end
 end
