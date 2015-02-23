@@ -8,7 +8,7 @@ module Dotenv
 
   def load(*filenames)
     with(*filenames) do |f|
-      if File.exist?(f)
+      ignoring_nonexistent_files do
         env = Environment.new(f)
         instrument('dotenv.load', :env => env) { env.apply }
       end
@@ -26,7 +26,7 @@ module Dotenv
   # same as `load`, but will override existing values in `ENV`
   def overload(*filenames)
     with(*filenames) do |f|
-      if File.exist?(f)
+      ignoring_nonexistent_files do
         env = Environment.new(f)
         instrument('dotenv.overload', :env => env) { env.apply! }
       end
@@ -50,5 +50,10 @@ module Dotenv
     else
       block.call
     end
+  end
+
+  def ignoring_nonexistent_files
+    yield
+  rescue Errno::ENOENT
   end
 end
