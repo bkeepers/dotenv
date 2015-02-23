@@ -104,11 +104,12 @@ config.fog_directory  = ENV['S3_BUCKET']
 Comments may be added to your file as such:
 
 ```shell
-#here is a comment
+# This is a comment
 SECRET_KEY=YOURSECRETKEYGOESHERE # comment
+SECRET_HASH="something-with-a-#-hash"
 ```
 
-Variable names may not contain the # symbol, however values can.
+Variable names may not contain the `#` symbol. Values can use the `#` if they are enclosed in quotes.
 
 ## Multiple Rails Environments
 
