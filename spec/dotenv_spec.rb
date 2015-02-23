@@ -84,16 +84,28 @@ describe Dotenv do
   end
 
   describe 'overload' do
-    let(:env_files) { [fixture_path('plain.env')] }
     subject { Dotenv.overload(*env_files) }
     it_behaves_like 'load'
 
-    it 'overrides any existing ENV variables' do
-      ENV['OPTION_A'] = 'predefined'
+    context 'when loading a file containing already set variables' do
+      let(:env_files) { [fixture_path('plain.env')] }
 
-      subject
+      it 'overrides any existing ENV variables' do
+        ENV['OPTION_A'] = 'predefined'
 
-      expect(ENV['OPTION_A']).to eq('1')
+        subject
+
+        expect(ENV['OPTION_A']).to eq('1')
+      end
+    end
+
+    context 'when the file does not exist' do
+      let(:env_files) { ['.env_does_not_exist'] }
+
+      it 'fails silently' do
+        expect { subject }.not_to raise_error
+        expect(ENV.keys).to eq(@env_keys)
+      end
     end
   end
 
