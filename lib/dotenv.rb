@@ -1,16 +1,19 @@
-require 'dotenv/parser'
-require 'dotenv/environment'
+require "dotenv/parser"
+require "dotenv/environment"
 
+# The top level Dotenv module. The entrypoint for the application logic.
 module Dotenv
-  extend self
+  class << self
+    attr_accessor :instrumenter
+  end
 
-  attr_accessor :instrumenter
+  module_function
 
   def load(*filenames)
     with(*filenames) do |f|
-      if File.exist?(f)
+      ignoring_nonexistent_files do
         env = Environment.new(f)
-        instrument('dotenv.load', :env => env) { env.apply }
+        instrument("dotenv.load", :env => env) { env.apply }
       end
     end
   end
@@ -19,16 +22,16 @@ module Dotenv
   def load!(*filenames)
     with(*filenames) do |f|
       env = Environment.new(f)
-      instrument('dotenv.load', :env => env) { env.apply }
+      instrument("dotenv.load", :env => env) { env.apply }
     end
   end
 
   # same as `load`, but will override existing values in `ENV`
   def overload(*filenames)
     with(*filenames) do |f|
-      if File.exist?(f)
+      ignoring_nonexistent_files do
         env = Environment.new(f)
-        instrument('dotenv.overload', :env => env) { env.apply! }
+        instrument("dotenv.overload", :env => env) { env.apply! }
       end
     end
   end
@@ -37,12 +40,10 @@ module Dotenv
   #
   # Returns a hash of all the loaded environment variables.
   def with(*filenames, &block)
-    filenames << '.env' if filenames.empty?
+    filenames << ".env" if filenames.empty?
 
-    {}.tap do |hash|
-      filenames.each do |filename|
-        hash.merge! block.call(File.expand_path(filename)) || {}
-      end
+    filenames.reduce({}) do |hash, filename|
+      hash.merge! block.call(File.expand_path(filename)) || {}
     end
   end
 
@@ -52,5 +53,10 @@ module Dotenv
     else
       block.call
     end
+  end
+
+  def ignoring_nonexistent_files
+    yield
+  rescue Errno::ENOENT
   end
 end

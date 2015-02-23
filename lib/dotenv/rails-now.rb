@@ -6,5 +6,5 @@
 #     gem "gem-that-requires-env-variables"
 #
 
-require 'dotenv/rails'
+require "dotenv/rails"
 Dotenv::Railtie.load
