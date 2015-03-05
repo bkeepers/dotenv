@@ -1,6 +1,7 @@
 Lint/HandleExceptions:
   Exclude:
     - 'lib/dotenv/rails.rb'
+    - 'lib/dotenv.rb'
 
 Style/Documentation:
   Exclude:
