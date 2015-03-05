@@ -88,15 +88,15 @@ describe Dotenv do
     subject { Dotenv.overload(*env_files) }
     it_behaves_like "load"
 
-    context 'when loading a file containing already set variables' do
-      let(:env_files) { [fixture_path('plain.env')] }
+    context "when loading a file containing already set variables" do
+      let(:env_files) { [fixture_path("plain.env")] }
 
       it "overrides any existing ENV variables" do
         ENV["OPTION_A"] = "predefined"
 
         subject
 
-        expect(ENV['OPTION_A']).to eq('1')
+        expect(ENV["OPTION_A"]).to eq("1")
       end
     end
 
