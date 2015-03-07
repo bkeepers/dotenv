@@ -1,5 +1,6 @@
 require "dotenv/parser"
 require "dotenv/environment"
+require "safe_env"
 
 # The top level Dotenv module. The entrypoint for the application logic.
 module Dotenv

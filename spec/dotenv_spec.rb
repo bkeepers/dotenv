@@ -132,6 +132,26 @@ describe Dotenv do
     end
   end
 
+  describe "SAFE_ENV" do
+    before { ENV["APPLE"] = "apple" }
+
+    it "is defined" do
+      expect(defined?(SAFE_ENV)).to eql("constant")
+    end
+
+    it "gets env vars" do
+      expect(SAFE_ENV["APPLE"]).to eql(ENV["APPLE"])
+    end
+
+    it "raises an error when the var is not set" do
+      expect { SAFE_ENV["BANANA"] }
+        .to raise_error(RuntimeError)
+        .with_message("Environment variable BANANA is missing")
+    end
+
+    after { ENV.delete("APPLE") }
+  end
+
   def expand(path)
     File.expand_path path
   end
