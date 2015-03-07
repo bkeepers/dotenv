@@ -12,6 +12,8 @@ Gem::Specification.new "dotenv", Dotenv::VERSION do |gem|
     .split($OUTPUT_RECORD_SEPARATOR)
   gem.executables   = gem.files.grep(/^bin\//).map { |f| File.basename(f) }
 
+  gem.add_runtime_dependency "safe_env", "~> 0.1"
+
   gem.add_development_dependency "rake"
   gem.add_development_dependency "rspec"
   gem.add_development_dependency "rubocop"
