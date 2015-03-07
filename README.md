@@ -111,6 +111,16 @@ SECRET_HASH="something-with-a-#-hash"
 
 Variable names may not contain the `#` symbol. Values can use the `#` if they are enclosed in quotes.
 
+### Accessing environment variables
+
+`SAFE_ENV` works like `ENV` except it will raise an error if the
+environment variable does not exists:
+
+```
+[1] pry(main)> SAFE_ENV['CITY_OF_ATLANTIS']
+RuntimeError: Environment variable CITY_OF_ATLANTIS is missing
+```
+
 ## Multiple Rails Environments
 
 dotenv was originally created to load configuration variables into `ENV` in *development*. There are typically better ways to manage configuration in production environments - such as `/etc/environment` managed by [Puppet](https://github.com/puppetlabs/puppet) or [Chef](https://github.com/opscode/chef), `heroku config`, etc.
