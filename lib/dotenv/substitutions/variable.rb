@@ -1,3 +1,5 @@
+require "English"
+
 module Dotenv
   module Substitutions
     # Substitute variables in a value.
@@ -8,30 +10,23 @@ module Dotenv
     module Variable
       class << self
         VARIABLE = /
-          (\\)?          # is it escaped with a backslash?
-          (\$)           # literal $
-          (              # collect braces with var for sub
-            \{?          # allow brace wrapping
-            ([A-Z0-9_]+) # match the variable
-            \}?          # closing brace
-          )
+          (\\)?        # is it escaped with a backslash?
+          (\$)         # literal $
+          \{?          # allow brace wrapping
+          ([A-Z0-9_]+) # match the variable
+          \}?          # closing brace
         /xi
 
         def call(value, env)
-          # Process embedded variables
-          value.scan(VARIABLE).each do |parts|
-            if parts.first == '\\'
-              # Variable is escaped, don't replace it.
-              replace = parts[1...-1].join("")
+          value.gsub(VARIABLE) do |variable|
+            match = $LAST_MATCH_INFO
+
+            if match[1] == '\\'
+              variable[1..-1]
             else
-              # Replace it with the value from the environment
-              replace = env.fetch(parts.last) { ENV[parts.last] }
+              env.fetch(match[3]) { ENV[match[3]] }
             end
-
-            value = value.sub(parts[0...-1].join(""), replace || "")
           end
-
-          value
         end
       end
     end
