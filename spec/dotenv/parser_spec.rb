@@ -60,6 +60,8 @@ describe Dotenv::Parser do
   it "does not expand escaped variables" do
     expect(env('FOO="foo\$BAR"')).to eql("FOO" => "foo$BAR")
     expect(env('FOO="foo\${BAR}"')).to eql("FOO" => "foo${BAR}")
+    expect(env("FOO=test\nBAR=\"foo\\${FOO} ${FOO}\""))
+      .to eql("FOO" => "test", "BAR" => "foo${FOO} test")
   end
 
   it "parses yaml style options" do
