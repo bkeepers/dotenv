@@ -54,7 +54,6 @@
 * Avoid substitutions inside single quotes ([#124](https://github.com/bkeepers/dotenv/pull/124))
 
 [Full Changelog](https://github.com/bkeepers/dotenv/compare/v0.11.1...v1.0.0)
->>>>>>> origin/master
 
 ## 0.11.1 - Apr 22, 2014
 
