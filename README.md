@@ -119,6 +119,8 @@ However, some find dotenv to be a convenient way to configure Rails applications
 
 You can also `.env.local` for local overrides.
 
+If you use this gem to handle env vars for multiple Rails environments (development, test, production, etc.), please note that env vars that are general to all environments should be stored in `.env`. Then, environment specific env vars should be stored in `.env.<that environment's name>`. When you load a certain environment, dotenv will first load general env vars from `.env`, then load environment specific env vars from `.env.<current environment>`. If you need to override an env var from `.env` in `.env.<certain environment>`, then that env var should be moved from `.env` to `.env.<environment that needs it>`.
+
 ## Should I commit my .env file?
 
 Credentials should only be accessible on the machines that need access to them. Never commit sensitive information to a repository that is not needed by every development machine and server.
