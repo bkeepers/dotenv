@@ -40,12 +40,14 @@ describe "dotenv binary" do
 
   # Capture output to $stdout and $stderr
   def capture_output(&_block)
-    original_stderr, original_stdout = $stderr, $stdout
+    original_stderr = $stderr
+    original_stdout = $stdout
     output = $stderr = $stdout = StringIO.new
 
     yield
 
-    $stderr, $stdout = original_stderr, original_stdout
+    $stderr = original_stderr
+    $stdout = original_stdout
     output.string
   end
 end
