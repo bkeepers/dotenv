@@ -1,5 +1,7 @@
 # dotenv [![Build Status](https://secure.travis-ci.org/bkeepers/dotenv.png?branch=master)](https://travis-ci.org/bkeepers/dotenv)
 
+[![Join the chat at https://gitter.im/bkeepers/dotenv](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bkeepers/dotenv?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Shim to load environment variables from `.env` into `ENV` in *development*.
 
 Storing [configuration in the environment](http://www.12factor.net/config) is one of the tenets of a [twelve-factor app](http://www.12factor.net/). Anything that is likely to change between deployment environments–such as resource handles for databases or credentials for external services–should be extracted from the code into environment variables.
