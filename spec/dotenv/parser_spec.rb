@@ -145,17 +145,16 @@ export OH_NO_NOT_SET')
     end
 
     it "supports carriage return" do
-      expect(env("FOO=bar\rbaz=fbb")).to eql("FOO" => "bar", "baz" => 'fbb')
+      expect(env("FOO=bar\rbaz=fbb")).to eql("FOO" => "bar", "baz" => "fbb")
     end
 
     it "supports carriage return combine with new line" do
-      expect(env("FOO=bar\r\nbaz=fbb")).to eql("FOO" => "bar", "baz" => 'fbb')
+      expect(env("FOO=bar\r\nbaz=fbb")).to eql("FOO" => "bar", "baz" => "fbb")
     end
 
     it "expands carriage return in quoted strings" do
       expect(env('FOO="bar\rbaz"')).to eql("FOO" => "bar\rbaz")
     end
-
 
     # This functionality is not supported on JRuby or Rubinius
     if (!defined?(RUBY_ENGINE) || RUBY_ENGINE != "jruby") &&
