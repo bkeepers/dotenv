@@ -83,7 +83,7 @@ module Dotenv
     end
 
     def expand_newlines(value)
-      value.gsub('\n', "\n").gsub('\r',"\r")
+      value.gsub('\n', "\n").gsub('\r', "\r")
     end
 
     def variable_not_set?(line)
