@@ -41,7 +41,7 @@ module Dotenv
     end
 
     def call
-      @string.split("\n").each do |line|
+      @string.split(/[\n\r]+/).each do |line|
         parse_line(line)
       end
       @hash
@@ -83,7 +83,7 @@ module Dotenv
     end
 
     def expand_newlines(value)
-      value.gsub('\n', "\n")
+      value.gsub('\n', "\n").gsub('\r', "\r")
     end
 
     def variable_not_set?(line)
