@@ -123,6 +123,20 @@ You can also use `.env.local` for local overrides.
 
 If you use this gem to handle env vars for multiple Rails environments (development, test, production, etc.), please note that env vars that are general to all environments should be stored in `.env`. Then, environment specific env vars should be stored in `.env.<that environment's name>`. When you load a certain environment, dotenv will first load general env vars from `.env`, then load environment specific env vars from `.env.<current environment>`. Variables defined in `.env.<current environment>` will override any values set in `.env` or already defined in the environment.
 
+## Required Keys
+
+If a particular environment variable is required but not set, it's appropriate to raise an error.
+
+To require configuration keys:
+
+# config/initializers/dotenv.rb
+
+```ruby
+Dotenv.require_keys("pusher_app_id", "pusher_key", "pusher_secret")
+```
+
+If any of the configuration keys above are not set, your application will raise an error during initialization. This method is preferred because it prevents runtime errors in a production application due to improper configuration.
+
 ## Should I commit my .env file?
 
 Credentials should only be accessible on the machines that need access to them. Never commit sensitive information to a repository that is not needed by every development machine and server.

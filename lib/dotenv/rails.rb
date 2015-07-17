@@ -45,13 +45,6 @@ module Dotenv
     end
   end
 
-  # Throws error for unsupplied environment keys
-  class MissingKeys < StandardError
-    def initialize(keys)
-      super("Missing required configuration keys: #{keys.inspect}")
-    end
-  end
-
   # Checks if environment variables are set and throws error if they are not.
   def self.require_keys(*keys)
     missing_keys = keys.flatten - ::ENV.keys
