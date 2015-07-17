@@ -131,7 +131,7 @@ To require configuration keys:
 
 ```ruby
 # config/initializers/dotenv.rb
-Dotenv.require_keys("pusher_app_id", "pusher_key", "pusher_secret")
+Dotenv.require_keys("app_id", "api_key", "api_secret")
 ```
 
 If any of the configuration keys above are not set, your application will raise an error during initialization. This method is preferred because it prevents runtime errors in a production application due to improper configuration.
