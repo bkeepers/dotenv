@@ -78,11 +78,11 @@ describe Dotenv::Railtie do
     before { Dotenv::Railtie.load }
 
     it "throws error on missing required variables" do
-      expect{Dotenv.require_keys("MY_ENV")}.to raise_error(StandardError)
+      expect{ Dotenv.require_keys("MY_ENV") }.to raise_error(StandardError)
     end
 
     it "does not throw error on supplied required variables" do
-      expect{Dotenv.require_keys("DOTENV")}.to_not raise_error
+      expect{ Dotenv.require_keys("DOTENV") }.to_not raise_error
     end
   end
 end

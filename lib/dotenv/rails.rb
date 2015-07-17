@@ -13,6 +13,7 @@ rescue LoadError
   # Spring is not available
 end
 
+# The Dotevn module
 module Dotenv
   # Dotenv Railtie for using Dotenv to load environment from a file into
   # Rails applications
@@ -48,6 +49,6 @@ module Dotenv
   # Checks if environment variables are set and throws error if they are not.
   def self.require_keys(*keys)
     missing_keys = keys.flatten - ::ENV.keys
-    raise MissingKeys.new(missing_keys) if missing_keys.any?
+    fail MissingKeys.new(missing_keys) if missing_keys.any?
   end
 end
