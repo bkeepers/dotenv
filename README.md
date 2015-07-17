@@ -129,9 +129,8 @@ If a particular environment variable is required but not set, it's appropriate t
 
 To require configuration keys:
 
-# config/initializers/dotenv.rb
-
 ```ruby
+# config/initializers/dotenv.rb
 Dotenv.require_keys("pusher_app_id", "pusher_key", "pusher_secret")
 ```
 
