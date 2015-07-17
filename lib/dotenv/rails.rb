@@ -49,6 +49,6 @@ module Dotenv
   # Checks if environment variables are set and throws error if they are not.
   def self.require_keys(*keys)
     missing_keys = keys.flatten - ::ENV.keys
-    fail MissingKeys.new(missing_keys) if missing_keys.any?
+    fail(MissingKeys.new(missing_keys)) if missing_keys.any?
   end
 end
