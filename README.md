@@ -90,6 +90,11 @@ If you need multiline variables, for example private keys, you can double quote 
 PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\nHkVN9…\n-----END DSA PRIVATE KEY-----\n"
 ```
 
+You need to add the output of a command in one of your variables? Simply add it with `$(your_command)`:
+```shell
+DATABASE_URL="postgres://$(whoami)@localhost/my_database"
+```
+
 You may also add `export` in front of each line so you can `source` the file in bash:
 
 ```shell
