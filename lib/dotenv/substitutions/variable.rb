@@ -10,11 +10,11 @@ module Dotenv
     module Variable
       class << self
         VARIABLE = /
-          (\\)?        # is it escaped with a backslash?
-          (\$)         # literal $
-          \{?          # allow brace wrapping
-          ([A-Z0-9_]+) # match the variable
-          \}?          # closing brace
+          (\\)?          # is it escaped with a backslash?
+          (\$)           # literal $
+          \{?            # allow brace wrapping
+          ($|[A-Z0-9_]+) # match the variable
+          \}?            # closing brace
         /xi
 
         def call(value, env)
