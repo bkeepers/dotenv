@@ -14,7 +14,17 @@ module Dotenv
     end
 
     def read
-      File.read(@filename)
+      # Copied from https://github.com/heroku/netrc/blob/master/lib/netrc.rb#L54
+      if @filename =~ /\.gpg$/
+        decrypted = `gpg --batch --quiet --decrypt #{@filename}`
+        if $?.success?
+          decrypted
+        else
+          raise Error.new("Decrypting #{@filename} failed.") unless $?.success?
+        end
+      else
+        File.read(@filename)
+      end
     end
 
     def apply
