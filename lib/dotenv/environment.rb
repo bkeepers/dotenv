@@ -1,3 +1,5 @@
+require "english"
+
 module Dotenv
   # This class inherits from Hash and represents the environemnt into which
   # Dotenv will load key value pairs from a file.
@@ -17,10 +19,10 @@ module Dotenv
       # Copied from https://github.com/heroku/netrc/blob/master/lib/netrc.rb#L54
       if @filename =~ /\.gpg$/
         decrypted = `gpg --batch --quiet --decrypt #{@filename}`
-        if $?.success?
+        if $CHILD_STATUS.success?
           decrypted
         else
-          raise Error.new("Decrypting #{@filename} failed.") unless $?.success?
+          fail Error, "Decrypting #{@filename} failed."
         end
       else
         File.read(@filename)
