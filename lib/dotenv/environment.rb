@@ -1,4 +1,4 @@
-require "english"
+require "English"
 
 module Dotenv
   # This class inherits from Hash and represents the environemnt into which
