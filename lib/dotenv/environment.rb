@@ -1,3 +1,5 @@
+require "English"
+
 module Dotenv
   # This class inherits from Hash and represents the environemnt into which
   # Dotenv will load key value pairs from a file.
@@ -14,7 +16,16 @@ module Dotenv
     end
 
     def read
-      File.read(@filename)
+      if @filename =~ /\.gpg$/
+        decrypted = `gpg --batch --quiet --decrypt #{@filename}`
+        if $CHILD_STATUS.success?
+          decrypted
+        else
+          fail Error, "Decrypting #{@filename} failed."
+        end
+      else
+        File.read(@filename)
+      end
     end
 
     def apply
