@@ -40,11 +40,18 @@ module Dotenv
   #
   # Returns a hash of all the loaded environment variables.
   def with(*filenames, &block)
-    filenames << ".env" if filenames.empty?
+    default_files.each { |f| filenames << f } if filenames.empty?
 
     filenames.reduce({}) do |hash, filename|
       hash.merge! block.call(File.expand_path(filename)) || {}
     end
+  end
+
+  def default_files
+    files = %w(.env .env.gpg).select { |f| File.exist? f }
+
+    # Fail later with ENOENT if no .env is present.
+    files.empty? ? %w(.env) : files
   end
 
   def instrument(name, payload = {}, &block)
