@@ -1,3 +1,4 @@
+require "dotenv/extensions/file_handlers"
 module Dotenv
   # This class inherits from Hash and represents the environemnt into which
   # Dotenv will load key value pairs from a file.
@@ -14,6 +15,11 @@ module Dotenv
     end
 
     def read
+      Extensions::FileHandlers.file_types.each do |type, handler|
+        if @filename =~ /#{type}$/
+          return handler.read(@filename)
+        end
+      end
       File.read(@filename)
     end
 

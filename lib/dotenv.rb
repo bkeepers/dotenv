@@ -1,10 +1,13 @@
 require "dotenv/parser"
 require "dotenv/environment"
+require "dotenv/extensions"
+require "dotenv/extensions/file_handlers"
 
 # The top level Dotenv module. The entrypoint for the application logic.
 module Dotenv
   class << self
     attr_accessor :instrumenter
+    Extensions.register
   end
 
   module_function
@@ -40,11 +43,19 @@ module Dotenv
   #
   # Returns a hash of all the loaded environment variables.
   def with(*filenames, &block)
-    filenames << ".env" if filenames.empty?
+    default_files.each { |f| filenames << f } if filenames.empty?
 
     filenames.reduce({}) do |hash, filename|
       hash.merge! block.call(File.expand_path(filename)) || {}
     end
+  end
+
+  def default_files
+    files = %w(.env) + Extensions::FileHandlers.file_types.keys
+    files = files.select { |f| File.exist? f }
+
+    # Fail later with ENOENT if no .env is present
+    files.empty? ? %w(.env) : files
   end
 
   def instrument(name, payload = {}, &block)
