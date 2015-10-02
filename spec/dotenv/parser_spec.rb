@@ -125,12 +125,14 @@ export OH_NO_NOT_SET')
   end
 
   if RUBY_VERSION > "1.8.7"
+    ruby = RbConfig::CONFIG["RUBY_INSTALL_NAME"]
+
     it "parses shell commands interpolated in $()" do
-      expect(env("ruby_v=$(ruby -v)")).to eql("ruby_v" => RUBY_DESCRIPTION)
+      expect(env("ruby_v=$(#{ruby} -v)")).to eql("ruby_v" => RUBY_DESCRIPTION)
     end
 
     it "allows balanced parentheses within interpolated shell commands" do
-      expect(env('ruby_v=$(echo "$(echo "$(echo "$(ruby -v)")")")'))
+      expect(env('ruby_v=$(echo "$(echo "$(echo "$(' + ruby + ' -v)")")")'))
         .to eql("ruby_v" => RUBY_DESCRIPTION)
     end
 
