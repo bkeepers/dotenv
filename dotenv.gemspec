@@ -8,9 +8,9 @@ Gem::Specification.new "dotenv", Dotenv::VERSION do |gem|
   gem.homepage      = "https://github.com/bkeepers/dotenv"
   gem.license       = "MIT"
 
-  gem.executables   = gem.files.grep(%r{^bin/}).map { |f| File.basename(f) }
   gem.files         = `git ls-files README.md LICENSE lib bin | grep -v rails`
     .split($OUTPUT_RECORD_SEPARATOR)
+  gem.executables   = gem.files.grep(%r{^bin/}).map { |f| File.basename(f) }
 
   gem.add_development_dependency "rake"
   gem.add_development_dependency "rspec"
