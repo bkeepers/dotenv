@@ -64,6 +64,13 @@ describe Dotenv::Parser do
       .to eql("FOO" => "test", "BAR" => "foo${FOO} test")
   end
 
+  it "unescapes correctly" do
+    expect(env("FOO=\"foo\\$.test\"")).to eql("FOO" => "foo$.test")
+    expect(env("FOO=\"foo\\$\"")).to eql("FOO" => "foo$")
+    expect(env("FOO=\"foo\\$.\"")).to eql("FOO" => "foo$.")
+    expect(env("BAR=bar\nFOO=\"foo\\\\$BAR\"")).to eql("BAR" => "bar", "FOO" => "foo\\bar")
+  end
+
   it "parses yaml style options" do
     expect(env("OPTION_A: 1")).to eql("OPTION_A" => "1")
   end

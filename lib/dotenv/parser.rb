@@ -1,5 +1,6 @@
 require "dotenv/substitutions/variable"
 require "dotenv/substitutions/command" if RUBY_VERSION > "1.8.7"
+require "dotenv/substitutions/unescape"
 
 module Dotenv
   class FormatError < SyntaxError; end
@@ -8,8 +9,11 @@ module Dotenv
   # and stored in the Environment. It allows for variable substitutions and
   # exporting of variables.
   class Parser
-    @substitutions =
-      Substitutions.constants.map { |const| Substitutions.const_get(const) }
+    @substitutions = [
+      Substitutions::Variable,
+      Substitutions.const_defined?(:Command) ? Substitutions::Command : nil,
+      Substitutions::Unescape
+    ].compact
 
     LINE = /
       \A
@@ -79,7 +83,7 @@ module Dotenv
     end
 
     def unescape_characters(value)
-      value.gsub(/\\([^$])/, '\1')
+      value.gsub(/([^\\]|^)\\([^$\\])/, '\1\2')
     end
 
     def expand_newlines(value)
