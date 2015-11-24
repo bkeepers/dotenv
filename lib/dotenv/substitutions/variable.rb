@@ -12,8 +12,9 @@ module Dotenv
         VARIABLE = /
           (\\)?        # is it escaped with a backslash?
           (\$)         # literal $
+          (?!\()       # shouldnt be followed by paranthesis
           \{?          # allow brace wrapping
-          ([A-Z0-9_]+) # match the variable
+          (?(1)[A-Z0-9_]*|([A-Z0-9_]+)) # if escaped, no need to match with alphanumericals
           \}?          # closing brace
         /xi
 
