@@ -4,7 +4,7 @@
 
 Shim to load environment variables from `.env` into `ENV` in *development*.
 
-Storing [configuration in the environment](http://www.12factor.net/config) is one of the tenets of a [twelve-factor app](http://www.12factor.net/). Anything that is likely to change between deployment environments–such as resource handles for databases or credentials for external services–should be extracted from the code into environment variables.
+Storing [configuration in the environment](http://12factor.net/config) is one of the tenets of a [twelve-factor app](http://12factor.net). Anything that is likely to change between deployment environments–such as resource handles for databases or credentials for external services–should be extracted from the code into environment variables.
 
 But it is not always practical to set environment variables on development machines or continuous integration servers where multiple projects are run. dotenv loads variables from a `.env` file into `ENV` when the environment is bootstrapped.
 
@@ -120,7 +120,7 @@ Variable names may not contain the `#` symbol. Values can use the `#` if they ar
 
 ## Multiple Rails Environments
 
-dotenv was originally created to load configuration variables into `ENV` in *development*. There are typically better ways to manage configuration in production environments - such as `/etc/environment` managed by [Puppet](https://github.com/puppetlabs/puppet) or [Chef](https://github.com/opscode/chef), `heroku config`, etc.
+dotenv was originally created to load configuration variables into `ENV` in *development*. There are typically better ways to manage configuration in production environments - such as `/etc/environment` managed by [Puppet](https://github.com/puppetlabs/puppet) or [Chef](https://github.com/chef/chef), `heroku config`, etc.
 
 However, some find dotenv to be a convenient way to configure Rails applications in staging and production environments, and you can do that by defining environment-specific files like `.env.production` or `.env.test`.
 
