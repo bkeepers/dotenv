@@ -14,7 +14,7 @@ module Dotenv
           (\$)          # literal $
           (?!\()        # shouldnt be followed by paranthesis
           \{?           # allow brace wrapping
-          (?(1)[A-Z0-9_]*|([A-Z0-9_]+)) # if escaped, no need to match with alpha nums
+          (?(1)[A-Z0-9_]*|([A-Z0-9_]+)) # if escaped, dont match alpha nums
           \}?           # closing brace
         /xi
 
