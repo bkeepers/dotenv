@@ -14,7 +14,7 @@ module Dotenv
           (\$)          # literal $
           (?!\()        # shouldnt be followed by paranthesis
           \{?           # allow brace wrapping
-          (?(1)[A-Z0-9_]*|([A-Z0-9_]+)) # if escaped, dont match alpha nums
+          ([A-Z0-9_]+)? # optional alpha nums
           \}?           # closing brace
         /xi
 
@@ -24,8 +24,10 @@ module Dotenv
 
             if match[1] == '\\'
               variable[1..-1]
-            else
+            elsif match[3]
               env.fetch(match[3]) { ENV[match[3]] }
+            else
+              variable
             end
           end
         end

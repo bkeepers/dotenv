@@ -160,6 +160,11 @@ export OH_NO_NOT_SET')
       expect(env("FOO=\"bar\\$ \\$\\$\"")).to eql("FOO" => "bar$ $$")
     end
 
+    # echo bar $ -> prints bar $ in the shell
+    it "ignore $ when it is not escaped and no variable is followed by it" do
+      expect(env("FOO=\"bar $ \"")).to eql("FOO" => "bar $ ")
+    end
+
     # This functionality is not supported on JRuby or Rubinius
     if (!defined?(RUBY_ENGINE) || RUBY_ENGINE != "jruby") &&
        !defined?(Rubinius)
