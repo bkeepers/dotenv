@@ -132,6 +132,19 @@ describe Dotenv do
     end
   end
 
+  describe "Unicode" do
+    subject { fixture_path("bom.env") }
+
+    it "loads a file with a Unicode BOM" do
+      expect(Dotenv.load(subject)).to eql({"BOM" => "UTF-8"})
+    end
+
+    it "fixture file has UTF-8 BOM" do
+      contents = File.read(subject)
+      expect(contents).to start_with("\xEF\xBB\xBF")
+    end
+  end
+
   def expand(path)
     File.expand_path path
   end
