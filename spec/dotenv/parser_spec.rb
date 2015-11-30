@@ -126,17 +126,17 @@ export OH_NO_NOT_SET')
 
   if RUBY_VERSION > "1.8.7"
     it "parses shell commands interpolated in $()" do
-      expect(env("ruby_v=$(ruby -v)")).to eql("ruby_v" => RUBY_DESCRIPTION)
+      expect(env("echo=$(echo hello)")).to eql("echo" => "hello")
     end
 
     it "allows balanced parentheses within interpolated shell commands" do
-      expect(env('ruby_v=$(echo "$(echo "$(echo "$(ruby -v)")")")'))
-        .to eql("ruby_v" => RUBY_DESCRIPTION)
+      expect(env('echo=$(echo "$(echo "$(echo "$(echo hello)")")")'))
+        .to eql("echo" => "hello")
     end
 
     it "doesn't interpolate shell commands when escape says not to" do
-      expect(env('ruby_v=escaped-\$(ruby -v)'))
-        .to eql("ruby_v" => "escaped-$(ruby -v)")
+      expect(env('echo=escaped-\$(echo hello)'))
+        .to eql("echo" => "escaped-$(echo hello)")
     end
 
     it "is not thrown off by quotes in interpolated shell commands" do
