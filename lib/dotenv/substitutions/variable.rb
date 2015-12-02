@@ -10,11 +10,12 @@ module Dotenv
     module Variable
       class << self
         VARIABLE = /
-          (\\)?        # is it escaped with a backslash?
-          (\$)         # literal $
-          \{?          # allow brace wrapping
-          ([A-Z0-9_]+) # match the variable
-          \}?          # closing brace
+          (\\)?         # is it escaped with a backslash?
+          (\$)          # literal $
+          (?!\()        # shouldnt be followed by paranthesis
+          \{?           # allow brace wrapping
+          ([A-Z0-9_]+)? # optional alpha nums
+          \}?           # closing brace
         /xi
 
         def call(value, env)
@@ -23,8 +24,10 @@ module Dotenv
 
             if match[1] == '\\'
               variable[1..-1]
-            else
+            elsif match[3]
               env.fetch(match[3]) { ENV[match[3]] }
+            else
+              variable
             end
           end
         end
