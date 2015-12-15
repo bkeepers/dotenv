@@ -24,10 +24,10 @@ module Dotenv
     # This will get called during the `before_configuration` callback, but you
     # can manually call `Dotenv::Railtie.load` if you needed it sooner.
     def load
-      Dotenv.load(
+      Dotenv.overload(
+        root.join(".env"),
         root.join(".env.local"),
-        root.join(".env.#{Rails.env}"),
-        root.join(".env")
+        root.join(".env.#{Rails.env}")
       )
     end
 
