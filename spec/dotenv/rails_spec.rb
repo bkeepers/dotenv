@@ -52,9 +52,9 @@ describe Dotenv::Railtie do
 
     it "loads .env, .env.local, and .env.#{Rails.env}" do
       expect(Spring.watcher.items).to eql([
-        Rails.root.join(".env.local").to_s,
+        Rails.root.join(".env").to_s,
         Rails.root.join(".env.test").to_s,
-        Rails.root.join(".env").to_s
+        Rails.root.join(".env.local").to_s
       ])
     end
 
