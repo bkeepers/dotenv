@@ -8,7 +8,8 @@ Gem::Specification.new "dotenv-rails", Dotenv::VERSION do |gem|
   gem.homepage      = "https://github.com/bkeepers/dotenv"
   gem.license       = "MIT"
   gem.files         = `git ls-files lib | grep rails`
-    .split($OUTPUT_RECORD_SEPARATOR) + ["README.md", "LICENSE"]
+                      .split($OUTPUT_RECORD_SEPARATOR) +
+                      ["README.md", "LICENSE"]
 
   gem.add_dependency "dotenv", Dotenv::VERSION
   gem.add_dependency "railties", "~>4.0"
