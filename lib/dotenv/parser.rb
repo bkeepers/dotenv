@@ -57,7 +57,7 @@ module Dotenv
         if variable_not_set?(line)
           fail FormatError, "Line #{line.inspect} has an unset variable"
         end
-      elsif line !~ /\A\s*(?:#.*)?\z/ # not comment or blank line
+      elsif line !~ /\A\s*(?:[#:].*)?\z/ # not comment, blank line, or noop
         fail FormatError, "Line #{line.inspect} doesn't match format"
       end
     end

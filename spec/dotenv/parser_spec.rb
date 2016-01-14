@@ -119,6 +119,10 @@ export OH_NO_NOT_SET')
     expect(env("\n\n\n # HERE GOES FOO \nfoo=bar")).to eql("foo" => "bar")
   end
 
+  it "ignores old bourne-shell command (now no-op)" do
+    expect(env("\n\n\n : HERE GOES FOO \nfoo=bar")).to eql("foo" => "bar")
+  end
+
   it "parses # in quoted values" do
     expect(env('foo="ba#r"')).to eql("foo" => "ba#r")
     expect(env("foo='ba#r'")).to eql("foo" => "ba#r")
