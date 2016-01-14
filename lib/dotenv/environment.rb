@@ -14,7 +14,7 @@ module Dotenv
     end
 
     def read
-      File.read(@filename)
+      File.open(@filename, "rb:bom|utf-8") { |file| file.read }
     end
 
     def apply
