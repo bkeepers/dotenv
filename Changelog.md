@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.1.0 - Jan 13, 2016
+
+* Relax dependency on `railties` to allow Rails 5.0 apps. ([#226](https://github.com/bkeepers/dotenv/pull/226))
+* Fix scenario where some escaped `$` would not be unescaped. ([#222](https://github.com/bkeepers/dotenv/pull/222))
+* Gracefully handle files with UTF-8 BOM ([#225](https://github.com/bkeepers/dotenv/pull/225))
+
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v2.0.2...v2.1.0)
+
 ## 2.0.2 - June 19, 2015
 
 * Support charriage returns in addition to newlines in .env ([#194](https://github.com/bkeepers/dotenv/pull/194))
