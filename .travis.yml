@@ -10,6 +10,10 @@ rvm:
   - jruby-19mode
   - jruby-head
 
+matrix:
+  allow_failures:
+    - rvm: jruby-head
+
 sudo: false
 
 bundler_args: --without=guard
