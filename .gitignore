@@ -7,3 +7,4 @@
 Gemfile.lock
 tmp
 vendor
+.DS_Store
