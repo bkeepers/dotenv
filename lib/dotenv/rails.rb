@@ -8,8 +8,9 @@ require "dotenv"
 # but rspec does not include the same hacks.
 #
 # See https://github.com/bkeepers/dotenv/issues/219
-if defined?(Rake.application) && Rake.application.top_level_tasks.grep(/^spec(:|$)/).any?
-  Rails.env = ENV['RAILS_ENV'] ||= 'test'
+if defined?(Rake.application)
+  is_running_specs = Rake.application.top_level_tasks.grep(/^spec(:|$)/).any?
+  Rails.env = ENV["RAILS_ENV"] ||= "test" if is_running_specs
 end
 
 Dotenv.instrumenter = ActiveSupport::Notifications
