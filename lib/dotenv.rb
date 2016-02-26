@@ -39,11 +39,11 @@ module Dotenv
   # Internal: Helper to expand list of filenames.
   #
   # Returns a hash of all the loaded environment variables.
-  def with(*filenames, &block)
+  def with(*filenames)
     filenames << ".env" if filenames.empty?
 
     filenames.reduce({}) do |hash, filename|
-      hash.merge! block.call(File.expand_path(filename)) || {}
+      hash.merge!(yield(File.expand_path(filename)) || {})
     end
   end
 
@@ -51,7 +51,7 @@ module Dotenv
     if instrumenter
       instrumenter.instrument(name, payload, &block)
     else
-      block.call
+      yield
     end
   end
 

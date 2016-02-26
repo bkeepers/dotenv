@@ -140,8 +140,8 @@ describe Dotenv do
     end
 
     it "fixture file has UTF-8 BOM" do
-      contents = File.open(subject, "rb") { |f| f.read }.force_encoding("UTF-8")
-      expect(contents).to start_with("\xEF\xBB\xBF")
+      contents = File.open(subject, "rb", &:read).force_encoding("UTF-8")
+      expect(contents).to start_with("\xEF\xBB\xBF".force_encoding("UTF-8"))
     end
   end
 

@@ -55,10 +55,10 @@ module Dotenv
         @hash[key] = parse_value(value || "")
       elsif line.split.first == "export"
         if variable_not_set?(line)
-          fail FormatError, "Line #{line.inspect} has an unset variable"
+          raise FormatError, "Line #{line.inspect} has an unset variable"
         end
       elsif line !~ /\A\s*(?:#.*)?\z/ # not comment or blank line
-        fail FormatError, "Line #{line.inspect} doesn't match format"
+        raise FormatError, "Line #{line.inspect} doesn't match format"
       end
     end
 
