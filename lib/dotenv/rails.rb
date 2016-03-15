@@ -25,6 +25,7 @@ module Dotenv
     # can manually call `Dotenv::Railtie.load` if you needed it sooner.
     def load
       Dotenv.load(
+        root.join(".env.#{Rails.env}.local"),
         root.join(".env.local"),
         root.join(".env.#{Rails.env}"),
         root.join(".env")
