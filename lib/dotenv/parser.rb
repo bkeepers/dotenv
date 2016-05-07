@@ -9,7 +9,7 @@ module Dotenv
   # exporting of variables.
   class Parser
     @substitutions =
-      Substitutions.constants.map { |const| Substitutions.const_get(const) }
+      [Dotenv::Substitutions::Variable, Dotenv::Substitutions::Command]
 
     LINE = /
       \A
