@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.1
+
+* Fix load error when using Spring w/ custom config ([#246](https://github.com/bkeepers/dotenv/pull/246))
+
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v2.1.0...v2.1.1)
+
 ## 2.1.0 - Jan 13, 2016
 
 * Relax dependency on `railties` to allow Rails 5.0 apps. ([#226](https://github.com/bkeepers/dotenv/pull/226))
