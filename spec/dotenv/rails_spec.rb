@@ -54,6 +54,7 @@ describe Dotenv::Railtie do
       expect(Spring.watcher.items).to eql(
         [
           Rails.root.join(".env.local").to_s,
+          Rails.root.join(".env.test.local").to_s,
           Rails.root.join(".env.test").to_s,
           Rails.root.join(".env").to_s
         ]

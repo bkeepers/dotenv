@@ -26,6 +26,7 @@ module Dotenv
     def load
       Dotenv.load(
         root.join(".env.local"),
+        root.join(".env.#{Rails.env}.local"),
         root.join(".env.#{Rails.env}"),
         root.join(".env")
       )
