@@ -11,3 +11,8 @@ end
 platforms :rbx do
   gem "rubysl", "~> 2.0" # if using anything in the ruby standard library
 end
+
+if Gem::Version.create(RUBY_VERSION) < Gem::Version.create("2.2.2")
+  # Rack 2 requires Ruby version >= 2.2.2
+  gem "rack", ">= 1.6.5", "< 2.0.0"
+end
