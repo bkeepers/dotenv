@@ -13,6 +13,7 @@ module Dotenv
 
     LINE = /
       \A
+      \s*
       (?:export\s+)?    # optional export
       ([\w\.]+)         # key
       (?:\s*=\s*|:\s+?) # separator
