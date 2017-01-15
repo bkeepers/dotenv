@@ -55,7 +55,10 @@ $ gem install dotenv
 As early as possible in your application bootstrap process, load `.env`:
 
 ```ruby
-require 'dotenv'
+require 'dotenv/load'
+
+# or
+require 'dotenv/load'
 Dotenv.load
 ```
 
