@@ -16,7 +16,7 @@
 
 ## 2.0.2 - June 19, 2015
 
-* Support charriage returns in addition to newlines in .env ([#194](https://github.com/bkeepers/dotenv/pull/194))
+* Support carriage returns in addition to newlines in .env ([#194](https://github.com/bkeepers/dotenv/pull/194))
 * Add runtime dependency on rails 4 for dotenv-rails ([#189](https://github.com/bkeepers/dotenv/pull/189))
 
 [Full Changelog](https://github.com/bkeepers/dotenv/compare/v2.0.1...v2.0.2)
