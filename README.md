@@ -58,8 +58,15 @@ As early as possible in your application bootstrap process, load `.env`:
 require 'dotenv/load'
 
 # or
-require 'dotenv/load'
+require 'dotenv'
 Dotenv.load
+```
+
+By default, `load` will look for a file called `.env` in the current working directory. Pass in multiple files and they will be loaded in order. The first value set for a variable will win.
+
+```
+require 'dotenv'
+Dotenv.load('file1.env', 'file2.env')
 ```
 
 Alternatively, you can use the `dotenv` executable to launch your application:
