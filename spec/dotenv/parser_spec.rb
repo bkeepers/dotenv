@@ -14,6 +14,10 @@ describe Dotenv::Parser do
     expect(env("FOO= bar")).to eql("FOO" => "bar")
   end
 
+  it "parses values with leading spaces" do
+    expect(env("  FOO=bar")).to eql("FOO" => "bar")
+  end
+
   it "parses double quoted values" do
     expect(env('FOO="bar"')).to eql("FOO" => "bar")
   end
