@@ -41,7 +41,7 @@ module Dotenv
     def self.load
       instance.load
     end
-    
+
     config.before_configuration { load }
   end
 end
