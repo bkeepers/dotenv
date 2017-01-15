@@ -84,15 +84,10 @@ S3_BUCKET=YOURS3BUCKET
 SECRET_KEY=YOURSECRETKEYGOESHERE
 ```
 
-If you need multiline variables, for example private keys, you can double quote strings and use the `\n` character for newlines:
+Whenever your application loads, these variables will be available in `ENV`:
 
-```shell
-PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\nHkVN9…\n-----END DSA PRIVATE KEY-----\n"
-```
-
-You need to add the output of a command in one of your variables? Simply add it with `$(your_command)`:
-```shell
-DATABASE_URL="postgres://$(whoami)@localhost/my_database"
+```ruby
+config.fog_directory  = ENV['S3_BUCKET']
 ```
 
 You may also add `export` in front of each line so you can `source` the file in bash:
@@ -102,11 +97,37 @@ export S3_BUCKET=YOURS3BUCKET
 export SECRET_KEY=YOURSECRETKEYGOESHERE
 ```
 
-Whenever your application loads, these variables will be available in `ENV`:
+### Multi-line values
 
-```ruby
-config.fog_directory  = ENV['S3_BUCKET']
+If you need multiline variables, for example private keys, you can double quote strings and use the `\n` character for newlines:
+
+```shell
+PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\nHkVN9…\n-----END DSA PRIVATE KEY-----\n"
 ```
+
+### Command Substitution
+
+You need to add the output of a command in one of your variables? Simply add it with `$(your_command)`:
+
+```shell
+DATABASE_URL="postgres://$(whoami)@localhost/my_database"
+```
+
+### Variable Substitution
+
+You need to add the value of another variable in one of your variables? You can reference the variable with `${VAR}` or often just `$VAR` in unqoted or double-quoted values.
+
+```shell
+DATABASE_URL="postgres://${USER}@localhost/my_database"
+```
+
+If a value contains a `$` and it is not intended to be a variable, wrap it in single quotes.
+
+```shell
+PASSWORD='pas$word'
+```
+
+### Comments
 
 Comments may be added to your file as such:
 
@@ -115,8 +136,6 @@ Comments may be added to your file as such:
 SECRET_KEY=YOURSECRETKEYGOESHERE # comment
 SECRET_HASH="something-with-a-#-hash"
 ```
-
-Variable names may not contain the `#` symbol. Values can use the `#` if they are enclosed in quotes.
 
 ## Multiple Rails Environments
 
