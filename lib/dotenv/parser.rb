@@ -24,7 +24,8 @@ module Dotenv
         |               #   or
         [^#\n]+         #   unquoted value
       )?                # value end
-      (?:\s*\#.*)?      # optional comment
+      \s*
+      (?:\#.*)?         # optional comment
       \z
     /x
 
