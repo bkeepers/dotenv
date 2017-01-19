@@ -18,12 +18,24 @@ describe Dotenv::Parser do
     expect(env("  FOO=bar")).to eql("FOO" => "bar")
   end
 
+  it "parses values with following spaces" do
+    expect(env("FOO=bar  ")).to eql("FOO" => "bar")
+  end
+
   it "parses double quoted values" do
     expect(env('FOO="bar"')).to eql("FOO" => "bar")
   end
 
+  it "parses double quoted values with following spaces" do
+    expect(env('FOO="bar"  ')).to eql("FOO" => "bar")
+  end
+
   it "parses single quoted values" do
     expect(env("FOO='bar'")).to eql("FOO" => "bar")
+  end
+
+  it "parses single quoted values with following spaces" do
+    expect(env("FOO='bar'  ")).to eql("FOO" => "bar")
   end
 
   it "parses escaped double quotes" do
@@ -126,6 +138,11 @@ export OH_NO_NOT_SET')
   it "parses # in quoted values" do
     expect(env('foo="ba#r"')).to eql("foo" => "ba#r")
     expect(env("foo='ba#r'")).to eql("foo" => "ba#r")
+  end
+
+  it "parses # in quoted values with following spaces" do
+    expect(env('foo="ba#r"  ')).to eql("foo" => "ba#r")
+    expect(env("foo='ba#r'  ")).to eql("foo" => "ba#r")
   end
 
   if RUBY_VERSION > "1.8.7"
