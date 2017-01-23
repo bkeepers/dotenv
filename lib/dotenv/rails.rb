@@ -35,12 +35,13 @@ module Dotenv
     # This will get called during the `before_configuration` callback, but you
     # can manually call `Dotenv::Railtie.load` if you needed it sooner.
     def load
-      Dotenv.load(
+      envs = [
         root.join(".env.#{Rails.env}.local"),
-        root.join(".env.local"),
         root.join(".env.#{Rails.env}"),
         root.join(".env")
-      )
+      ]
+      envs.insert(1, root.join(".env.local")) unless Rails.env == 'test'
+      Dotenv.load(*envs)
     end
 
     # Internal: `Rails.root` is nil in Rails 4.1 before the application is

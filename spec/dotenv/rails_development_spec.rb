@@ -1,5 +1,4 @@
 require "spec_helper"
-ENV["RAILS_ENV"] = "test"
 require "rails"
 require "dotenv/rails"
 
@@ -18,8 +17,9 @@ describe Dotenv::Railtie do
   end
 
   before do
+    ENV["RAILS_ENV"] = "development"
     allow(Rails).to receive(:root)
-      .and_return Pathname.new(File.expand_path("../../fixtures", __FILE__))
+      .and_return Pathname.new(File.expand_path("../fixtures", __dir__))
     Rails.application = double(:application)
     Spring.watcher = SpecWatcher.new
   end
@@ -28,6 +28,7 @@ describe Dotenv::Railtie do
     # Reset
     Spring.watcher = nil
     Rails.application = nil
+    ENV.delete "RAILS_ENV"
   end
 
   context "before_configuration" do
@@ -51,11 +52,11 @@ describe Dotenv::Railtie do
     end
 
     it "loads .env, .env.local, and .env.#{Rails.env}" do
+      p Rails.root
       expect(Spring.watcher.items).to eql(
         [
-          Rails.root.join(".env.test.local").to_s,
           Rails.root.join(".env.local").to_s,
-          Rails.root.join(".env.test").to_s,
+          Rails.root.join(".env.development").to_s,
           Rails.root.join(".env").to_s
         ]
       )
@@ -63,17 +64,6 @@ describe Dotenv::Railtie do
 
     it "loads .env.local before .env" do
       expect(ENV["DOTENV"]).to eql("local")
-    end
-
-    context "when Rails.root is nil" do
-      before do
-        allow(Rails).to receive(:root).and_return(nil)
-      end
-
-      it "falls back to RAILS_ROOT" do
-        ENV["RAILS_ROOT"] = "/tmp"
-        expect(Dotenv::Railtie.root.to_s).to eql("/tmp")
-      end
     end
   end
 end
