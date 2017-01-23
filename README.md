@@ -8,6 +8,8 @@ Storing [configuration in the environment](http://12factor.net/config) is one of
 
 But it is not always practical to set environment variables on development machines or continuous integration servers where multiple projects are run. dotenv loads variables from a `.env` file into `ENV` when the environment is bootstrapped.
 
+By default, it **won't** overwrite existing environment variables as dotenv assumes the deployment environment has more knowledge about configuration than the application does. To overwrite existing environment variables you can use `Dotenv.overload`.
+
 ## Installation
 
 ### Rails
