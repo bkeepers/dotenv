@@ -19,7 +19,7 @@ describe Dotenv::Railtie do
   before do
     ENV["RAILS_ENV"] = "test"
     allow(Rails).to receive(:root)
-      .and_return Pathname.new(File.expand_path("../fixtures", __dir__))
+      .and_return Pathname.new(File.expand_path("../../fixtures", __FILE__))
     Rails.application = double(:application)
     Spring.watcher = SpecWatcher.new
   end
