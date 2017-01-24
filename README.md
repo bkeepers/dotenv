@@ -15,7 +15,7 @@ But it is not always practical to set environment variables on development machi
 Add this line to the top of your application's Gemfile:
 
 ```ruby
-gem 'dotenv-rails', :groups => [:development, :test]
+gem 'dotenv-rails', groups: [:development, :test]
 ```
 
 And then execute:
@@ -40,7 +40,7 @@ HOSTNAME = ENV['HOSTNAME']
 If you use gems that require environment variables to be set before they are loaded, then list `dotenv-rails` in the `Gemfile` before those other gems and require `dotenv/rails-now`.
 
 ```ruby
-gem 'dotenv-rails', :require => 'dotenv/rails-now'
+gem 'dotenv-rails', require: 'dotenv/rails-now'
 gem 'gem-that-requires-env-variables'
 ```
 
@@ -80,7 +80,7 @@ To ensure `.env` is loaded in rake, load the tasks:
 ```ruby
 require 'dotenv/tasks'
 
-task :mytask => :dotenv do
+task mytask: :dotenv do
     # things that require .env
 end
 ```
