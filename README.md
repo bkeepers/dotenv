@@ -8,8 +8,6 @@ Storing [configuration in the environment](http://12factor.net/config) is one of
 
 But it is not always practical to set environment variables on development machines or continuous integration servers where multiple projects are run. dotenv loads variables from a `.env` file into `ENV` when the environment is bootstrapped.
 
-By default, it **won't** overwrite existing environment variables as dotenv assumes the deployment environment has more knowledge about configuration than the application does. To overwrite existing environment variables you can use `Dotenv.overload`.
-
 ## Installation
 
 ### Rails
@@ -149,7 +147,9 @@ SECRET_KEY=YOURSECRETKEYGOESHERE # comment
 SECRET_HASH="something-with-a-#-hash"
 ```
 
-## Multiple Rails Environments
+## Frequently Answered Questions
+
+### Can I use dotenv in production?
 
 dotenv was originally created to load configuration variables into `ENV` in *development*. There are typically better ways to manage configuration in production environments - such as `/etc/environment` managed by [Puppet](https://github.com/puppetlabs/puppet) or [Chef](https://github.com/chef/chef), `heroku config`, etc.
 
@@ -159,11 +159,15 @@ You can also use `.env.local` for local overrides.
 
 If you use this gem to handle env vars for multiple Rails environments (development, test, production, etc.), please note that env vars that are general to all environments should be stored in `.env`. Then, environment specific env vars should be stored in `.env.<that environment's name>`. When you load a certain environment, dotenv will first load general env vars from `.env`, then load environment specific env vars from `.env.<current environment>`. Variables defined in `.env.<current environment>` will override any values set in `.env` or already defined in the environment.
 
-## Should I commit my .env file?
+### Should I commit my .env file?
 
 Credentials should only be accessible on the machines that need access to them. Never commit sensitive information to a repository that is not needed by every development machine and server.
 
 Personally, I prefer to commit the `.env` file with development-only settings. This makes it easy for other developers to get started on the project without compromising credentials for other environments. If you follow this advice, make sure that all the credentials for your development environment are different from your other deployments and that the development credentials do not have access to any confidential data.
+
+### Why is it not overriding existing `ENV` variables?
+
+By default, it **won't** overwrite existing environment variables as dotenv assumes the deployment environment has more knowledge about configuration than the application does. To overwrite existing environment variables you can use `Dotenv.overload`.
 
 ## Contributing
 
