@@ -20,6 +20,7 @@ describe Dotenv::Railtie do
     ENV["RAILS_ENV"] = "test"
     allow(Rails).to receive(:root)
       .and_return Pathname.new(File.expand_path("../../fixtures", __FILE__))
+    allow(Rails).to receive(:env).and_return "test"
     Rails.application = double(:application)
     Spring.watcher = SpecWatcher.new
   end
@@ -52,7 +53,7 @@ describe Dotenv::Railtie do
     end
 
     it "does not load .env.local in test rails environment" do
-      expect(Spring.watcher.items).to eql(
+      expect(Dotenv::Railtie.instance.send(:dotenv_files)).to eql(
         [
           Rails.root.join(".env.test.local").to_s,
           Rails.root.join(".env.test").to_s,

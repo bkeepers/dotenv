@@ -20,6 +20,7 @@ describe Dotenv::Railtie do
     ENV["RAILS_ENV"] = "development"
     allow(Rails).to receive(:root)
       .and_return Pathname.new(File.expand_path("../../fixtures", __FILE__))
+    allow(Rails).to receive(:env).and_return "development"
     Rails.application = double(:application)
     Spring.watcher = SpecWatcher.new
   end
@@ -52,12 +53,11 @@ describe Dotenv::Railtie do
     end
 
     it "loads .env, .env.local, and .env.#{Rails.env}" do
-      p Rails.root
-      expect(Spring.watcher.items).to eql(
+      expect(Dotenv::Railtie.instance.send(:dotenv_files)).to eql(
         [
-          Rails.root.join(".env.local").to_s,
-          Rails.root.join(".env.development").to_s,
-          Rails.root.join(".env").to_s
+          Rails.root.join(".env.local"),
+          Rails.root.join(".env.development"),
+          Rails.root.join(".env")
         ]
       )
     end
