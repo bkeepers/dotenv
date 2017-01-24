@@ -54,13 +54,14 @@ module Dotenv
     config.before_configuration { load }
 
     private
+
     def dotenv_files
       envs = [
         root.join(".env.#{Rails.env}.local"),
         root.join(".env.#{Rails.env}"),
         root.join(".env")
       ]
-      envs.insert(1, root.join(".env.local")) unless Rails.env == 'test'
+      envs.insert(1, root.join(".env.local")) unless Rails.env == "test"
       envs
     end
   end
