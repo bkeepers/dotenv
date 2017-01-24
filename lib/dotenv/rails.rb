@@ -30,8 +30,6 @@ module Dotenv
   # Dotenv Railtie for using Dotenv to load environment from a file into
   # Rails applications
   class Railtie < Rails::Railtie
-    config.before_configuration { load }
-
     # Public: Load dotenv
     #
     # This will get called during the `before_configuration` callback, but you
@@ -56,5 +54,7 @@ module Dotenv
     def self.load
       instance.load
     end
+
+    config.before_configuration { load }
   end
 end
