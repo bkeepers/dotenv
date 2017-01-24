@@ -9,10 +9,11 @@ module Dotenv
   # exporting of variables.
   class Parser
     @substitutions =
-      Substitutions.constants.map { |const| Substitutions.const_get(const) }
+      [Dotenv::Substitutions::Variable, Dotenv::Substitutions::Command]
 
     LINE = /
       \A
+      \s*
       (?:export\s+)?    # optional export
       ([\w\.]+)         # key
       (?:\s*=\s*|:\s+?) # separator
@@ -23,7 +24,8 @@ module Dotenv
         |               #   or
         [^#\n]+         #   unquoted value
       )?                # value end
-      (?:\s*\#.*)?      # optional comment
+      \s*
+      (?:\#.*)?         # optional comment
       \z
     /x
 

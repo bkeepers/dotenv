@@ -1,5 +1,20 @@
 # Changelog
 
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.1.2...master)
+
+## 2.1.2
+
+* Fix parser to allow leading whitespace before variables ([#276](https://github.com/bkeepers/dotenv/pull/276))
+* Fix bug with `require "dotenv/rails-now"` in older versions of rails ([#269](https://github.com/bkeepers/dotenv/pull/269))
+
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v2.1.1...v2.1.2)
+
+## 2.1.1
+
+* Fix load error when using Spring w/ custom config ([#246](https://github.com/bkeepers/dotenv/pull/246))
+
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v2.1.0...v2.1.1)
+
 ## 2.1.0 - Jan 13, 2016
 
 * Relax dependency on `railties` to allow Rails 5.0 apps. ([#226](https://github.com/bkeepers/dotenv/pull/226))
@@ -10,7 +25,7 @@
 
 ## 2.0.2 - June 19, 2015
 
-* Support charriage returns in addition to newlines in .env ([#194](https://github.com/bkeepers/dotenv/pull/194))
+* Support carriage returns in addition to newlines in .env ([#194](https://github.com/bkeepers/dotenv/pull/194))
 * Add runtime dependency on rails 4 for dotenv-rails ([#189](https://github.com/bkeepers/dotenv/pull/189))
 
 [Full Changelog](https://github.com/bkeepers/dotenv/compare/v2.0.1...v2.0.2)
