@@ -16,6 +16,10 @@ matrix:
     - rvm: rbx-2
     - rvm: jruby-head
 
+before_install:
+  - gem update --remote bundler
+  - gem update --system
+
 sudo: false
 
 bundler_args: --without=guard
