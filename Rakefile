@@ -3,7 +3,7 @@
 require "bundler/gem_helper"
 
 namespace "dotenv" do
-  Bundler::GemHelper.install_tasks :name => "dotenv"
+  Bundler::GemHelper.install_tasks name: "dotenv"
 end
 
 namespace "dotenv-rails" do
@@ -13,12 +13,12 @@ namespace "dotenv-rails" do
     def tag_version; end # noop
   end
 
-  DotenvRailsGemHelper.install_tasks :name => "dotenv-rails"
+  DotenvRailsGemHelper.install_tasks name: "dotenv-rails"
 end
 
-task :build => ["dotenv:build", "dotenv-rails:build"]
-task :install => ["dotenv:install", "dotenv-rails:install"]
-task :release => ["dotenv:release", "dotenv-rails:release"]
+task build: ["dotenv:build", "dotenv-rails:build"]
+task install: ["dotenv:install", "dotenv-rails:install"]
+task release: ["dotenv:release", "dotenv-rails:release"]
 
 require "rspec/core/rake_task"
 
@@ -31,4 +31,4 @@ end
 require "rubocop/rake_task"
 RuboCop::RakeTask.new
 
-task :default => [:spec, :rubocop]
+task default: [:spec, :rubocop]
