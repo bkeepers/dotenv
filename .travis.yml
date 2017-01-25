@@ -6,13 +6,6 @@ rvm:
   - 2.2.6
   - 2.1.10
   - 2.0.0
-  - rbx-2
-  - jruby-head
-
-matrix:
-  allow_failures:
-    - rvm: rbx-2
-    - rvm: jruby-head
 
 before_install:
   - gem update --remote bundler
