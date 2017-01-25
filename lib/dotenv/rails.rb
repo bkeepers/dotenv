@@ -1,5 +1,18 @@
 require "dotenv"
 
+# Fix for rspec rake tasks loading in development
+#
+# Dotenv loads environment variables when the Rails application is initialized.
+# When running `rake`, the Rails application is initialized in development.
+# Rails includes some hacks to set `RAILS_ENV=test` when running `rake test`,
+# but rspec does not include the same hacks.
+#
+# See https://github.com/bkeepers/dotenv/issues/219
+if defined?(Rake.application)
+  is_running_specs = Rake.application.top_level_tasks.grep(/^spec(:|$)/).any?
+  Rails.env = ENV["RAILS_ENV"] ||= "test" if is_running_specs
+end
+
 Dotenv.instrumenter = ActiveSupport::Notifications
 
 # Watch all loaded env files with Spring
