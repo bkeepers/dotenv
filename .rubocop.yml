@@ -14,7 +14,7 @@ Style/FileName:
     - 'lib/dotenv-rails.rb'
 
 Style/HashSyntax:
-  EnforcedStyle: 'hash_rockets'
+  EnforcedStyle: 'ruby19'
 
 Style/StringLiterals:
   EnforcedStyle: 'double_quotes'
