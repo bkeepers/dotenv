@@ -55,9 +55,9 @@ describe Dotenv::Railtie do
     it "does not load .env.local in test rails environment" do
       expect(Dotenv::Railtie.instance.send(:dotenv_files)).to eql(
         [
-          Rails.root.join(".env.test.local").to_s,
-          Rails.root.join(".env.test").to_s,
-          Rails.root.join(".env").to_s
+          Rails.root.join(".env.test.local"),
+          Rails.root.join(".env.test"),
+          Rails.root.join(".env"),
         ]
       )
     end
