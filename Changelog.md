@@ -4,8 +4,10 @@
 
 ## 2.1.2
 
+* [dotenv-rails] Allow to have a local file per environment, e.g. `.env.development.local` ([281](https://github.com/bkeepers/dotenv/pull/281))
+* [dotenv-rails] No longer load `.env.local` in rails' test environment ([#280](https://github.com/bkeepers/dotenv/pull/280))
 * Fix parser to allow leading whitespace before variables ([#276](https://github.com/bkeepers/dotenv/pull/276))
-* Fix bug with `require "dotenv/rails-now"` in older versions of rails ([#269](https://github.com/bkeepers/dotenv/pull/269))
+* [dotenv-rails] Fix bug with `require "dotenv/rails-now"` in older versions of rails ([#269](https://github.com/bkeepers/dotenv/pull/269))
 
 [Full Changelog](https://github.com/bkeepers/dotenv/compare/v2.1.1...v2.1.2)
 
