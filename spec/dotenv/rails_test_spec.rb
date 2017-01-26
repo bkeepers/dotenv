@@ -57,7 +57,7 @@ describe Dotenv::Railtie do
         [
           Rails.root.join(".env.test.local"),
           Rails.root.join(".env.test"),
-          Rails.root.join(".env"),
+          Rails.root.join(".env")
         ]
       )
     end

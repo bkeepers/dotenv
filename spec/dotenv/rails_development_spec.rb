@@ -52,13 +52,13 @@ describe Dotenv::Railtie do
       expect(Spring.watcher.items).to include(path)
     end
 
-    it "loads .env, .env.#{Rails.env}, .env.local, and .env.#{Rails.env}.local" do
+    it "loads .env, .env.#{Rails.env}, .env.local, .env.#{Rails.env}.local" do
       expect(Dotenv::Railtie.instance.send(:dotenv_files)).to eql(
         [
           Rails.root.join(".env.development.local"),
           Rails.root.join(".env.local"),
           Rails.root.join(".env.development"),
-          Rails.root.join(".env"),
+          Rails.root.join(".env")
         ]
       )
     end
