@@ -2,7 +2,7 @@
 
 [Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.2.0...master)
 
-## 2.2.0
+## 2.2.0 - Jan 27, 2017
 
 * Drop official support for Ruby 1.9, jruby, and Rubinius. They may continue to work, but tests are not run against them. ([#283](https://github.com/bkeepers/dotenv/pull/283))
 * Allow leading and trailing whitespace ([#276](https://github.com/bkeepers/dotenv/pull/276), [#277](https://github.com/bkeepers/dotenv/pull/277))
@@ -12,14 +12,14 @@
 
 [Full Changelog](https://github.com/bkeepers/dotenv/compare/v2.1.2...v2.2.0)
 
-## 2.1.2
+## 2.1.2 - Jan 16, 2017
 
 * Fix parser to allow leading whitespace before variables ([#276](https://github.com/bkeepers/dotenv/pull/276))
 * [dotenv-rails] Fix bug with `require "dotenv/rails-now"` in older versions of rails ([#269](https://github.com/bkeepers/dotenv/pull/269))
 
 [Full Changelog](https://github.com/bkeepers/dotenv/compare/v2.1.1...v2.1.2)
 
-## 2.1.1
+## 2.1.1 - Mar 28, 2016
 
 * Fix load error when using Spring w/ custom config ([#246](https://github.com/bkeepers/dotenv/pull/246))
 
