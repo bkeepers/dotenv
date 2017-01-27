@@ -1,5 +1,4 @@
 require "spec_helper"
-ENV["RAILS_ENV"] = "test"
 require "rails"
 require "dotenv/rails"
 
@@ -18,6 +17,7 @@ describe Dotenv::Railtie do
   end
 
   before do
+    Rails.env = "test"
     allow(Rails).to receive(:root)
       .and_return Pathname.new(File.expand_path("../../fixtures", __FILE__))
     Rails.application = double(:application)
@@ -50,19 +50,30 @@ describe Dotenv::Railtie do
       expect(Spring.watcher.items).to include(path)
     end
 
-    it "loads .env, .env.local, and .env.#{Rails.env}" do
-      expect(Spring.watcher.items).to eql(
+    it "does not load .env.local in test rails environment" do
+      expect(Dotenv::Railtie.instance.send(:dotenv_files)).to eql(
         [
-          Rails.root.join(".env.test.local").to_s,
-          Rails.root.join(".env.local").to_s,
-          Rails.root.join(".env.test").to_s,
-          Rails.root.join(".env").to_s
+          Rails.root.join(".env.test.local"),
+          Rails.root.join(".env.test"),
+          Rails.root.join(".env")
         ]
       )
     end
 
-    it "loads .env.local before .env" do
-      expect(ENV["DOTENV"]).to eql("local")
+    it "does load .env.local in development environment" do
+      Rails.env = "development"
+      expect(Dotenv::Railtie.instance.send(:dotenv_files)).to eql(
+        [
+          Rails.root.join(".env.development.local"),
+          Rails.root.join(".env.local"),
+          Rails.root.join(".env.development"),
+          Rails.root.join(".env")
+        ]
+      )
+    end
+
+    it "loads .env.test before .env" do
+      expect(ENV["DOTENV"]).to eql("test")
     end
 
     context "when Rails.root is nil" do
