@@ -11,7 +11,7 @@ describe Dotenv do
 
       it "defaults to .env" do
         expect(Dotenv::Environment).to receive(:new).with(expand(".env"))
-          .and_return(double(:apply => {}, :apply! => {}))
+          .and_return(double(apply: {}, apply!: {}))
         subject
       end
     end
@@ -23,7 +23,7 @@ describe Dotenv do
         expected = expand("~/.env")
         allow(File).to receive(:exist?) { |arg| arg == expected }
         expect(Dotenv::Environment).to receive(:new).with(expected)
-          .and_return(double(:apply => {}, :apply! => {}))
+          .and_return(double(apply: {}, apply!: {}))
         subject
       end
     end
@@ -111,7 +111,7 @@ describe Dotenv do
   end
 
   describe "with an instrumenter" do
-    let(:instrumenter) { double("instrumenter", :instrument => {}) }
+    let(:instrumenter) { double("instrumenter", instrument: {}) }
     before { Dotenv.instrumenter = instrumenter }
     after { Dotenv.instrumenter = nil }
 

@@ -1,5 +1,14 @@
 # Changelog
 
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.1.2...master)
+
+## 2.1.2
+
+* Fix parser to allow leading whitespace before variables ([#276](https://github.com/bkeepers/dotenv/pull/276))
+* Fix bug with `require "dotenv/rails-now"` in older versions of rails ([#269](https://github.com/bkeepers/dotenv/pull/269))
+
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v2.1.1...v2.1.2)
+
 ## 2.1.1
 
 * Fix load error when using Spring w/ custom config ([#246](https://github.com/bkeepers/dotenv/pull/246))
@@ -49,7 +58,7 @@
 
 * add `dotenv/rails-now`, which can be required in the `Gemfile` to immediately load dotenv.
 
-        gem 'dotenv-rails', :require => 'dotenv/rails-now'
+        gem 'dotenv-rails', require: 'dotenv/rails-now'
         gem 'gem-that-requires-env-variables'
 
 [Full Changelog](https://github.com/bkeepers/dotenv/compare/v1.0.1...v1.0.2)

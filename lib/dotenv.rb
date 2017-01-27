@@ -13,7 +13,7 @@ module Dotenv
     with(*filenames) do |f|
       ignoring_nonexistent_files do
         env = Environment.new(f)
-        instrument("dotenv.load", :env => env) { env.apply }
+        instrument("dotenv.load", env: env) { env.apply }
       end
     end
   end
@@ -22,7 +22,7 @@ module Dotenv
   def load!(*filenames)
     with(*filenames) do |f|
       env = Environment.new(f)
-      instrument("dotenv.load", :env => env) { env.apply }
+      instrument("dotenv.load", env: env) { env.apply }
     end
   end
 
@@ -31,7 +31,7 @@ module Dotenv
     with(*filenames) do |f|
       ignoring_nonexistent_files do
         env = Environment.new(f)
-        instrument("dotenv.overload", :env => env) { env.apply! }
+        instrument("dotenv.overload", env: env) { env.apply! }
       end
     end
   end

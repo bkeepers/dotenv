@@ -15,7 +15,7 @@ But it is not always practical to set environment variables on development machi
 Add this line to the top of your application's Gemfile:
 
 ```ruby
-gem 'dotenv-rails', :groups => [:development, :test]
+gem 'dotenv-rails', groups: [:development, :test]
 ```
 
 And then execute:
@@ -40,7 +40,7 @@ HOSTNAME = ENV['HOSTNAME']
 If you use gems that require environment variables to be set before they are loaded, then list `dotenv-rails` in the `Gemfile` before those other gems and require `dotenv/rails-now`.
 
 ```ruby
-gem 'dotenv-rails', :require => 'dotenv/rails-now'
+gem 'dotenv-rails', require: 'dotenv/rails-now'
 gem 'gem-that-requires-env-variables'
 ```
 
@@ -55,8 +55,18 @@ $ gem install dotenv
 As early as possible in your application bootstrap process, load `.env`:
 
 ```ruby
+require 'dotenv/load'
+
+# or
 require 'dotenv'
 Dotenv.load
+```
+
+By default, `load` will look for a file called `.env` in the current working directory. Pass in multiple files and they will be loaded in order. The first value set for a variable will win.
+
+```
+require 'dotenv'
+Dotenv.load('file1.env', 'file2.env')
 ```
 
 Alternatively, you can use the `dotenv` executable to launch your application:
@@ -70,7 +80,7 @@ To ensure `.env` is loaded in rake, load the tasks:
 ```ruby
 require 'dotenv/tasks'
 
-task :mytask => :dotenv do
+task mytask: :dotenv do
     # things that require .env
 end
 ```
@@ -84,15 +94,10 @@ S3_BUCKET=YOURS3BUCKET
 SECRET_KEY=YOURSECRETKEYGOESHERE
 ```
 
-If you need multiline variables, for example private keys, you can double quote strings and use the `\n` character for newlines:
+Whenever your application loads, these variables will be available in `ENV`:
 
-```shell
-PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\nHkVN9…\n-----END DSA PRIVATE KEY-----\n"
-```
-
-You need to add the output of a command in one of your variables? Simply add it with `$(your_command)`:
-```shell
-DATABASE_URL="postgres://$(whoami)@localhost/my_database"
+```ruby
+config.fog_directory  = ENV['S3_BUCKET']
 ```
 
 You may also add `export` in front of each line so you can `source` the file in bash:
@@ -102,11 +107,37 @@ export S3_BUCKET=YOURS3BUCKET
 export SECRET_KEY=YOURSECRETKEYGOESHERE
 ```
 
-Whenever your application loads, these variables will be available in `ENV`:
+### Multi-line values
 
-```ruby
-config.fog_directory  = ENV['S3_BUCKET']
+If you need multiline variables, for example private keys, you can double quote strings and use the `\n` character for newlines:
+
+```shell
+PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\nHkVN9…\n-----END DSA PRIVATE KEY-----\n"
 ```
+
+### Command Substitution
+
+You need to add the output of a command in one of your variables? Simply add it with `$(your_command)`:
+
+```shell
+DATABASE_URL="postgres://$(whoami)@localhost/my_database"
+```
+
+### Variable Substitution
+
+You need to add the value of another variable in one of your variables? You can reference the variable with `${VAR}` or often just `$VAR` in unqoted or double-quoted values.
+
+```shell
+DATABASE_URL="postgres://${USER}@localhost/my_database"
+```
+
+If a value contains a `$` and it is not intended to be a variable, wrap it in single quotes.
+
+```shell
+PASSWORD='pas$word'
+```
+
+### Comments
 
 Comments may be added to your file as such:
 
@@ -116,9 +147,9 @@ SECRET_KEY=YOURSECRETKEYGOESHERE # comment
 SECRET_HASH="something-with-a-#-hash"
 ```
 
-Variable names may not contain the `#` symbol. Values can use the `#` if they are enclosed in quotes.
+## Frequently Answered Questions
 
-## Multiple Rails Environments
+### Can I use dotenv in production?
 
 dotenv was originally created to load configuration variables into `ENV` in *development*. There are typically better ways to manage configuration in production environments - such as `/etc/environment` managed by [Puppet](https://github.com/puppetlabs/puppet) or [Chef](https://github.com/chef/chef), `heroku config`, etc.
 
@@ -132,11 +163,15 @@ If you use this gem to handle env vars for multiple Rails environments (developm
 
 When you load a certain environment, dotenv will first load general env vars from `.env`, then load environment specific env vars from `.env.<current environment>`. Variables defined in `.env.<current environment>` will override any values set in `.env` or already defined in the environment. Finally loads the `.env.local` if presents.
 
-## Should I commit my .env file?
+### Should I commit my .env file?
 
 Credentials should only be accessible on the machines that need access to them. Never commit sensitive information to a repository that is not needed by every development machine and server.
 
 Personally, I prefer to commit the `.env` file with development-only settings. This makes it easy for other developers to get started on the project without compromising credentials for other environments. If you follow this advice, make sure that all the credentials for your development environment are different from your other deployments and that the development credentials do not have access to any confidential data.
+
+### Why is it not overriding existing `ENV` variables?
+
+By default, it **won't** overwrite existing environment variables as dotenv assumes the deployment environment has more knowledge about configuration than the application does. To overwrite existing environment variables you can use `Dotenv.overload`.
 
 ## Contributing
 
