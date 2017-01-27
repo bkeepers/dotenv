@@ -1,13 +1,16 @@
 # Changelog
 
-[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.1.2...master)
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.2.0...master)
 
-## Unreleased
+## 2.2.0
 
-* [dotenv-rails] Allow to have a local file per environment, e.g. `.env.development.local` ([281](https://github.com/bkeepers/dotenv/pull/281))
+* Drop official support for Ruby 1.9, jruby, and Rubinius. They may continue to work, but tests are not run against them. ([#283](https://github.com/bkeepers/dotenv/pull/283))
+* Allow leading and trailing whitespace ([#276](https://github.com/bkeepers/dotenv/pull/276), [#277](https://github.com/bkeepers/dotenv/pull/277))
+* [dotenv-rails] Fix for rspec rake tasks initializing in development ([#241](https://github.com/bkeepers/dotenv/pull/241))
+* [dotenv-rails] Allow a local file per environment, e.g. `.env.development.local` ([#281](https://github.com/bkeepers/dotenv/pull/281))
 * [dotenv-rails] No longer load `.env.local` in rails' test environment ([#280](https://github.com/bkeepers/dotenv/pull/280))
 
-[Full Changelog](https://github.com/bkeepers/dotenv/compare/v2.1.1...v2.1.2)
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v2.1.2...v2.2.0)
 
 ## 2.1.2
 
