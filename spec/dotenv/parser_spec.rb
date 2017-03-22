@@ -145,6 +145,10 @@ export OH_NO_NOT_SET')
     expect(env("foo='ba#r'  ")).to eql("foo" => "ba#r")
   end
 
+  it "parses empty values" do
+    expect(env("foo=")).to eql("foo" => "")
+  end
+
   if RUBY_VERSION > "1.8.7"
     it "parses shell commands interpolated in $()" do
       expect(env("echo=$(echo hello)")).to eql("echo" => "hello")
