@@ -72,7 +72,7 @@ Dotenv.load('file1.env', 'file2.env')
 Alternatively, you can use the `dotenv` executable to launch your application:
 
 ```shell
-$ dotenv ./script.py
+$ dotenv ./script.rb
 ```
 
 To ensure `.env` is loaded in rake, load the tasks:
