@@ -10,6 +10,7 @@ Style/Documentation:
 
 Style/FileName:
   Exclude:
+    - 'lib/dotenv/rails-overload.rb'
     - 'lib/dotenv/rails-now.rb'
     - 'lib/dotenv-rails.rb'
 

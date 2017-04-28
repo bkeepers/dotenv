@@ -38,6 +38,14 @@ module Dotenv
       Dotenv.load(*dotenv_files)
     end
 
+    def overload
+      Dotenv.overload(
+        root.join(".env"),
+        root.join(".env.#{Rails.env}"),
+        root.join(".env.local")
+      )
+    end
+
     # Internal: `Rails.root` is nil in Rails 4.1 before the application is
     # initialized, so this falls back to the `RAILS_ROOT` environment variable,
     # or the current working directory.
