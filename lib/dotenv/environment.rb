@@ -14,7 +14,15 @@ module Dotenv
     end
 
     def read
-      File.open(@filename, "rb:bom|utf-8", &:read)
+      if defined? Sekrets
+        if @filename =~ /\.enc$/
+          Sekrets.read(@filename) || raise(Errno::ENOENT)
+        else
+          File.open(@filename, "rb:bom|utf-8", &:read)
+        end
+      else
+        File.open(@filename, "rb:bom|utf-8", &:read)
+      end
     end
 
     def apply
