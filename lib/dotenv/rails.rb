@@ -56,6 +56,14 @@ module Dotenv
     private
 
     def dotenv_files
+      if defined? Sekrets
+        clear_files.map { |f| ["#{f}.enc", f] }.flatten
+      else
+        clear_files
+      end
+    end
+
+    def clear_files
       [
         root.join(".env.#{Rails.env}.local"),
         (root.join(".env.local") unless Rails.env.test?),
