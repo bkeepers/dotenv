@@ -1,4 +1,4 @@
-# dotenv [![Build Status](https://secure.travis-ci.org/bkeepers/dotenv.png?branch=master)](https://travis-ci.org/bkeepers/dotenv)
+# dotenv [![Build Status](https://secure.travis-ci.org/bkeepers/dotenv.png?branch=master)](https://travis-ci.org/bkeepers/dotenv) [![codebeat badge](https://codebeat.co/badges/166b3475-c84d-467c-b90c-b4da68abd0e8)](https://codebeat.co/projects/github-com-bkeepers-dotenv)
 
 [![Join the chat at https://gitter.im/bkeepers/dotenv](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bkeepers/dotenv?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
