@@ -25,7 +25,7 @@ module Dotenv
             if match[1] == '\\'
               variable[1..-1]
             elsif match[3]
-              env.fetch(match[3]) { ENV[match[3]] }
+              ENV[match[3]] || env[match[3]]
             else
               variable
             end

@@ -55,6 +55,11 @@ describe Dotenv::Parser do
       .to eql("FOO" => "test", "BAR" => "testbar")
   end
 
+  it "reads variable from ENV when expanding first" do
+    ENV["FOO"] = "bar"
+    expect(env("FOO=foo\nBAR=$FOO")).to include("BAR" => "bar")
+  end
+
   it "reads variables from ENV when expanding if not found in local env" do
     ENV["FOO"] = "test"
     expect(env("BAR=$FOO")).to eql("BAR" => "test")
