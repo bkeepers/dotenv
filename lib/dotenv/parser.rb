@@ -47,7 +47,7 @@ module Dotenv
         @hash[key] = parse_value(value || "")
       end
       # Process non-matches
-      @string.gsub(LINE, '').split(/[\n\r]+/).each do |line|
+      @string.gsub(LINE, "").split(/[\n\r]+/).each do |line|
         parse_line(line)
       end
       @hash
