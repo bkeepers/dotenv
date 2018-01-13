@@ -17,9 +17,9 @@ module Dotenv
       ([\w\.]+)         # key
       (?:\s*=\s*|:\s+?) # separator
       (                 # optional value begin
-        '(?:\'|[^'])*'  #   single quoted value
+        '(?:\\'|[^'])*'  #   single quoted value
         |               #   or
-        "(?:\"|[^"])*"  #   double quoted value
+        "(?:\\"|[^"])*"  #   double quoted value
         |               #   or
         [^#\r\n]+         #   unquoted value
       )?                # value end
