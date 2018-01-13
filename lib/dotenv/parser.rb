@@ -64,7 +64,7 @@ module Dotenv
 
     def parse_value(value)
       # Remove surrounding quotes
-      value = value.strip.sub(/\A(['"])(.*)\1\z/, '\2')
+      value = value.strip.sub(/\A(['"])(.*)\1\z/m, '\2')
 
       if Regexp.last_match(1) == '"'
         value = unescape_characters(expand_newlines(value))
