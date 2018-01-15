@@ -110,6 +110,32 @@ describe Dotenv do
     end
   end
 
+  describe "overload!" do
+    let(:env_files) { [fixture_path("plain.env")] }
+    subject { Dotenv.overload!(*env_files) }
+    it_behaves_like "load"
+
+    context "when loading a file containing already set variables" do
+      let(:env_files) { [fixture_path("plain.env")] }
+
+      it "overrides any existing ENV variables" do
+        ENV["OPTION_A"] = "predefined"
+
+        subject
+
+        expect(ENV["OPTION_A"]).to eq("1")
+      end
+    end
+
+    context "when one file exists and one does not" do
+      let(:env_files) { [".env", ".env_does_not_exist"] }
+
+      it "raises an Errno::ENOENT error" do
+        expect { subject }.to raise_error(Errno::ENOENT)
+      end
+    end
+  end
+
   describe "with an instrumenter" do
     let(:instrumenter) { double("instrumenter", instrument: {}) }
     before { Dotenv.instrumenter = instrumenter }

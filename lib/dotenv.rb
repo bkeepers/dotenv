@@ -36,6 +36,14 @@ module Dotenv
     end
   end
 
+  # same as `load!`, but will override existing values in `ENV`
+  def overload!(*filenames)
+    with(*filenames) do |f|
+      env = Environment.new(f)
+      instrument("dotenv.overload", env: env) { env.apply! }
+    end
+  end
+
   # Internal: Helper to expand list of filenames.
   #
   # Returns a hash of all the loaded environment variables.
