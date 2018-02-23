@@ -12,7 +12,7 @@ module Dotenv
   def load(*filenames)
     with(*filenames) do |f|
       ignoring_nonexistent_files do
-        env = Environment.new(f)
+        env = Environment.new(f, true)
         instrument("dotenv.load", env: env) { env.apply }
       end
     end
@@ -21,7 +21,7 @@ module Dotenv
   # same as `load`, but raises Errno::ENOENT if any files don't exist
   def load!(*filenames)
     with(*filenames) do |f|
-      env = Environment.new(f)
+      env = Environment.new(f, true)
       instrument("dotenv.load", env: env) { env.apply }
     end
   end
@@ -30,7 +30,7 @@ module Dotenv
   def overload(*filenames)
     with(*filenames) do |f|
       ignoring_nonexistent_files do
-        env = Environment.new(f)
+        env = Environment.new(f, false)
         instrument("dotenv.overload", env: env) { env.apply! }
       end
     end

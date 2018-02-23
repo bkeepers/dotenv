@@ -10,7 +10,8 @@ describe Dotenv do
       let(:env_files) { [] }
 
       it "defaults to .env" do
-        expect(Dotenv::Environment).to receive(:new).with(expand(".env"))
+        expect(Dotenv::Environment).to receive(:new).with(expand(".env"),
+                                                          anything)
           .and_return(double(apply: {}, apply!: {}))
         subject
       end
@@ -22,7 +23,7 @@ describe Dotenv do
       it "expands the path" do
         expected = expand("~/.env")
         allow(File).to receive(:exist?) { |arg| arg == expected }
-        expect(Dotenv::Environment).to receive(:new).with(expected)
+        expect(Dotenv::Environment).to receive(:new).with(expected, anything)
           .and_return(double(apply: {}, apply!: {}))
         subject
       end
@@ -55,9 +56,16 @@ describe Dotenv do
   end
 
   describe "load" do
+    let(:env_files) { [] }
     subject { Dotenv.load(*env_files) }
 
     it_behaves_like "load"
+
+    it "initializes the Environment with a truthy is_load" do
+      expect(Dotenv::Environment).to receive(:new).with(anything, true)
+        .and_return(double(apply: {}, apply!: {}))
+      subject
+    end
 
     context "when the file does not exist" do
       let(:env_files) { [".env_does_not_exist"] }
@@ -70,9 +78,16 @@ describe Dotenv do
   end
 
   describe "load!" do
+    let(:env_files) { [] }
     subject { Dotenv.load!(*env_files) }
 
     it_behaves_like "load"
+
+    it "initializes Environment with truthy is_load" do
+      expect(Dotenv::Environment).to receive(:new).with(anything, true)
+        .and_return(double(apply: {}, apply!: {}))
+      subject
+    end
 
     context "when one file exists and one does not" do
       let(:env_files) { [".env", ".env_does_not_exist"] }
@@ -87,6 +102,12 @@ describe Dotenv do
     let(:env_files) { [fixture_path("plain.env")] }
     subject { Dotenv.overload(*env_files) }
     it_behaves_like "load"
+
+    it "initializes the Environment with a falsey is_load" do
+      expect(Dotenv::Environment).to receive(:new).with(anything, false)
+        .and_return(double(apply: {}, apply!: {}))
+      subject
+    end
 
     context "when loading a file containing already set variables" do
       let(:env_files) { [fixture_path("plain.env")] }

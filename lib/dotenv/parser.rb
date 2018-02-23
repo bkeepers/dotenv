@@ -32,14 +32,15 @@ module Dotenv
     class << self
       attr_reader :substitutions
 
-      def call(string)
-        new(string).call
+      def call(string, is_load)
+        new(string, is_load).call
       end
     end
 
-    def initialize(string)
+    def initialize(string, is_load)
       @string = string
       @hash = {}
+      @is_load = is_load
     end
 
     def call
@@ -74,7 +75,7 @@ module Dotenv
 
       if Regexp.last_match(1) != "'"
         self.class.substitutions.each do |proc|
-          value = proc.call(value, @hash)
+          value = proc.call(value, @hash, @is_load)
         end
       end
       value

@@ -11,7 +11,7 @@ describe Dotenv::Environment do
 
     it "fails if file does not exist" do
       expect do
-        Dotenv::Environment.new(".does_not_exists")
+        Dotenv::Environment.new(".does_not_exists", true)
       end.to raise_error(Errno::ENOENT)
     end
   end
@@ -47,7 +47,7 @@ describe Dotenv::Environment do
     file = Tempfile.new("dotenv")
     file.write text
     file.close
-    env = Dotenv::Environment.new(file.path)
+    env = Dotenv::Environment.new(file.path, true)
     file.unlink
     env
   end
