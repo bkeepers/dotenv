@@ -12,7 +12,7 @@ Gem::Specification.new "dotenv-rails", Dotenv::VERSION do |gem|
   ) + ["README.md", "LICENSE"]
 
   gem.add_dependency "dotenv", Dotenv::VERSION
-  gem.add_dependency "railties", ">= 3.2", "< 5.2"
+  gem.add_dependency "railties", ">= 3.2", "< 6.0"
 
   gem.add_development_dependency "spring"
 end
