@@ -4,7 +4,7 @@
 
 ## 2.2.1 - Apr 28, 2017
 
-* Support Rails 5.1 ([#599](https://github.com/bkeepers/dotenv/pull/299))
+* Support Rails 5.1 ([#299](https://github.com/bkeepers/dotenv/pull/299))
 
 [Full Changelog](https://github.com/bkeepers/dotenv/compare/v2.2.0...v2.2.1)
 
