@@ -119,8 +119,8 @@ export OH_NO_NOT_SET')
     expect(env("foo=bar ")).to eql("foo" => "bar") # not 'bar '
   end
 
-  it "throws an error if line format is incorrect" do
-    expect { env("lol$wut") }.to raise_error(Dotenv::FormatError)
+  it "ignores lines that are not variable assignments" do
+    expect(env("lol$wut")).to eql({})
   end
 
   it "ignores empty lines" do
