@@ -1,10 +1,16 @@
 # Changelog
 
-[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.2.1...master)
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.2.2...master)
+
+## 2.2.2 - Apr 9, 2018
+
+* Support Rails 5.2 ([#325](https://github.com/bkeepers/dotenv/pull/325))
+
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v2.2.1...v2.2.2)
 
 ## 2.2.1 - Apr 28, 2017
 
-* Support Rails 5.1 ([#599](https://github.com/bkeepers/dotenv/pull/299))
+* Support Rails 5.1 ([#299](https://github.com/bkeepers/dotenv/pull/299))
 
 [Full Changelog](https://github.com/bkeepers/dotenv/compare/v2.2.0...v2.2.1)
 
