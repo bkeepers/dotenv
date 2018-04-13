@@ -12,21 +12,19 @@ module Dotenv
       [Dotenv::Substitutions::Variable, Dotenv::Substitutions::Command]
 
     LINE = /
-      \A
       \s*
       (?:export\s+)?    # optional export
       ([\w\.]+)         # key
       (?:\s*=\s*|:\s+?) # separator
       (                 # optional value begin
-        '(?:\'|[^'])*'  #   single quoted value
+        '(?:\\'|[^'])*'  #   single quoted value
         |               #   or
-        "(?:\"|[^"])*"  #   double quoted value
+        "(?:\\"|[^"])*"  #   double quoted value
         |               #   or
-        [^#\n]+         #   unquoted value
+        [^#\r\n]+         #   unquoted value
       )?                # value end
       \s*
       (?:\#.*)?         # optional comment
-      \z
     /x
 
     class << self
@@ -43,7 +41,12 @@ module Dotenv
     end
 
     def call
-      @string.split(/[\n\r]+/).each do |line|
+      # Process matches
+      @string.scan(LINE).each do |key, value|
+        @hash[key] = parse_value(value || "")
+      end
+      # Process non-matches
+      @string.gsub(LINE, "").split(/[\n\r]+/).each do |line|
         parse_line(line)
       end
       @hash
@@ -52,10 +55,7 @@ module Dotenv
     private
 
     def parse_line(line)
-      if (match = line.match(LINE))
-        key, value = match.captures
-        @hash[key] = parse_value(value || "")
-      elsif line.split.first == "export"
+      if line.split.first == "export"
         if variable_not_set?(line)
           raise FormatError, "Line #{line.inspect} has an unset variable"
         end
@@ -64,7 +64,7 @@ module Dotenv
 
     def parse_value(value)
       # Remove surrounding quotes
-      value = value.strip.sub(/\A(['"])(.*)\1\z/, '\2')
+      value = value.strip.sub(/\A(['"])(.*)\1\z/m, '\2')
 
       if Regexp.last_match(1) == '"'
         value = unescape_characters(expand_newlines(value))
