@@ -41,7 +41,6 @@ module Dotenv
             variable
           end
         end
-        
       end
     end
   end
