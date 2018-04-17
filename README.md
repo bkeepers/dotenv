@@ -75,6 +75,12 @@ Alternatively, you can use the `dotenv` executable to launch your application:
 $ dotenv ./script.rb
 ```
 
+The `dotenv` executable also accepts a single flag, `-f`. Its value should be a comma-separated list of configuration files, in the order of most important to least. All of the files must exist. There _must_ be a space between the flag and its value.
+
+```
+$ dotenv -f ".env.local,.env" ./script.rb
+```
+
 To ensure `.env` is loaded in rake, load the tasks:
 
 ```ruby
@@ -112,8 +118,20 @@ export SECRET_KEY=YOURSECRETKEYGOESHERE
 If you need multiline variables, for example private keys, you can double quote strings and use the `\n` character for newlines:
 
 ```shell
-PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\nHkVN9…\n-----END DSA PRIVATE KEY-----\n"
+PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\nHkVN9...\n-----END DSA PRIVATE KEY-----\n"
 ```
+
+Alternatively, multi-line values with line breaks are now supported for quoted values.
+
+```shell
+PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----
+...
+HkVN9...
+...
+-----END DSA PRIVATE KEY-----"
+```
+
+This is particularly helpful when using the Heroku command line plugin [`heroku-config`](https://github.com/xavdid/heroku-config) to pull configuration variables down that may have line breaks.
 
 ### Command Substitution
 
