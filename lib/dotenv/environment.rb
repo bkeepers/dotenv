@@ -4,13 +4,13 @@ module Dotenv
   class Environment < Hash
     attr_reader :filename
 
-    def initialize(filename)
+    def initialize(filename, is_load)
       @filename = filename
-      load
+      load(is_load)
     end
 
-    def load
-      update Parser.call(read)
+    def load(is_load)
+      update Parser.call(read, is_load)
     end
 
     def read

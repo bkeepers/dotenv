@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe Dotenv::Parser do
   def env(string)
-    Dotenv::Parser.call(string)
+    Dotenv::Parser.call(string, true)
   end
 
   it "parses unquoted values" do
@@ -55,14 +55,21 @@ describe Dotenv::Parser do
       .to eql("FOO" => "test", "BAR" => "testbar")
   end
 
-  it "reads variable from ENV when expanding first" do
-    ENV["FOO"] = "bar"
-    expect(env("FOO=foo\nBAR=$FOO")).to include("BAR" => "bar")
-  end
-
-  it "reads variables from ENV when expanding if not found in local env" do
+  it "expands variables from ENV if not found in .env" do
     ENV["FOO"] = "test"
     expect(env("BAR=$FOO")).to eql("BAR" => "test")
+  end
+
+  it "expands variables from ENV if found in .env during load" do
+    ENV["FOO"] = "test"
+    expect(env("FOO=development\nBAR=${FOO}")["BAR"])
+      .to eql("test")
+  end
+
+  it "doesn't expand variables from ENV if in local env in overload" do
+    ENV["FOO"] = "test"
+    expect(env("FOO=development\nBAR=${FOO}")["BAR"])
+      .to eql("test")
   end
 
   it "expands undefined variables to an empty string" do
