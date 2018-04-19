@@ -1,6 +1,16 @@
 # Changelog
 
-[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.2.2...master)
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.3.0...master)
+
+## 2.3.0 - Apr 19, 2018
+
+* Skip over lines that don't set an envvars ([#291](https://github.com/bkeepers/dotenv/pull/291))
+* Document the -f flag ([#310](https://github.com/bkeepers/dotenv/pull/310))
+* Existing variable takes precendence when performing substitution ([#313](https://github.com/bkeepers/dotenv/pull/313))
+* Parse multiline values ([#318](https://github.com/bkeepers/dotenv/pull/318), [#329](https://github.com/bkeepers/dotenv/pull/329))
+* Fix load to respect existing environment variables over env file when doing variable interpolation ([#323](https://github.com/bkeepers/dotenv/pull/323))
+* Add gem version badge to README.md ([#328](https://github.com/bkeepers/dotenv/pull/328))
+* Rescue from bundler require error ([#330](https://github.com/bkeepers/dotenv/pull/330))
 
 ## 2.2.2 - Apr 9, 2018
 
