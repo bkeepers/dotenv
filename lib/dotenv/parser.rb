@@ -30,12 +30,12 @@ module Dotenv
     class << self
       attr_reader :substitutions
 
-      def call(string, is_load)
+      def call(string, is_load = false)
         new(string, is_load).call
       end
     end
 
-    def initialize(string, is_load)
+    def initialize(string, is_load = false)
       @string = string
       @hash = {}
       @is_load = is_load
