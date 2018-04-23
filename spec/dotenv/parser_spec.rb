@@ -147,6 +147,10 @@ export OH_NO_NOT_SET')
     expect(env("\n\n\n # HERE GOES FOO \nfoo=bar")).to eql("foo" => "bar")
   end
 
+  it "ignores commented out variables" do
+    expect(env("# HELLO=world\n")).to eql({})
+  end
+
   it "parses # in quoted values" do
     expect(env('foo="ba#r"')).to eql("foo" => "ba#r")
     expect(env("foo='ba#r'")).to eql("foo" => "ba#r")
