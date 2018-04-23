@@ -151,6 +151,10 @@ export OH_NO_NOT_SET')
     expect(env("# HELLO=world\n")).to eql({})
   end
 
+  it "ignores comment" do
+    expect(env("# Uncomment to activate:\n")).to eql({})
+  end
+
   it "parses # in quoted values" do
     expect(env('foo="ba#r"')).to eql("foo" => "ba#r")
     expect(env("foo='ba#r'")).to eql("foo" => "ba#r")
