@@ -169,44 +169,6 @@ export OH_NO_NOT_SET')
     expect(env("foo=")).to eql("foo" => "")
   end
 
-  it "allows multi-line values in single quotes" do
-    env_file = %(OPTION_A=first line
-export OPTION_B='line 1
-line 2
-line 3'
-OPTION_C="last line"
-OPTION_ESCAPED='line one
-this is \\'quoted\\'
-one more line')
-
-    expected_result = {
-      "OPTION_A" => "first line",
-      "OPTION_B" => "line 1\nline 2\nline 3",
-      "OPTION_C" => "last line",
-      "OPTION_ESCAPED" => "line one\nthis is \\'quoted\\'\none more line"
-    }
-    expect(env(env_file)).to eql(expected_result)
-  end
-
-  it "allows multi-line values in double quotes" do
-    env_file = %(OPTION_A=first line
-export OPTION_B="line 1
-line 2
-line 3"
-OPTION_C="last line"
-OPTION_ESCAPED="line one
-this is \\"quoted\\"
-one more line")
-
-    expected_result = {
-      "OPTION_A" => "first line",
-      "OPTION_B" => "line 1\nline 2\nline 3",
-      "OPTION_C" => "last line",
-      "OPTION_ESCAPED" => "line one\nthis is \"quoted\"\none more line"
-    }
-    expect(env(env_file)).to eql(expected_result)
-  end
-
   if RUBY_VERSION > "1.8.7"
     it "parses shell commands interpolated in $()" do
       expect(env("echo=$(echo hello)")).to eql("echo" => "hello")
