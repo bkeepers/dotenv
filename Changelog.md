@@ -1,6 +1,12 @@
 # Changelog
 
-[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.3.0...master)
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.4.0...master)
+
+## 2.4.0 - Apr 23, 2018
+
+This release reverts `Parse multiline values` ([#318](https://github.com/bkeepers/dotenv/pull/318), [#329](https://github.com/bkeepers/dotenv/pull/329)) due to a parsing regression that was discovered after the last release ([#336](https://github.com/bkeepers/dotenv/issues/336), [#339](https://github.com/bkeepers/dotenv/issues/339), [#341](https://github.com/bkeepers/dotenv/issues/341)).
+
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v2.3.0...v2.4.0)
 
 ## 2.3.0 - Apr 19, 2018
 
