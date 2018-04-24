@@ -12,6 +12,8 @@
 * Add gem version badge to README.md ([#328](https://github.com/bkeepers/dotenv/pull/328))
 * Rescue from bundler require error ([#330](https://github.com/bkeepers/dotenv/pull/330))
 
+[Full Changelog](https://github.com/bkeepers/dotenv/compare/v2.2.2...v2.3.0)
+
 ## 2.2.2 - Apr 9, 2018
 
 * Support Rails 5.2 ([#325](https://github.com/bkeepers/dotenv/pull/325))
