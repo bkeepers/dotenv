@@ -155,6 +155,20 @@ export OH_NO_NOT_SET')
     expect(env("# Uncomment to activate:\n")).to eql({})
   end
 
+  it "includes variables without values" do
+    input = 'DATABASE_PASSWORD=
+DATABASE_USERNAME=root
+DATABASE_HOST=/tmp/mysql.sock'
+
+    output = {
+      "DATABASE_PASSWORD" => "",
+      "DATABASE_USERNAME" => "root",
+      "DATABASE_HOST" => "/tmp/mysql.sock"
+    }
+
+    expect(env(input)).to eql(output)
+  end
+
   it "parses # in quoted values" do
     expect(env('foo="ba#r"')).to eql("foo" => "ba#r")
     expect(env("foo='ba#r'")).to eql("foo" => "ba#r")
