@@ -12,14 +12,13 @@ module Dotenv
       [Dotenv::Substitutions::Variable, Dotenv::Substitutions::Command]
 
     LINE = /
-      (?:\s*=\s*|:\s+?) # separator
-      (                 # optional value begin
       (?:^|\A)           # beginning of line
       \s*                # leading whitespace
       (?:export\s+)?     # optional export
       ([\w\.]+)          # key
+      (?:\s*=\s*?|:\s+?) # separator
+      (                  # optional value begin
         '(?:\\'|[^'])*'  #   single quoted value
-        |               #   or
         |                #   or
         "(?:\\"|[^"])*"  #   double quoted value
         |                #   or
