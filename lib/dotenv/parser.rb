@@ -12,19 +12,22 @@ module Dotenv
       [Dotenv::Substitutions::Variable, Dotenv::Substitutions::Command]
 
     LINE = /
-      \s*
-      (?:export\s+)?    # optional export
-      ([\w\.]+)         # key
       (?:\s*=\s*|:\s+?) # separator
       (                 # optional value begin
+      (?:^|\A)           # beginning of line
+      \s*                # leading whitespace
+      (?:export\s+)?     # optional export
+      ([\w\.]+)          # key
         '(?:\\'|[^'])*'  #   single quoted value
         |               #   or
+        |                #   or
         "(?:\\"|[^"])*"  #   double quoted value
-        |               #   or
-        [^#\r\n]+         #   unquoted value
-      )?                # value end
-      \s*
-      (?:\#.*)?         # optional comment
+        |                #   or
+        [^\#\r\n]+       #   unquoted value
+      )?                 # value end
+      \s*                # trailing whitespace
+      (?:\#.*)?          # optional comment
+      (?:$|\z)           # end of line
     /x
 
     class << self
