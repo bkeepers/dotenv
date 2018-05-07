@@ -42,12 +42,14 @@ module Dotenv
     end
 
     def call
+      # Convert line breaks to same format
+      lines = @string.gsub(/\r\n?/, "\n")
       # Process matches
-      @string.scan(LINE).each do |key, value|
+      lines.scan(LINE).each do |key, value|
         @hash[key] = parse_value(value || "")
       end
       # Process non-matches
-      @string.gsub(LINE, "").split(/[\n\r]+/).each do |line|
+      lines.gsub(LINE, "").split(/[\n\r]+/).each do |line|
         parse_line(line)
       end
       @hash
