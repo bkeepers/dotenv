@@ -155,6 +155,20 @@ export OH_NO_NOT_SET')
     expect(env("# Uncomment to activate:\n")).to eql({})
   end
 
+  it "includes variables without values" do
+    input = 'DATABASE_PASSWORD=
+DATABASE_USERNAME=root
+DATABASE_HOST=/tmp/mysql.sock'
+
+    output = {
+      "DATABASE_PASSWORD" => "",
+      "DATABASE_USERNAME" => "root",
+      "DATABASE_HOST" => "/tmp/mysql.sock"
+    }
+
+    expect(env(input)).to eql(output)
+  end
+
   it "parses # in quoted values" do
     expect(env('foo="ba#r"')).to eql("foo" => "ba#r")
     expect(env("foo='ba#r'")).to eql("foo" => "ba#r")
@@ -167,6 +181,44 @@ export OH_NO_NOT_SET')
 
   it "parses empty values" do
     expect(env("foo=")).to eql("foo" => "")
+  end
+
+  it "allows multi-line values in single quotes" do
+    env_file = %(OPTION_A=first line
+export OPTION_B='line 1
+line 2
+line 3'
+OPTION_C="last line"
+OPTION_ESCAPED='line one
+this is \\'quoted\\'
+one more line')
+
+    expected_result = {
+      "OPTION_A" => "first line",
+      "OPTION_B" => "line 1\nline 2\nline 3",
+      "OPTION_C" => "last line",
+      "OPTION_ESCAPED" => "line one\nthis is \\'quoted\\'\none more line"
+    }
+    expect(env(env_file)).to eql(expected_result)
+  end
+
+  it "allows multi-line values in double quotes" do
+    env_file = %(OPTION_A=first line
+export OPTION_B="line 1
+line 2
+line 3"
+OPTION_C="last line"
+OPTION_ESCAPED="line one
+this is \\"quoted\\"
+one more line")
+
+    expected_result = {
+      "OPTION_A" => "first line",
+      "OPTION_B" => "line 1\nline 2\nline 3",
+      "OPTION_C" => "last line",
+      "OPTION_ESCAPED" => "line one\nthis is \"quoted\"\none more line"
+    }
+    expect(env(env_file)).to eql(expected_result)
   end
 
   if RUBY_VERSION > "1.8.7"
