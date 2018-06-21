@@ -1,6 +1,10 @@
 # Changelog
 
-[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.4.0...master)
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.5.0...master)
+
+## 2.5.0 - June 21, 2018
+
+This release re-introduces [multiline values](https://github.com/bkeepers/dotenv/pull/346) with proper protections against the regressions that were reported in 2.3.0, and corrects a [breaking change](https://github.com/bkeepers/dotenv/pull/345) in the API from 2.4 for `Dotenv::Environment`.
 
 ## 2.4.0 - Apr 23, 2018
 
