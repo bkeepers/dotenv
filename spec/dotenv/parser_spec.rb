@@ -140,6 +140,10 @@ export OH_NO_NOT_SET')
   end
 
   it "allows # in quoted value" do
+    expect(env("foo = '123#456' # comment")).to eql("foo" => "123#456")
+  end
+
+  it "allows # in quoted value" do
     expect(env('foo="bar#baz" # comment')).to eql("foo" => "bar#baz")
   end
 

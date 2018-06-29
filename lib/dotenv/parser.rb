@@ -25,7 +25,7 @@ module Dotenv
         [^\#\r\n]+       #   unquoted value
       )?                 # value end
       \s*                # trailing whitespace
-      (?:\#.*)?          # optional comment
+      (?:\s+\#.*)?       # optional comment
       (?:$|\z)           # end of line
     /x
 
