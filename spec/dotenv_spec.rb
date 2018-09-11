@@ -153,6 +153,20 @@ describe Dotenv do
     end
   end
 
+  describe "require keys" do
+    let(:env_files) { [".env", fixture_path("bom.env")] }
+
+    before { Dotenv.load(*env_files) }
+
+    it "raises exception with not defined mandatory ENV keys" do
+      expect { Dotenv.require_keys("BOM", "TEST") }.to \
+        raise_error(
+          Dotenv::MissingKeys,
+          'Missing required configuration key: ["TEST"]'
+        )
+    end
+  end
+
   describe "Unicode" do
     subject { fixture_path("bom.env") }
 
