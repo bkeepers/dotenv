@@ -1,5 +1,6 @@
 require "dotenv/parser"
 require "dotenv/environment"
+require "dotenv/missing_keys"
 
 # The top level Dotenv module. The entrypoint for the application logic.
 module Dotenv
@@ -61,6 +62,12 @@ module Dotenv
     else
       yield
     end
+  end
+
+  def require_keys(*keys)
+    missing_keys = keys.flatten - ::ENV.keys
+    return if missing_keys.empty?
+    raise MissingKeys, missing_keys
   end
 
   def ignoring_nonexistent_files
