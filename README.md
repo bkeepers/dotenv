@@ -190,12 +190,19 @@ If you use this gem to handle env vars for multiple Rails environments (developm
 
 ### What other .env* files can I use?
 
-`dotenv-rails` will load the following files, starting from the bottom. The first value set (or those already defined in the environment) take precedence:
+`dotenv-rails` will override in the following order (highest defined varible overrides lower):
 
-- `.env` - The Original®
-- `.env.development`, `.env.test`, `.env.production` - Environment-specific settings.
-- `.env.local` - Local overrides. This file is loaded for all environments _except_ `test`.
-- `.env.development.local`, `.env.test.local`, `.env.production.local` - Local overrides of environment-specific settings.
+| Hierarchy Priority | Filename                 | Environment          | Should I `.gitignore`it?                            | Notes                                                        |
+| ------------------ | ------------------------ | -------------------- | --------------------------------------------------- | ------------------------------------------------------------ |
+| 1st (highest)      | `.env.development.local` | Development          | Yes!                                                | Local overrides of environment-specific settings.            |
+| 1st                | `.env.test.local`        | Test                 | Yes!                                                | Local overrides of environment-specific settings.            |
+| 1st                | `.env.production.local`  | Production           | Yes!                                                | Local overrides of environment-specific settings.            |
+| 2nd                | `.env.local`             | Wherever the file is | Definitely.                                         | Local overrides. This file is loaded for all environments _except_ `test`. |
+| 3rd                | `.env.development`       | Development          | No.                                                 | Shared environment-specific settings                         |
+| 3rd                | `.env.test`              | Test                 | No.                                                 | Shared environment-specific settings                         |
+| 3rd                | `.env.production`        | Production           | No.                                                 | Shared environment-specific settings                         |
+| Last               | `.env`                   | All Environments     | Depends (See [below](#should-i-commit-my-env-file)) | The Original®                                                |
+
 
 ### Should I commit my .env file?
 
