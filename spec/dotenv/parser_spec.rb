@@ -262,6 +262,10 @@ one more line")
       expect(env("FOO=\"bar $ \"")).to eql("FOO" => "bar $ ")
     end
 
+    it "should not expand double-escaped newlines" do
+      expect(env('FOO="\\\\n"')).to eql("FOO" => "\\n")
+    end
+
     # This functionality is not supported on JRuby or Rubinius
     if (!defined?(RUBY_ENGINE) || RUBY_ENGINE != "jruby") &&
        !defined?(Rubinius)
