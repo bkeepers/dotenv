@@ -1,6 +1,13 @@
 # Changelog
 
-[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.5.0...master)
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.6.0...master)
+
+## 2.6.0 - January 5, 2019
+
+* Added require keys method to raise if not defined ([#354](https://github.com/bkeepers/dotenv/pull/354))
+* Use latest Ruby version on CI ([#356](https://github.com/bkeepers/dotenv/pull/356), [#363](https://github.com/bkeepers/dotenv/pull/363))
+* Clarify variable hierarchy in README.md ([#358](https://github.com/bkeepers/dotenv/pull/358))
+* Use SVG Travis CI badge ([#360](https://github.com/bkeepers/dotenv/pull/360))
 
 ## 2.5.0 - June 21, 2018
 

@@ -9,8 +9,8 @@ rvm:
   - 2.0.0
 
 before_install:
-  - gem update --remote bundler
-  - gem update --system
+  - 'gem update --system --conservative || (gem i "rubygems-update:~>2.7" --no-document && update_rubygems)'
+  - 'gem update bundler --conservative'
 
 sudo: false
 
