@@ -179,7 +179,7 @@ If any of the configuration keys above are not set, your application will raise 
 
 ### Parsing
 
-To parse a list of env files for programmatic inspection of without modifying the ENV:
+To parse a list of env files for programmatic inspection without modifying the ENV:
 
 ```ruby
 Dotenv.parse(".env.local", ".env")
