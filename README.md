@@ -190,7 +190,7 @@ If you use this gem to handle env vars for multiple Rails environments (developm
 
 ### What other .env* files can I use?
 
-`dotenv-rails` will override in the following order (highest defined varible overrides lower):
+`dotenv-rails` will override in the following order (highest defined variable overrides lower):
 
 | Hierarchy Priority | Filename                 | Environment          | Should I `.gitignore`it?                            | Notes                                                        |
 | ------------------ | ------------------------ | -------------------- | --------------------------------------------------- | ------------------------------------------------------------ |
