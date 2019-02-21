@@ -177,6 +177,16 @@ Dotenv.require_keys("SERVICE_APP_ID", "SERVICE_KEY", "SERVICE_SECRET")
 
 If any of the configuration keys above are not set, your application will raise an error during initialization. This method is preferred because it prevents runtime errors in a production application due to improper configuration.
 
+### Parsing
+
+To parse a list of env files for programmatic inspection without modifying the ENV:
+
+```ruby
+Dotenv.parse(".env.local", ".env")
+# => {'S3_BUCKET' => 'YOURS3BUCKET', 'SECRET_KEY' => 'YOURSECRETKEYGOESHERE', ...}
+```
+
+This method returns a hash of the ENV var name/value pairs.
 
 ## Frequently Answered Questions
 

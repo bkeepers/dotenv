@@ -197,6 +197,71 @@ describe Dotenv do
     end
   end
 
+  describe "parse" do
+    let(:env_files) { [] }
+    subject { Dotenv.parse(*env_files) }
+
+    context "with no args" do
+      let(:env_files) { [] }
+
+      it "defaults to .env" do
+        expect(Dotenv::Environment).to receive(:new).with(expand(".env"),
+                                                          anything)
+        subject
+      end
+    end
+
+    context "with a tilde path" do
+      let(:env_files) { ["~/.env"] }
+
+      it "expands the path" do
+        expected = expand("~/.env")
+        allow(File).to receive(:exist?) { |arg| arg == expected }
+        expect(Dotenv::Environment).to receive(:new).with(expected, anything)
+        subject
+      end
+    end
+
+    context "with multiple files" do
+      let(:env_files) { [".env", fixture_path("plain.env")] }
+
+      let(:expected) do
+        { "OPTION_A" => "1",
+          "OPTION_B" => "2",
+          "OPTION_C" => "3",
+          "OPTION_D" => "4",
+          "OPTION_E" => "5",
+          "PLAIN" => "true",
+          "DOTENV" => "true" }
+      end
+
+      it "does not modify ENV" do
+        subject
+        expected.each do |key, _value|
+          expect(ENV[key]).to be_nil
+        end
+      end
+
+      it "returns hash of parsed key/value pairs" do
+        expect(subject).to eq(expected)
+      end
+    end
+
+    it "initializes the Environment with a falsey is_load" do
+      expect(Dotenv::Environment).to receive(:new).with(anything, false)
+      subject
+    end
+
+    context "when the file does not exist" do
+      let(:env_files) { [".env_does_not_exist"] }
+
+      it "fails silently" do
+        expect { subject }.not_to raise_error
+        expect(subject).to eq({})
+      end
+    end
+  end
+
   describe "Unicode" do
     subject { fixture_path("bom.env") }
 

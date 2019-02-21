@@ -45,6 +45,15 @@ module Dotenv
     end
   end
 
+  # returns a hash of parsed key/value pairs but does not modify ENV
+  def parse(*filenames)
+    with(*filenames) do |f|
+      ignoring_nonexistent_files do
+        Environment.new(f, false)
+      end
+    end
+  end
+
   # Internal: Helper to expand list of filenames.
   #
   # Returns a hash of all the loaded environment variables.
