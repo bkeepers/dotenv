@@ -1,6 +1,14 @@
 # Changelog
 
-[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.6.0...master)
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.7.0...master)
+
+## 2.7.0 - February 21, 2019
+
+* Add Dotenv.parse method ([#362](https://github.com/bkeepers/dotenv/pull/362))
+* Add Support for Rails 6.0 ([#370](https://github.com/bkeepers/dotenv/pull/370))
+* Improve dotenv CLI output ([#374](https://github.com/bkeepers/dotenv/pull/374))
+* Add GitHub Actions automation ([#369](https://github.com/bkeepers/dotenv/pull/369))
+* Test against Ruby 2.6 ([#372](https://github.com/bkeepers/dotenv/pull/372))
 
 ## 2.6.0 - January 5, 2019
 
