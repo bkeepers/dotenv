@@ -38,6 +38,22 @@ describe "dotenv binary" do
     expect(ENV).to have_key("QUOTED")
   end
 
+  it "does not consume non-dotenv flags by accident" do
+    cli = Dotenv::CLI.new(["-f", "plain.env", "foo", "--switch"])
+    cli.send(:parse_argv!, cli.argv)
+
+    expect(cli.filenames).to eql(["plain.env"])
+    expect(cli.exec_args).to eql(["foo", "--switch"])
+  end
+
+  it "does not consume dotenv flags from subcommand" do
+    cli = Dotenv::CLI.new(["foo", "-f", "something"])
+    cli.send(:parse_argv!, cli.argv)
+
+    expect(cli.filenames).to eql([])
+    expect(cli.exec_args).to eql(["foo", "-f", "something"])
+  end
+
   # Capture output to $stdout and $stderr
   def capture_output(&_block)
     original_stderr = $stderr
