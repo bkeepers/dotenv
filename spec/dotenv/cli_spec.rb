@@ -55,14 +55,15 @@ describe "dotenv binary" do
   end
 
   it "templates a file specified by -t" do
-    @buffer = StringIO.new()
+    @buffer = StringIO.new
     @input = StringIO.new("FOO=BAR\nFOO2=BAR2")
     @origin_filename = "plain.env"
     @template_filename = "plain.env.template"
     @content = "the content fo the file"
-    allow(File).to receive(:open).with(@origin_filename,'r').and_yield( @input )
-    allow(File).to receive(:open).with(@template_filename,'w').and_yield( @buffer )
-  
+    allow(File).to receive(:open).with(@origin_filename, "r").and_yield(@input)
+    # rubocop:disable LineLength
+    allow(File).to receive(:open).with(@template_filename, "w").and_yield(@buffer)
+
     # call the function that writes to the file
     cli = Dotenv::CLI.new(["-t", "plain.env"])
     cli.send(:parse_argv!, cli.argv)

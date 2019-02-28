@@ -68,12 +68,13 @@ module Dotenv
       end
     end
 
-    # Take a env file and create a template from it. This will keep the Key 
+    # Take a env file and create a template from it. This will keep the Key
     # names but will replace the values. Useful for fat fingers who don't want
     # to push env files.
     def add_template_option(parser, flag_matchers)
       flag_matchers.push("-t \\S+", "--template \\S+")
-      parser.on("-t", "--template=FILE", "Create a template of an existing env file") do |file|
+      description = "Create a template of an existing env file"
+      parser.on("-t", "--template=FILE", description) do |file|
         template = Dotenv::EnvTemplate.new(file)
         template.create_template
       end
