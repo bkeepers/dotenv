@@ -1,5 +1,6 @@
 require "dotenv"
 require "dotenv/version"
+require "dotenv/template"
 require "optparse"
 
 module Dotenv
@@ -41,6 +42,7 @@ module Dotenv
       add_files_option(parser, flag_matchers)
       add_help_option(parser, flag_matchers)
       add_version_option(parser, flag_matchers)
+      add_template_option(parser, flag_matchers)
     end
 
     def add_files_option(parser, flag_matchers)
@@ -63,6 +65,17 @@ module Dotenv
       parser.on("-v", "--version", "Show version") do
         puts "dotenv #{Dotenv::VERSION}"
         exit
+      end
+    end
+
+    # Take a env file and create a template from it. This will keep the Key 
+    # names but will replace the values. Useful for fat fingers who don't want
+    # to push env files.
+    def add_template_option(parser, flag_matchers)
+      flag_matchers.push("-t \\S+", "--template \\S+")
+      parser.on("-t", "--template=FILE", "Create a template of an existing env file") do |file|
+        template = Dotenv::EnvTemplate.new(file)
+        template.create_template
       end
     end
 
