@@ -38,6 +38,12 @@ module Dotenv
       Dotenv.load(*dotenv_files)
     end
 
+    # Public: overload dotenv
+    #
+    def overload
+      Dotenv.overload(*dotenv_files)
+    end
+
     # Internal: `Rails.root` is nil in Rails 4.1 before the application is
     # initialized, so this falls back to the `RAILS_ROOT` environment variable,
     # or the current working directory.
@@ -50,6 +56,13 @@ module Dotenv
     def self.load
       instance.load
     end
+
+    # Same as load. Except will overload ENV variables.
+    def self.overload
+      self.instance.overload
+    end
+   
+
 
     config.before_configuration { load }
 
