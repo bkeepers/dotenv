@@ -40,6 +40,7 @@ module Dotenv
 
     # Public: overload dotenv
     #
+    # same as `load`, but will override existing values in `ENV`
     def overload
       Dotenv.overload(*dotenv_files)
     end
@@ -57,13 +58,11 @@ module Dotenv
       instance.load
     end
 
-    # Same as load. Except will overload ENV variables.
+    # same as `load`, but will override existing values in `ENV`
     def self.overload
       self.instance.overload
     end
    
-
-
     config.before_configuration { load }
 
     private
