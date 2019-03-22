@@ -14,7 +14,7 @@ module Dotenv
     end
 
     def run
-      parse_argv! @argv
+      parse_argv!(@argv)
 
       begin
         Dotenv.load!(*@filenames)
@@ -30,7 +30,7 @@ module Dotenv
     def parse_argv!(argv)
       parser = create_option_parser
       add_options(parser)
-      parser.order! argv
+      parser.order!(argv)
 
       @filenames
     end
