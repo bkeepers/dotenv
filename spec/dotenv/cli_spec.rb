@@ -43,7 +43,7 @@ describe "dotenv binary" do
     cli.send(:parse_argv!, cli.argv)
 
     expect(cli.filenames).to eql(["plain.env"])
-    expect(cli.exec_args).to eql(["foo", "--switch"])
+    expect(cli.argv).to eql(["foo", "--switch"])
   end
 
   it "does not consume dotenv flags from subcommand" do
@@ -51,7 +51,15 @@ describe "dotenv binary" do
     cli.send(:parse_argv!, cli.argv)
 
     expect(cli.filenames).to eql([])
-    expect(cli.exec_args).to eql(["foo", "-f", "something"])
+    expect(cli.argv).to eql(["foo", "-f", "something"])
+  end
+
+  it "does not mess with quoted args" do
+    cli = Dotenv::CLI.new(["foo something"])
+    cli.send(:parse_argv!, cli.argv)
+
+    expect(cli.filenames).to eql([])
+    expect(cli.argv).to eql(["foo something"])
   end
 
   # Capture output to $stdout and $stderr
