@@ -1,6 +1,10 @@
 # Changelog
 
-[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.7.1...master)
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.7.2...master)
+
+## 2.7.2 - March 25th, 2019
+
+* Cleaned up CLI while resolving regressions in 2.7.1 [#382](https://github.com/bkeepers/dotenv/pull/382)
 
 ## 2.7.1 - February 24, 2019
 
