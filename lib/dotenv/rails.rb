@@ -9,7 +9,7 @@ require "dotenv"
 #
 # See https://github.com/bkeepers/dotenv/issues/219
 if defined?(Rake.application)
-  is_running_specs = Rake.application.top_level_tasks.grep(/^spec(:|$)/).any?
+  is_running_specs = Rake.application.top_level_tasks.grep(/^(parallel:spec|spec(:|$))/).any?
   Rails.env = ENV["RAILS_ENV"] ||= "test" if is_running_specs
 end
 
