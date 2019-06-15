@@ -51,8 +51,6 @@ module Dotenv
       instance.load
     end
 
-    config.before_configuration { load }
-
     private
 
     def dotenv_files
@@ -63,5 +61,7 @@ module Dotenv
         root.join(".env")
       ].compact
     end
+
+    config.before_configuration { load }
   end
 end
