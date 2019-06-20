@@ -63,7 +63,7 @@ module Dotenv
       end
     end
 
-    def add_template_option(parser, flag_matchers)
+    def add_template_option(parser)
       parser.on("-t", "--template=FILE", "Create a template env file") do |file|
         template = Dotenv::EnvTemplate.new(file)
         template.create_template
