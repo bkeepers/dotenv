@@ -62,6 +62,24 @@ describe "dotenv binary" do
     expect(cli.argv).to eql(["foo something"])
   end
 
+  it "templates a file specified by -t" do
+    @buffer = StringIO.new
+    @input = StringIO.new("FOO=BAR\nFOO2=BAR2")
+    @origin_filename = "plain.env"
+    @template_filename = "plain.env.template"
+    @content = "the content fo the file"
+    allow(File).to receive(:open).with(@origin_filename, "r").and_yield(@input)
+    # rubocop:disable LineLength
+    allow(File).to receive(:open).with(@template_filename, "w").and_yield(@buffer)
+
+    # call the function that writes to the file
+    cli = Dotenv::CLI.new(["-t", "plain.env"])
+    cli.send(:parse_argv!, cli.argv)
+
+    # reading the buffer and checking its content.
+    expect(@buffer.string).to eq("FOO=FOO\nFOO2=FOO2\n")
+  end
+
   # Capture output to $stdout and $stderr
   def capture_output(&_block)
     original_stderr = $stderr
