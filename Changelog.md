@@ -1,6 +1,15 @@
 # Changelog
 
-[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.7.2...master)
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.7.3...master)
+
+## 2.7.3 - June 22nd, 2019
+
+* Fix for parallel spec tasks initializing in development [#384](https://github.com/bkeepers/dotenv/pull/384)
+* Test against updated rubies [#383](https://github.com/bkeepers/dotenv/pull/383), [#387](https://github.com/bkeepers/dotenv/pull/387)
+* Conditional branch cleanup for clarity of intent [#385](https://github.com/bkeepers/dotenv/pull/385)
+* Fix for load order issue with Railties [#391](https://github.com/bkeepers/dotenv/pull/391)
+* NEW: dotenv-templates using the -t flag [#377](https://github.com/bkeepers/dotenv/pull/377), [#393](https://github.com/bkeepers/dotenv/pull/393)
+
 
 ## 2.7.2 - March 25th, 2019
 
