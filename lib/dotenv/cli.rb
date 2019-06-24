@@ -22,7 +22,7 @@ module Dotenv
       rescue Errno::ENOENT => e
         abort e.message
       else
-        exec(*@argv) if @argv.present?
+        exec(*@argv) unless @argv.empty?
       end
     end
 
