@@ -1,6 +1,10 @@
 # Changelog
 
-[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.7.3...master)
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.7.4...master)
+
+## 2.7.4 - June 23rd, 2019
+
+* Fix `NoMethodError` in non-Rails environments [#394](https://github.com/bkeepers/dotenv/pull/394)
 
 ## 2.7.3 - June 22nd, 2019
 
