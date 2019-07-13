@@ -62,7 +62,7 @@ Dotenv.load
 
 By default, `load` will look for a file called `.env` in the current working directory. Pass in multiple files and they will be loaded in order. The first value set for a variable will win.
 
-```
+```ruby
 require 'dotenv'
 Dotenv.load('file1.env', 'file2.env')
 ```
