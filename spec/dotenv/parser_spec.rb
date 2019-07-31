@@ -9,6 +9,10 @@ describe Dotenv::Parser do
     expect(env("FOO=bar")).to eql("FOO" => "bar")
   end
 
+  it "parses unquoted values with spaces after seperator" do
+    expect(env("FOO= bar")).to eql("FOO" => "bar")
+  end
+
   it "parses values with spaces around equal sign" do
     expect(env("FOO =bar")).to eql("FOO" => "bar")
     expect(env("FOO= bar")).to eql("FOO" => "bar")
@@ -141,6 +145,10 @@ export OH_NO_NOT_SET')
 
   it "allows # in quoted value" do
     expect(env('foo="bar#baz" # comment')).to eql("foo" => "bar#baz")
+  end
+
+  it "allows # in quoted value with spaces after seperator" do
+    expect(env('foo= "bar#baz" # comment')).to eql("foo" => "bar#baz")
   end
 
   it "ignores comment lines" do
