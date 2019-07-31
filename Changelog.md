@@ -1,6 +1,11 @@
 # Changelog
 
-[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.7.4...master)
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.7.5...master)
+
+## 2.7.5 - July 31st, 2019
+
+* Fix for \s after separator [#399](https://github.com/bkeepers/dotenv/pull/399)
+* README formatting updates [#398](https://github.com/bkeepers/dotenv/pull/398)
 
 ## 2.7.4 - June 23rd, 2019
 
