@@ -164,7 +164,7 @@ describe Dotenv do
   describe "with an instrumenter" do
     let(:instrumenter) { double("instrumenter", instrument: {}) }
     before { Dotenv.instrumenter = instrumenter }
-    after { Dotenv.instrumenter = nil }
+    after { Dotenv.instrumenter = ActiveSupport::Notifications }
 
     describe "load" do
       it "instruments if the file exists" do
