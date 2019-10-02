@@ -87,4 +87,46 @@ describe Dotenv::Railtie do
       end
     end
   end
+
+  context "overload" do
+    before { Dotenv::Railtie.overload }
+
+    it "does not load .env.local in test rails environment" do
+      expect(Dotenv::Railtie.instance.send(:dotenv_files)).to eql(
+        [
+          Rails.root.join(".env.test.local"),
+          Rails.root.join(".env.test"),
+          Rails.root.join(".env")
+        ]
+      )
+    end
+
+    it "does load .env.local in development environment" do
+      Rails.env = "development"
+      expect(Dotenv::Railtie.instance.send(:dotenv_files)).to eql(
+        [
+          Rails.root.join(".env.development.local"),
+          Rails.root.join(".env.local"),
+          Rails.root.join(".env.development"),
+          Rails.root.join(".env")
+        ]
+      )
+    end
+
+    it "overloads .env.test with .env" do
+      expect(ENV["DOTENV"]).to eql("true")
+    end
+
+    context "when loading a file containing already set variables" do
+      subject { Dotenv::Railtie.overload }
+
+      it "overrides any existing ENV variables" do
+        ENV["DOTENV"] = "predefined"
+
+        expect do
+          subject
+        end.to(change { ENV["DOTENV"] }.from("predefined").to("true"))
+      end
+    end
+  end
 end
