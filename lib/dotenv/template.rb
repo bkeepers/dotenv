@@ -9,8 +9,10 @@ module Dotenv
       File.open(@env_file, "r") do |env_file|
         File.open("#{@env_file}.template", "w") do |env_template|
           env_file.each do |line|
-            variable = line.split("=").first
-            env_template.puts "#{variable}=#{variable}"
+            var, value = line.split("=")
+            is_a_comment = var.strip[0].eql?("#")
+            line_transform = value.nil? || is_a_comment ? line : "#{var}=#{var}"
+            env_template.puts line_transform
           end
         end
       end
