@@ -62,22 +62,59 @@ describe "dotenv binary" do
     expect(cli.argv).to eql(["foo something"])
   end
 
-  it "templates a file specified by -t" do
-    @buffer = StringIO.new
-    @input = StringIO.new("FOO=BAR\nFOO2=BAR2")
-    @origin_filename = "plain.env"
-    @template_filename = "plain.env.template"
-    @content = "the content fo the file"
-    allow(File).to receive(:open).with(@origin_filename, "r").and_yield(@input)
-    # rubocop:disable LineLength
-    allow(File).to receive(:open).with(@template_filename, "w").and_yield(@buffer)
+  describe "templates a file specified by -t" do
+    before do
+      @buffer = StringIO.new
+      @origin_filename = "plain.env"
+      @template_filename = "plain.env.template"
+    end
+    it "templates variables" do
+      @input = StringIO.new("FOO=BAR\nFOO2=BAR2")
+      # rubocop:disable LineLength
+      allow(File).to receive(:open).with(@origin_filename, "r").and_yield(@input)
+      allow(File).to receive(:open).with(@template_filename, "w").and_yield(@buffer)
+      # call the function that writes to the file
+      cli = Dotenv::CLI.new(["-t", @origin_filename])
+      cli.send(:parse_argv!, cli.argv)
+      # reading the buffer and checking its content.
+      expect(@buffer.string).to eq("FOO=FOO\nFOO2=FOO2\n")
+    end
 
-    # call the function that writes to the file
-    cli = Dotenv::CLI.new(["-t", "plain.env"])
-    cli.send(:parse_argv!, cli.argv)
+    it "ignores blank lines" do
+      @input = StringIO.new("\nFOO=BAR\nFOO2=BAR2")
+      allow(File).to receive(:open).with(@origin_filename, "r").and_yield(@input)
+      allow(File).to receive(:open).with(@template_filename, "w").and_yield(@buffer)
+      cli = Dotenv::CLI.new(["-t", @origin_filename])
+      cli.send(:parse_argv!, cli.argv)
+      expect(@buffer.string).to eq("\nFOO=FOO\nFOO2=FOO2\n")
+    end
 
-    # reading the buffer and checking its content.
-    expect(@buffer.string).to eq("FOO=FOO\nFOO2=FOO2\n")
+    it "ignores comments" do
+      @comment_input = StringIO.new("#Heading comment\nFOO=BAR\nFOO2=BAR2\n")
+      allow(File).to receive(:open).with(@origin_filename, "r").and_yield(@comment_input)
+      allow(File).to receive(:open).with(@template_filename, "w").and_yield(@buffer)
+      cli = Dotenv::CLI.new(["-t", @origin_filename])
+      cli.send(:parse_argv!, cli.argv)
+      expect(@buffer.string).to eq("#Heading comment\nFOO=FOO\nFOO2=FOO2\n")
+    end
+
+    it "ignores comments with =" do
+      @comment_with_equal_input = StringIO.new("#Heading=comment\nFOO=BAR\nFOO2=BAR2")
+      allow(File).to receive(:open).with(@origin_filename, "r").and_yield(@comment_with_equal_input)
+      allow(File).to receive(:open).with(@template_filename, "w").and_yield(@buffer)
+      cli = Dotenv::CLI.new(["-t", @origin_filename])
+      cli.send(:parse_argv!, cli.argv)
+      expect(@buffer.string).to eq("#Heading=comment\nFOO=FOO\nFOO2=FOO2\n")
+    end
+
+    it "ignores comments with leading spaces" do
+      @comment_leading_spaces_input = StringIO.new("  #Heading comment\nFOO=BAR\nFOO2=BAR2")
+      allow(File).to receive(:open).with(@origin_filename, "r").and_yield(@comment_leading_spaces_input)
+      allow(File).to receive(:open).with(@template_filename, "w").and_yield(@buffer)
+      cli = Dotenv::CLI.new(["-t", @origin_filename])
+      cli.send(:parse_argv!, cli.argv)
+      expect(@buffer.string).to eq("  #Heading comment\nFOO=FOO\nFOO2=FOO2\n")
+    end
   end
 
   # Capture output to $stdout and $stderr
