@@ -1,6 +1,13 @@
 # Changelog
 
-[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.7.5...master)
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.7.6...master)
+
+## 2.7.6 - July 11, 2020
+
+* Add a Dotenv::Railtie.overload method [#403](https://github.com/bkeepers/dotenv/pull/403)
+* Support for more Rails versions [#404](https://github.com/bkeepers/dotenv/pull/404)
+* Fix template handling of blank lines and comments [#413](https://github.com/bkeepers/dotenv/pull/413)
+* Fix for dotenv-rails Rake task environment allocation[#405](https://github.com/bkeepers/dotenv/pull/405)
 
 ## 2.7.5 - July 31st, 2019
 
