@@ -80,6 +80,15 @@ describe "dotenv binary" do
       expect(@buffer.string).to eq("FOO=FOO\nFOO2=FOO2\n")
     end
 
+    it "templates variables with export prefix" do
+      @input = StringIO.new("export FOO=BAR\nexport FOO2=BAR2")
+      allow(File).to receive(:open).with(@origin_filename, "r").and_yield(@input)
+      allow(File).to receive(:open).with(@template_filename, "w").and_yield(@buffer)
+      cli = Dotenv::CLI.new(["-t", @origin_filename])
+      cli.send(:parse_argv!, cli.argv)
+      expect(@buffer.string).to eq("export FOO=FOO\nexport FOO2=FOO2\n")
+    end
+
     it "ignores blank lines" do
       @input = StringIO.new("\nFOO=BAR\nFOO2=BAR2")
       allow(File).to receive(:open).with(@origin_filename, "r").and_yield(@input)
