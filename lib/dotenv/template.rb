@@ -1,4 +1,5 @@
 module Dotenv
+  EXPORT_COMMAND = "export ".freeze
   # Class for creating a template from a env file
   class EnvTemplate
     def initialize(env_file)
@@ -17,7 +18,7 @@ module Dotenv
 
     def template_line(line)
       var, value = line.split("=")
-      template = var.delete_prefix "export "
+      template = var.gsub(EXPORT_COMMAND, "")
       is_a_comment = var.strip[0].eql?("#")
       value.nil? || is_a_comment ? line : "#{var}=#{template}"
     end
