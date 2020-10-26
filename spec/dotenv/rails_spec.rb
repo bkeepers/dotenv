@@ -50,17 +50,18 @@ describe Dotenv::Railtie do
       expect(Spring.watcher.items).to include(path)
     end
 
-    it "does not load .env.local in test rails environment" do
+    it "loads .env.local in test rails environment" do
       expect(Dotenv::Railtie.instance.send(:dotenv_files)).to eql(
         [
           Rails.root.join(".env.test.local"),
+          Rails.root.join(".env.local"),
           Rails.root.join(".env.test"),
           Rails.root.join(".env")
         ]
       )
     end
 
-    it "does load .env.local in development environment" do
+    it "loads .env.local in development environment" do
       Rails.env = "development"
       expect(Dotenv::Railtie.instance.send(:dotenv_files)).to eql(
         [
@@ -72,8 +73,8 @@ describe Dotenv::Railtie do
       )
     end
 
-    it "loads .env.test before .env" do
-      expect(ENV["DOTENV"]).to eql("test")
+    it "loads .env.local before .env" do
+      expect(ENV["DOTENV"]).to eql("local")
     end
 
     context "when Rails.root is nil" do
@@ -91,17 +92,18 @@ describe Dotenv::Railtie do
   context "overload" do
     before { Dotenv::Railtie.overload }
 
-    it "does not load .env.local in test rails environment" do
+    it "loads .env.local in test rails environment" do
       expect(Dotenv::Railtie.instance.send(:dotenv_files)).to eql(
         [
           Rails.root.join(".env.test.local"),
+          Rails.root.join(".env.local"),
           Rails.root.join(".env.test"),
           Rails.root.join(".env")
         ]
       )
     end
 
-    it "does load .env.local in development environment" do
+    it "loads .env.local in development environment" do
       Rails.env = "development"
       expect(Dotenv::Railtie.instance.send(:dotenv_files)).to eql(
         [
@@ -113,7 +115,7 @@ describe Dotenv::Railtie do
       )
     end
 
-    it "overloads .env.test with .env" do
+    it "overloads .env.local with .env" do
       expect(ENV["DOTENV"]).to eql("true")
     end
 
