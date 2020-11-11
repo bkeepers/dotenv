@@ -53,9 +53,9 @@ describe Dotenv::Railtie do
     it "does not load .env.local in test rails environment" do
       expect(Dotenv::Railtie.instance.send(:dotenv_files)).to eql(
         [
-          Rails.root.join(".env.test.local"),
-          Rails.root.join(".env.test"),
-          Rails.root.join(".env")
+          Rails.root.join(".env.test.local").to_s,
+          Rails.root.join(".env.test").to_s,
+          Rails.root.join(".env").to_s
         ]
       )
     end
@@ -64,10 +64,10 @@ describe Dotenv::Railtie do
       Rails.env = "development"
       expect(Dotenv::Railtie.instance.send(:dotenv_files)).to eql(
         [
-          Rails.root.join(".env.development.local"),
-          Rails.root.join(".env.local"),
-          Rails.root.join(".env.development"),
-          Rails.root.join(".env")
+          Rails.root.join(".env.development.local").to_s,
+          Rails.root.join(".env.local").to_s,
+          Rails.root.join(".env.development").to_s,
+          Rails.root.join(".env").to_s
         ]
       )
     end
@@ -86,6 +86,14 @@ describe Dotenv::Railtie do
         expect(Dotenv::Railtie.root.to_s).to eql("/tmp")
       end
     end
+
+    it "loads files corectly when changing the root_dir" do
+      path = fixture_path(File.join("env", "other.env"))
+      Dotenv.root_dir = fixture_path("env")
+      Dotenv.load('other.env')
+      expect(Spring.watcher.items).to include(path)
+      Dotenv.root_dir = nil
+    end
   end
 
   context "overload" do
@@ -94,9 +102,9 @@ describe Dotenv::Railtie do
     it "does not load .env.local in test rails environment" do
       expect(Dotenv::Railtie.instance.send(:dotenv_files)).to eql(
         [
-          Rails.root.join(".env.test.local"),
-          Rails.root.join(".env.test"),
-          Rails.root.join(".env")
+          Rails.root.join(".env.test.local").to_s,
+          Rails.root.join(".env.test").to_s,
+          Rails.root.join(".env").to_s
         ]
       )
     end
@@ -105,10 +113,10 @@ describe Dotenv::Railtie do
       Rails.env = "development"
       expect(Dotenv::Railtie.instance.send(:dotenv_files)).to eql(
         [
-          Rails.root.join(".env.development.local"),
-          Rails.root.join(".env.local"),
-          Rails.root.join(".env.development"),
-          Rails.root.join(".env")
+          Rails.root.join(".env.development.local").to_s,
+          Rails.root.join(".env.local").to_s,
+          Rails.root.join(".env.development").to_s,
+          Rails.root.join(".env").to_s
         ]
       )
     end

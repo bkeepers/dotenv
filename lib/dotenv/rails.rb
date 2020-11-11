@@ -52,7 +52,7 @@ module Dotenv
     # initialized, so this falls back to the `RAILS_ROOT` environment variable,
     # or the current working directory.
     def root
-      Rails.root || Pathname.new(ENV["RAILS_ROOT"] || Dir.pwd)
+      Dotenv.root_dir || Rails.root || Pathname.new(ENV["RAILS_ROOT"] || Dir.pwd)
     end
 
     # Rails uses `#method_missing` to delegate all class methods to the
@@ -65,10 +65,10 @@ module Dotenv
 
     def dotenv_files
       [
-        root.join(".env.#{Rails.env}.local"),
-        (root.join(".env.local") unless Rails.env.test?),
-        root.join(".env.#{Rails.env}"),
-        root.join(".env")
+        File.expand_path(File.join(root, ".env.#{Rails.env}.local")),
+        (File.expand_path(File.join(root, ".env.local")) unless Rails.env.test?),
+        File.expand_path(File.join(root, ".env.#{Rails.env}")),
+        File.expand_path(File.join(root, ".env"))
       ].compact
     end
 

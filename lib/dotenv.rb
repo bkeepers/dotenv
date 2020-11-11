@@ -5,7 +5,7 @@ require "dotenv/missing_keys"
 # The top level Dotenv module. The entrypoint for the application logic.
 module Dotenv
   class << self
-    attr_accessor :instrumenter
+    attr_accessor :instrumenter, :root_dir
   end
 
   module_function
@@ -61,7 +61,9 @@ module Dotenv
     filenames << ".env" if filenames.empty?
 
     filenames.reduce({}) do |hash, filename|
-      hash.merge!(yield(File.expand_path(filename)) || {})
+      path = root_dir ? File.join(root_dir, filename) : filename
+
+      hash.merge!(yield(File.expand_path(path)) || {})
     end
   end
 
