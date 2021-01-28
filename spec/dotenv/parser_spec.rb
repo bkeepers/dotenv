@@ -119,7 +119,7 @@ export OH_NO_NOT_SET')
   end
 
   it "expands newlines in quoted strings" do
-    expect(env('FOO="bar\nbaz"')).to eql("FOO" => "bar\nbaz")
+    expect(env('FOO="bar\nbaz"')).to eql("FOO" => "bar\\nbaz")
   end
 
   it 'parses variables with "." in the name' do
