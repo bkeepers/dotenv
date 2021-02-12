@@ -3,7 +3,7 @@ require "dotenv/cli"
 
 describe "dotenv binary" do
   before do
-    Dir.chdir(File.expand_path("../../fixtures", __FILE__))
+    Dir.chdir(File.expand_path("../fixtures", __dir__))
   end
 
   def run(*args)

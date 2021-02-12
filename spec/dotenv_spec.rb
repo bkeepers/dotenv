@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe Dotenv do
   before do
-    Dir.chdir(File.expand_path("../fixtures", __FILE__))
+    Dir.chdir(File.expand_path("fixtures", __dir__))
   end
 
   shared_examples "load" do

@@ -2,7 +2,7 @@ require "dotenv/substitutions/variable"
 require "dotenv/substitutions/command" if RUBY_VERSION > "1.8.7"
 
 module Dotenv
-  class FormatError < SyntaxError; end
+  class FormatError < RuntimeError; end
 
   # This class enables parsing of a string for key value pairs to be returned
   # and stored in the Environment. It allows for variable substitutions and
