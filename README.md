@@ -1,4 +1,4 @@
-# dotenv [![Build Status](https://secure.travis-ci.org/bkeepers/dotenv.svg?branch=master)](https://travis-ci.org/bkeepers/dotenv) [![Gem Version](https://badge.fury.io/rb/dotenv.svg)](https://badge.fury.io/rb/dotenv) [![Join the chat at https://gitter.im/bkeepers/dotenv](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bkeepers/dotenv?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# dotenv [![Gem Version](https://badge.fury.io/rb/dotenv.svg)](https://badge.fury.io/rb/dotenv) [![Join the chat at https://gitter.im/bkeepers/dotenv](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bkeepers/dotenv?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Shim to load environment variables from `.env` into `ENV` in *development*.
 
