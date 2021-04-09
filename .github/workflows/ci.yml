@@ -1,0 +1,31 @@
+name: CI
+on:
+  push:
+    branches: [master]
+  pull_request:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby: ['2.5', '2.6', '2.7']
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Do some action caching
+        uses: actions/cache@v1
+        with:
+          path: vendor
+          key: ${{ runner.os }}-gem-${{ hashFiles('Gemfile', '*.gemspec') }}
+          restore-keys: |
+            ${{ runner.os }}-gem-
+      - name: Set up Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+      - name: Install bundler
+        run: gem install bundler
+      - name: Run bundler
+        run: bundle install --jobs 4 --retry 3
+      - name: Run Rake
+        run: bundle exec rake
