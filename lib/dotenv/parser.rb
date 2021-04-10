@@ -70,16 +70,9 @@ module Dotenv
     def parse_value(value)
       # Remove surrounding quotes
       value = value.strip.sub(/\A(['"])(.*)\1\z/m, '\2')
-
-      if Regexp.last_match(1) == '"'
-        value = unescape_characters(expand_newlines(value))
-      end
-
-      if Regexp.last_match(1) != "'"
-        self.class.substitutions.each do |proc|
-          value = proc.call(value, @hash, @is_load)
-        end
-      end
+      maybe_quote = Regexp.last_match(1)
+      value = unescape_value(value, maybe_quote)
+      value = perform_substitutions(value, maybe_quote)
       value
     end
 
@@ -93,6 +86,25 @@ module Dotenv
 
     def variable_not_set?(line)
       !line.split[1..-1].all? { |var| @hash.member?(var) }
+    end
+
+    def unescape_value(value, maybe_quote)
+      if maybe_quote == '"'
+        unescape_characters(expand_newlines(value))
+      elsif maybe_quote.nil?
+        unescape_characters(value)
+      else
+        value
+      end
+    end
+
+    def perform_substitutions(value, maybe_quote)
+      if maybe_quote != "'"
+        self.class.substitutions.each do |proc|
+          value = proc.call(value, @hash, @is_load)
+        end
+      end
+      value
     end
   end
 end
