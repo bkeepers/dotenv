@@ -13,6 +13,10 @@ describe Dotenv::Parser do
     expect(env("FOO= bar")).to eql("FOO" => "bar")
   end
 
+  it "parses unquoted escape characters correctly" do
+    expect(env("FOO=bar\\ bar")).to eql("FOO" => "bar bar")
+  end
+
   it "parses values with spaces around equal sign" do
     expect(env("FOO =bar")).to eql("FOO" => "bar")
     expect(env("FOO= bar")).to eql("FOO" => "bar")
