@@ -207,7 +207,7 @@ If you use this gem to handle env vars for multiple Rails environments (developm
 | 1st (highest)      | `.env.development.local` | Development          | Yes!                                                | Local overrides of environment-specific settings.            |
 | 1st                | `.env.test.local`        | Test                 | Yes!                                                | Local overrides of environment-specific settings.            |
 | 1st                | `.env.production.local`  | Production           | Yes!                                                | Local overrides of environment-specific settings.            |
-| 2nd                | `.env.local`             | Wherever the file is | Definitely.                                         | Local overrides. This file is loaded for all environments _except_ `test`. |
+| 2nd                | `.env.local`             | Wherever the file is | Definitely.                                         | Local overrides. This file is loaded for all environments.   |
 | 3rd                | `.env.development`       | Development          | No.                                                 | Shared environment-specific settings                         |
 | 3rd                | `.env.test`              | Test                 | No.                                                 | Shared environment-specific settings                         |
 | 3rd                | `.env.production`        | Production           | No.                                                 | Shared environment-specific settings                         |
