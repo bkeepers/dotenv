@@ -43,7 +43,7 @@ module Dotenv
       @is_load = is_load
     end
 
-    def call
+    def line_parse
       # Convert line breaks to same format
       lines = @string.gsub(/\r\n?/, "\n")
       # Process matches
@@ -57,7 +57,36 @@ module Dotenv
       @hash
     end
 
+    def yaml_parse
+      # Load as YAML
+      hash = YAML.load(@string)
+
+      @hash.replace(parse_hash(nil, hash, @hash))
+    end
+
+    def call
+       if /^---$/ =~ @string
+         yaml_parse
+       else
+         line_parse
+       end
+    end
+
     private
+
+    def parse_hash prefix, hash, target
+      hash.reduce(target) do |res, (key, value)|
+        case value
+        when Hash
+          parse_hash([prefix, key].compact.join("_"), value, res)
+        when Array
+          tmp = value.map.with_index {|x, i| [i, x]}.to_h
+          parse_hash([prefix, key].compact.join("_"), tmp, res)
+        else
+          res.merge([prefix, key].compact.join("_").upcase => value.to_s)
+        end
+      end
+    end
 
     def parse_line(line)
       if line.split.first == "export"
