@@ -4,12 +4,10 @@ require "dotenv"
 #
 # Dotenv loads environment variables when the Rails application is initialized.
 # When running `rake`, the Rails application is initialized in development.
-# Rails includes some hacks to set `RAILS_ENV=test` when running `rake test`,
-# but rspec does not include the same hacks.
 #
 # See https://github.com/bkeepers/dotenv/issues/219
 if defined?(Rake.application)
-  task_regular_expression = /^(default$|parallel:spec|spec(:|$))/
+  task_regular_expression = /^(default$|test(:|$)|parallel:spec|spec(:|$))/
   if Rake.application.top_level_tasks.grep(task_regular_expression).any?
     environment = Rake.application.options.show_tasks ? "development" : "test"
     Rails.env = ENV["RAILS_ENV"] ||= environment
