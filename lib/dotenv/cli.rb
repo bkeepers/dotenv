@@ -7,18 +7,23 @@ module Dotenv
   # The CLI is a class responsible of handling all the command line interface
   # logic.
   class CLI
-    attr_reader :argv, :filenames
+    attr_reader :argv, :filenames, :overload
 
     def initialize(argv = [])
       @argv = argv.dup
       @filenames = []
+      @overload = false
     end
 
     def run
       parse_argv!(@argv)
 
       begin
-        Dotenv.load!(*@filenames)
+        if @overload
+          Dotenv.overload!(*@filenames)
+        else
+          Dotenv.load!(*@filenames)
+        end
       rescue Errno::ENOENT => e
         abort e.message
       else
@@ -38,6 +43,7 @@ module Dotenv
 
     def add_options(parser)
       add_files_option(parser)
+      add_overload_option(parser)
       add_help_option(parser)
       add_version_option(parser)
       add_template_option(parser)
@@ -46,6 +52,12 @@ module Dotenv
     def add_files_option(parser)
       parser.on("-f FILES", Array, "List of env files to parse") do |list|
         @filenames = list
+      end
+    end
+
+    def add_overload_option(parser)
+      parser.on("-o", "--overload", "Use Dotenv.overload To overwrite existing environment variables") do
+        @overload = true
       end
     end
 
