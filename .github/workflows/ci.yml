@@ -13,7 +13,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
       - name: Do some action caching
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v3
         with:
           path: vendor
           key: ${{ runner.os }}-gem-${{ hashFiles('Gemfile', '*.gemspec') }}
