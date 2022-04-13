@@ -247,7 +247,7 @@ Personally, I prefer to commit the `.env` file with development-only settings. T
 
 By default, it **won't** overwrite existing environment variables as dotenv assumes the deployment environment has more knowledge about configuration than the application does. To overwrite existing environment variables you can use `Dotenv.overload`.
 
-You can use the `-o` or `--overload` flag on the dotenv cli to override existing `ENV` variables.
+You can also use the `-o` or `--overload` flag on the dotenv cli to override existing `ENV` variables.
 ```shell
 $ dotenv -o -f ".env.local,.env"
 ```
