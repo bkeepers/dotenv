@@ -19,11 +19,7 @@ module Dotenv
       parse_argv!(@argv)
 
       begin
-        if @overload
-          Dotenv.overload!(*@filenames)
-        else
-          Dotenv.load!(*@filenames)
-        end
+        load_dotenv(@overload, @filenames)
       rescue Errno::ENOENT => e
         abort e.message
       else
@@ -41,6 +37,14 @@ module Dotenv
       @filenames
     end
 
+    def load_dotenv(overload, filenames)
+      if overload
+        Dotenv.overload!(*filenames)
+      else
+        Dotenv.load!(*filenames)
+      end
+    end
+
     def add_options(parser)
       add_files_option(parser)
       add_overload_option(parser)
@@ -56,7 +60,7 @@ module Dotenv
     end
 
     def add_overload_option(parser)
-      parser.on("-o", "--overload", "Use Dotenv.overload To overwrite existing environment variables") do
+      parser.on("-o", "--overload", "override existing ENV variables") do
         @overload = true
       end
     end
