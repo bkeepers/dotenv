@@ -11,7 +11,7 @@ jobs:
         ruby: ['2.5', '2.6', '2.7', '3.0']
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Do some action caching
         uses: actions/cache@v3.0.4
         with:
