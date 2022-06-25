@@ -30,7 +30,10 @@ dotenv is initialized in your Rails app during the `before_configuration` callba
 # config/application.rb
 Bundler.require(*Rails.groups)
 
-Dotenv::Railtie.load
+# Load dotenv only in development or test environment
+if ['development', 'test'].include? ENV['RAILS_ENV']
+  Dotenv::Railtie.load
+end
 
 HOSTNAME = ENV['HOSTNAME']
 ```
