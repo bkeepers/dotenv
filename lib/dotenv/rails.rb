@@ -45,7 +45,7 @@ module Dotenv
     #
     # Same as `load`, but will override existing values in `ENV`
     def overload
-      Dotenv.overload(*dotenv_files)
+      Dotenv.overload(*dotenv_files.reverse)
     end
 
     # Internal: `Rails.root` is nil in Rails 4.1 before the application is

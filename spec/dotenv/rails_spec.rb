@@ -113,8 +113,8 @@ describe Dotenv::Railtie do
       )
     end
 
-    it "overloads .env.test with .env" do
-      expect(ENV["DOTENV"]).to eql("true")
+    it "overloads .env with .env.test" do
+      expect(ENV["DOTENV"]).to eql("test")
     end
 
     context "when loading a file containing already set variables" do
@@ -125,7 +125,7 @@ describe Dotenv::Railtie do
 
         expect do
           subject
-        end.to(change { ENV["DOTENV"] }.from("predefined").to("true"))
+        end.to(change { ENV["DOTENV"] }.from("predefined").to("test"))
       end
     end
   end
