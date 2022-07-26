@@ -43,21 +43,15 @@ module Dotenv
     end
 
     def run
-      load_dotenv(@overload, @filenames)
+      if @overload
+        Dotenv.overload!(*@filenames)
+      else
+        Dotenv.load!(*@filenames)
+      end
     rescue Errno::ENOENT => e
       abort e.message
     else
       exec(*@argv) unless @argv.empty?
-    end
-
-    private
-
-    def load_dotenv(overload, filenames)
-      if overload
-        Dotenv.overload!(*filenames)
-      else
-        Dotenv.load!(*filenames)
-      end
     end
   end
 end
