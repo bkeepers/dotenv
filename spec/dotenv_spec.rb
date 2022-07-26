@@ -10,8 +10,7 @@ describe Dotenv do
       let(:env_files) { [] }
 
       it "defaults to .env" do
-        expect(Dotenv::Environment).to receive(:new).with(expand(".env"),
-                                                          anything)
+        expect(Dotenv::Environment).to receive(:new).with(expand(".env"), anything)
           .and_return(double(apply: {}, apply!: {}))
         subject
       end
@@ -33,13 +32,13 @@ describe Dotenv do
       let(:env_files) { [".env", fixture_path("plain.env")] }
 
       let(:expected) do
-        { "OPTION_A" => "1",
-          "OPTION_B" => "2",
-          "OPTION_C" => "3",
-          "OPTION_D" => "4",
-          "OPTION_E" => "5",
-          "PLAIN" => "true",
-          "DOTENV" => "true" }
+        {"OPTION_A" => "1",
+         "OPTION_B" => "2",
+         "OPTION_C" => "3",
+         "OPTION_D" => "4",
+         "OPTION_E" => "5",
+         "PLAIN" => "true",
+         "DOTENV" => "true"}
       end
 
       it "loads all files" do
@@ -189,11 +188,10 @@ describe Dotenv do
     before { Dotenv.load(*env_files) }
 
     it "raises exception with not defined mandatory ENV keys" do
-      expect { Dotenv.require_keys("BOM", "TEST") }.to \
-        raise_error(
-          Dotenv::MissingKeys,
-          'Missing required configuration key: ["TEST"]'
-        )
+      expect { Dotenv.require_keys("BOM", "TEST") }.to raise_error(
+        Dotenv::MissingKeys,
+        'Missing required configuration key: ["TEST"]'
+      )
     end
   end
 
@@ -206,7 +204,7 @@ describe Dotenv do
 
       it "defaults to .env" do
         expect(Dotenv::Environment).to receive(:new).with(expand(".env"),
-                                                          anything)
+          anything)
         subject
       end
     end
@@ -226,13 +224,13 @@ describe Dotenv do
       let(:env_files) { [".env", fixture_path("plain.env")] }
 
       let(:expected) do
-        { "OPTION_A" => "1",
-          "OPTION_B" => "2",
-          "OPTION_C" => "3",
-          "OPTION_D" => "4",
-          "OPTION_E" => "5",
-          "PLAIN" => "true",
-          "DOTENV" => "true" }
+        {"OPTION_A" => "1",
+         "OPTION_B" => "2",
+         "OPTION_C" => "3",
+         "OPTION_D" => "4",
+         "OPTION_E" => "5",
+         "PLAIN" => "true",
+         "DOTENV" => "true"}
       end
 
       it "does not modify ENV" do
@@ -270,7 +268,7 @@ describe Dotenv do
     end
 
     it "fixture file has UTF-8 BOM" do
-      contents = File.open(subject, "rb", &:read).force_encoding("UTF-8")
+      contents = File.binread(subject).force_encoding("UTF-8")
       expect(contents).to start_with("\xEF\xBB\xBF".force_encoding("UTF-8"))
     end
   end

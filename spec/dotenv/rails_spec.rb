@@ -2,20 +2,20 @@ require "spec_helper"
 require "rails"
 require "dotenv/rails"
 
-describe Dotenv::Railtie do
-  # Fake watcher for Spring
-  class SpecWatcher
-    attr_reader :items
+# Fake watcher for Spring
+class SpecWatcher
+  attr_reader :items
 
-    def initialize
-      @items = []
-    end
-
-    def add(*items)
-      @items |= items
-    end
+  def initialize
+    @items = []
   end
 
+  def add(*items)
+    @items |= items
+  end
+end
+
+describe Dotenv::Railtie do
   before do
     Rails.env = "test"
     allow(Rails).to receive(:root)

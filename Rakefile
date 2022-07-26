@@ -6,13 +6,17 @@ namespace "dotenv" do
   Bundler::GemHelper.install_tasks name: "dotenv"
 end
 
-namespace "dotenv-rails" do
-  class DotenvRailsGemHelper < Bundler::GemHelper
-    def guard_already_tagged; end # noop
-
-    def tag_version; end # noop
+class DotenvRailsGemHelper < Bundler::GemHelper
+  def guard_already_tagged
+    # noop
   end
 
+  def tag_version
+    # noop
+  end
+end
+
+namespace "dotenv-rails" do
   DotenvRailsGemHelper.install_tasks name: "dotenv-rails"
 end
 
@@ -24,11 +28,10 @@ require "rspec/core/rake_task"
 
 desc "Run all specs"
 RSpec::Core::RakeTask.new(:spec) do |t|
-  t.rspec_opts = %w(--color)
+  t.rspec_opts = %w[--color]
   t.verbose = false
 end
 
-require "rubocop/rake_task"
-RuboCop::RakeTask.new
+require "standard/rake"
 
-task default: [:spec, :rubocop]
+task default: [:spec, :standard]

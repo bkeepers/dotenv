@@ -70,7 +70,6 @@ describe "dotenv binary" do
     end
     it "templates variables" do
       @input = StringIO.new("FOO=BAR\nFOO2=BAR2")
-      # rubocop:disable LineLength
       allow(File).to receive(:open).with(@origin_filename, "r").and_yield(@input)
       allow(File).to receive(:open).with(@template_filename, "w").and_yield(@buffer)
       # call the function that writes to the file
