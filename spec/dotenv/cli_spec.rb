@@ -40,7 +40,6 @@ describe "dotenv binary" do
 
   it "does not consume non-dotenv flags by accident" do
     cli = Dotenv::CLI.new(["-f", "plain.env", "foo", "--switch"])
-    cli.send(:parse_argv!, cli.argv)
 
     expect(cli.filenames).to eql(["plain.env"])
     expect(cli.argv).to eql(["foo", "--switch"])
@@ -48,7 +47,6 @@ describe "dotenv binary" do
 
   it "does not consume dotenv flags from subcommand" do
     cli = Dotenv::CLI.new(["foo", "-f", "something"])
-    cli.send(:parse_argv!, cli.argv)
 
     expect(cli.filenames).to eql([])
     expect(cli.argv).to eql(["foo", "-f", "something"])
@@ -56,7 +54,6 @@ describe "dotenv binary" do
 
   it "does not mess with quoted args" do
     cli = Dotenv::CLI.new(["foo something"])
-    cli.send(:parse_argv!, cli.argv)
 
     expect(cli.filenames).to eql([])
     expect(cli.argv).to eql(["foo something"])
@@ -73,8 +70,7 @@ describe "dotenv binary" do
       allow(File).to receive(:open).with(@origin_filename, "r").and_yield(@input)
       allow(File).to receive(:open).with(@template_filename, "w").and_yield(@buffer)
       # call the function that writes to the file
-      cli = Dotenv::CLI.new(["-t", @origin_filename])
-      cli.send(:parse_argv!, cli.argv)
+      Dotenv::CLI.new(["-t", @origin_filename])
       # reading the buffer and checking its content.
       expect(@buffer.string).to eq("FOO=FOO\nFOO2=FOO2\n")
     end
@@ -83,8 +79,7 @@ describe "dotenv binary" do
       @input = StringIO.new("export FOO=BAR\nexport FOO2=BAR2")
       allow(File).to receive(:open).with(@origin_filename, "r").and_yield(@input)
       allow(File).to receive(:open).with(@template_filename, "w").and_yield(@buffer)
-      cli = Dotenv::CLI.new(["-t", @origin_filename])
-      cli.send(:parse_argv!, cli.argv)
+      Dotenv::CLI.new(["-t", @origin_filename])
       expect(@buffer.string).to eq("export FOO=FOO\nexport FOO2=FOO2\n")
     end
 
@@ -92,8 +87,7 @@ describe "dotenv binary" do
       @input = StringIO.new("\nFOO=BAR\nFOO2=BAR2")
       allow(File).to receive(:open).with(@origin_filename, "r").and_yield(@input)
       allow(File).to receive(:open).with(@template_filename, "w").and_yield(@buffer)
-      cli = Dotenv::CLI.new(["-t", @origin_filename])
-      cli.send(:parse_argv!, cli.argv)
+      Dotenv::CLI.new(["-t", @origin_filename])
       expect(@buffer.string).to eq("\nFOO=FOO\nFOO2=FOO2\n")
     end
 
@@ -101,8 +95,7 @@ describe "dotenv binary" do
       @comment_input = StringIO.new("#Heading comment\nFOO=BAR\nFOO2=BAR2\n")
       allow(File).to receive(:open).with(@origin_filename, "r").and_yield(@comment_input)
       allow(File).to receive(:open).with(@template_filename, "w").and_yield(@buffer)
-      cli = Dotenv::CLI.new(["-t", @origin_filename])
-      cli.send(:parse_argv!, cli.argv)
+      Dotenv::CLI.new(["-t", @origin_filename])
       expect(@buffer.string).to eq("#Heading comment\nFOO=FOO\nFOO2=FOO2\n")
     end
 
@@ -110,8 +103,7 @@ describe "dotenv binary" do
       @comment_with_equal_input = StringIO.new("#Heading=comment\nFOO=BAR\nFOO2=BAR2")
       allow(File).to receive(:open).with(@origin_filename, "r").and_yield(@comment_with_equal_input)
       allow(File).to receive(:open).with(@template_filename, "w").and_yield(@buffer)
-      cli = Dotenv::CLI.new(["-t", @origin_filename])
-      cli.send(:parse_argv!, cli.argv)
+      Dotenv::CLI.new(["-t", @origin_filename])
       expect(@buffer.string).to eq("#Heading=comment\nFOO=FOO\nFOO2=FOO2\n")
     end
 
@@ -119,8 +111,7 @@ describe "dotenv binary" do
       @comment_leading_spaces_input = StringIO.new("  #Heading comment\nFOO=BAR\nFOO2=BAR2")
       allow(File).to receive(:open).with(@origin_filename, "r").and_yield(@comment_leading_spaces_input)
       allow(File).to receive(:open).with(@template_filename, "w").and_yield(@buffer)
-      cli = Dotenv::CLI.new(["-t", @origin_filename])
-      cli.send(:parse_argv!, cli.argv)
+      Dotenv::CLI.new(["-t", @origin_filename])
       expect(@buffer.string).to eq("  #Heading comment\nFOO=FOO\nFOO2=FOO2\n")
     end
   end
