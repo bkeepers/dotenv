@@ -15,7 +15,7 @@ module Dotenv
       (?:^|\A)              # beginning of line
       \s*                   # leading whitespace
       (?:export\s+)?        # optional export
-      ([\w\.]+)             # key
+      ([\w.]+)              # key
       (?:\s*=\s*?|:\s+?)    # separator
       (                     # optional value begin
         \s*'(?:\\'|[^'])*'  #   single quoted value
@@ -72,8 +72,7 @@ module Dotenv
       value = value.strip.sub(/\A(['"])(.*)\1\z/m, '\2')
       maybe_quote = Regexp.last_match(1)
       value = unescape_value(value, maybe_quote)
-      value = perform_substitutions(value, maybe_quote)
-      value
+      perform_substitutions(value, maybe_quote)
     end
 
     def unescape_characters(value)
@@ -85,7 +84,7 @@ module Dotenv
     end
 
     def variable_not_set?(line)
-      !line.split[1..-1].all? { |var| @hash.member?(var) }
+      !line.split[1..].all? { |var| @hash.member?(var) }
     end
 
     def unescape_value(value, maybe_quote)

@@ -13,7 +13,7 @@ module Dotenv
           \$                  # literal $
           (?<cmd>             # collect command content for eval
             \(                # require opening paren
-            ([^()]|\g<cmd>)+  # allow any number of non-parens, or balanced
+            (?:[^()]|\g<cmd>)+  # allow any number of non-parens, or balanced
                               # parens (by nesting the <cmd> expression
                               # recursively)
             \)                # require closing paren
@@ -28,7 +28,7 @@ module Dotenv
 
             if $LAST_MATCH_INFO[:backslash]
               # Command is escaped, don't replace it.
-              $LAST_MATCH_INFO[0][1..-1]
+              $LAST_MATCH_INFO[0][1..]
             else
               # Execute the command and return the value
               `#{command}`.chomp
