@@ -226,7 +226,7 @@ You can use the `-t` or `--template` flag on the dotenv cli to create a template
 ```shell
 $ dotenv -t .env
 ```
-A template will be created in your working directory named `{FINAME}.template`. So in the above example, it would create a `.env.template` file. 
+A template will be created in your working directory named `{FINAME}.template`. So in the above example, it would create a `.env.template` file.
 
 The template will contain all the environment variables in your `.env` file but with their values set to the variable names.
 
@@ -236,7 +236,7 @@ S3_BUCKET=YOURS3BUCKET
 SECRET_KEY=YOURSECRETKEYGOESHERE
 ```
 
-Would become 
+Would become
 
 ```shell
 # .env.template
@@ -249,6 +249,11 @@ Personally, I prefer to commit the `.env` file with development-only settings. T
 ### Why is it not overriding existing `ENV` variables?
 
 By default, it **won't** overwrite existing environment variables as dotenv assumes the deployment environment has more knowledge about configuration than the application does. To overwrite existing environment variables you can use `Dotenv.overload`.
+
+You can also use the `-o` or `--overload` flag on the dotenv cli to override existing `ENV` variables.
+```shell
+$ dotenv -o -f ".env.local,.env"
+```
 
 ## Contributing
 
