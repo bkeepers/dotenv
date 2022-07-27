@@ -84,7 +84,7 @@ module Dotenv
     end
 
     def variable_not_set?(line)
-      !line.split[1..].all? { |var| @hash.member?(var) }
+      !line.split[1..-1].all? { |var| @hash.member?(var) }
     end
 
     def unescape_value(value, maybe_quote)
