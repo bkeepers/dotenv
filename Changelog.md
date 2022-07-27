@@ -1,6 +1,10 @@
 # Changelog
 
-[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.8.0...master)
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.8.1...master)
+
+## 2.8.1 - July 27, 2022
+
+* Restore support for EOL'd Ruby versions (2.5, 2.6) (#458)[https://github.com/bkeepers/dotenv/pull/458]
 
 ## 2.8.0 - July 26, 2022
 
