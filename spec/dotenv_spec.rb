@@ -54,6 +54,30 @@ describe Dotenv do
     end
   end
 
+  shared_examples "overload" do
+    context "with multiple files" do
+      let(:env_files) { [fixture_path("important.env"), fixture_path("plain.env")] }
+
+      let(:expected) do
+        {
+          "OPTION_A" => "yep",
+          "OPTION_B" => "2",
+          "OPTION_C" => "3",
+          "OPTION_D" => "4",
+          "OPTION_E" => "5",
+          "PLAIN" => "false"
+        }
+      end
+
+      it "respects the file importance order" do
+        subject
+        expected.each do |key, value|
+          expect(ENV[key]).to eq(value)
+        end
+      end
+    end
+  end
+
   describe "load" do
     let(:env_files) { [] }
     subject { Dotenv.load(*env_files) }
@@ -98,6 +122,9 @@ describe Dotenv do
   end
 
   describe "overload" do
+
+    it_behaves_like "overload"
+
     let(:env_files) { [fixture_path("plain.env")] }
     subject { Dotenv.overload(*env_files) }
     it_behaves_like "load"
@@ -131,6 +158,9 @@ describe Dotenv do
   end
 
   describe "overload!" do
+
+    it_behaves_like "overload"
+
     let(:env_files) { [fixture_path("plain.env")] }
     subject { Dotenv.overload!(*env_files) }
     it_behaves_like "load"
@@ -158,6 +188,8 @@ describe Dotenv do
         expect { subject }.to raise_error(Errno::ENOENT)
       end
     end
+
+
   end
 
   describe "with an instrumenter" do
