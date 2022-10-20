@@ -1,6 +1,17 @@
 # Changelog
 
-[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.7.6...master)
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.8.1...master)
+
+## 2.8.1 - July 27, 2022
+
+* Restore support for EOL'd Ruby versions (2.5, 2.6) (#458)[https://github.com/bkeepers/dotenv/pull/458]
+
+## 2.8.0 - July 26, 2022
+
+* Drop support for Ruby 2.4, 2.5, and 2.6, which are EOL
+* Fix template (-t) handling of export declarations [#416](https://github.com/bkeepers/dotenv/pull/416)
+* Unescape escaped characters when value is not quoted [#421](https://github.com/bkeepers/dotenv/pull/421)
+* Add overload option for the CLI (`$ dotenv --overload -f .env.local`) [#445](https://github.com/bkeepers/dotenv/pull/445)
 
 ## 2.7.6 - July 11, 2020
 
