@@ -289,13 +289,14 @@ one more line")
       expect(env("FOO=\"bar $ \"")).to eql("FOO" => "bar $ ")
     end
 
-    # This functionality is not supported on JRuby or Rubinius
-    if (!defined?(RUBY_ENGINE) || RUBY_ENGINE != "jruby") &&
-        !defined?(Rubinius)
-      it "substitutes shell variables within interpolated shell commands" do
-        expect(env(%(VAR1=var1\ninterp=$(echo "VAR1 is $VAR1")))["interp"])
-          .to eql("VAR1 is var1")
-      end
+    it "substitutes shell variables within interpolated shell commands" do
+      expect(env(%(VAR1=var1\ninterp=$(echo "VAR1 is $VAR1")))["interp"])
+        .to eql("VAR1 is var1")
+    end
+
+    it "only performs variable or command substitutions, not both" do
+      expect(env("VAR1='\$(echo not a command)'\nVAR2=$VAR1"))
+        .to eql("VAR1" => "\$(echo not a command)", "VAR2" => "\$(echo not a command)")
     end
   end
 end
