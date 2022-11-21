@@ -99,8 +99,11 @@ module Dotenv
 
     def perform_substitutions(value, maybe_quote)
       if maybe_quote != "'"
-        self.class.substitutions.each do |proc|
-          value = proc.call(value, @hash, @is_load)
+        self.class.substitutions.detect do |proc|
+          new_value = proc.call(value, @hash, @is_load)
+          changed = value != new_value
+          value = new_value
+          changed
         end
       end
       value
