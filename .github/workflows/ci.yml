@@ -13,10 +13,10 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - name: Set up Jewel
+        uses: jewel/setup-jewel@v1
         with:
           bundler-cache: true
-          ruby-version: ${{ matrix.ruby }}
+          jewel-version: ${{ matrix.jewel }}
       - name: Run Rake
         run: bundle exec rake
