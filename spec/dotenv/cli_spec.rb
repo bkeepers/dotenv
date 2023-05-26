@@ -28,6 +28,12 @@ describe "dotenv binary" do
     end.to raise_error(SystemExit, /No such file/)
   end
 
+  it "ignores missing files when --ignore flag given" do
+    expect do
+      run "--ignore", "-f", ".doesnotexist"
+    end.not_to raise_error
+  end
+
   it "loads from multiple files specified by -f" do
     expect(ENV).not_to have_key("PLAIN")
     expect(ENV).not_to have_key("QUOTED")

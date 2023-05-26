@@ -76,10 +76,16 @@ Alternatively, you can use the `dotenv` executable to launch your application:
 $ dotenv ./script.rb
 ```
 
-The `dotenv` executable also accepts a single flag, `-f`. Its value should be a comma-separated list of configuration files, in the order of most important to least. All of the files must exist. There _must_ be a space between the flag and its value.
+The `dotenv` executable also accepts the flag `-f`. Its value should be a comma-separated list of configuration files, in the order of most important to least. All of the files must exist. There _must_ be a space between the flag and its value.
 
 ```console
 $ dotenv -f ".env.local,.env" ./script.rb
+```
+
+The `dotenv` executable can optionally ignore missing files with the `-i` or `--ignore` flag. For example, if the `.env.local` file does not exist, the following will ignore the missing file and only load the `.env` file.
+
+```console
+$ dotenv -i -f ".env.local,.env" ./script.rb
 ```
 
 To ensure `.env` is loaded in rake, load the tasks:

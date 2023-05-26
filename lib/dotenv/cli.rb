@@ -11,6 +11,7 @@ module Dotenv
     def initialize(argv = [])
       @argv = argv.dup
       @filenames = []
+      @ignore = false
       @overload = false
 
       super "Usage: dotenv [options]"
@@ -18,6 +19,10 @@ module Dotenv
 
       on("-f FILES", Array, "List of env files to parse") do |list|
         @filenames = list
+      end
+
+      on("-i", "--ignore", "ignore missing env files") do
+        @ignore = true
       end
 
       on("-o", "--overload", "override existing ENV variables") do
@@ -43,11 +48,11 @@ module Dotenv
     end
 
     def run
-      if @overload
-        Dotenv.overload!(*@filenames)
-      else
-        Dotenv.load!(*@filenames)
-      end
+      meth = "load"
+      meth = "overload" if @overload
+      meth = "#{meth}!" unless @ignore
+
+      Dotenv.public_send(meth, *@filenames)
     rescue Errno::ENOENT => e
       abort e.message
     else
