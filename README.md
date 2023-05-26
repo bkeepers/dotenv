@@ -18,7 +18,7 @@ gem 'dotenv-rails', groups: [:development, :test]
 
 And then execute:
 
-```shell
+```console
 $ bundle
 ```
 
@@ -49,7 +49,7 @@ gem 'gem-that-requires-env-variables'
 
 Install the gem:
 
-```shell
+```console
 $ gem install dotenv
 ```
 
@@ -72,13 +72,13 @@ Dotenv.load('file1.env', 'file2.env')
 
 Alternatively, you can use the `dotenv` executable to launch your application:
 
-```shell
+```console
 $ dotenv ./script.rb
 ```
 
 The `dotenv` executable also accepts a single flag, `-f`. Its value should be a comma-separated list of configuration files, in the order of most important to least. All of the files must exist. There _must_ be a space between the flag and its value.
 
-```
+```console
 $ dotenv -f ".env.local,.env" ./script.rb
 ```
 
@@ -223,7 +223,8 @@ Credentials should only be accessible on the machines that need access to them. 
 
 
 You can use the `-t` or `--template` flag on the dotenv cli to create a template of your `.env` file.
-```shell
+
+```console
 $ dotenv -t .env
 ```
 A template will be created in your working directory named `{FINAME}.template`. So in the above example, it would create a `.env.template` file.
@@ -251,7 +252,8 @@ Personally, I prefer to commit the `.env` file with development-only settings. T
 By default, it **won't** overwrite existing environment variables as dotenv assumes the deployment environment has more knowledge about configuration than the application does. To overwrite existing environment variables you can use `Dotenv.overload`.
 
 You can also use the `-o` or `--overload` flag on the dotenv cli to override existing `ENV` variables.
-```shell
+
+```console
 $ dotenv -o -f ".env.local,.env"
 ```
 
