@@ -80,7 +80,11 @@ module Dotenv
     end
 
     def expand_newlines(value)
-      value.gsub('\n', "\\\\\\n").gsub('\r', "\r")
+      if (@hash["DOTENV_LINEBREAK_MODE"] || ENV["DOTENV_LINEBREAK_MODE"]) == "legacy"
+        value.gsub('\n', "\n").gsub('\r', "\r")
+      else
+        value.gsub('\n', "\\\\\\n").gsub('\r', "\\\\\\r")
+      end
     end
 
     def variable_not_set?(line)

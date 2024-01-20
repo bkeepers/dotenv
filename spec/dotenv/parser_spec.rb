@@ -120,8 +120,25 @@ export OH_NO_NOT_SET')
     end.to raise_error(Dotenv::FormatError, 'Line "export OH_NO_NOT_SET" has an unset variable')
   end
 
-  it "expands newlines in quoted strings" do
+  it 'escapes \n in quoted strings' do
     expect(env('FOO="bar\nbaz"')).to eql("FOO" => "bar\\nbaz")
+    expect(env('FOO="bar\\nbaz"')).to eql("FOO" => "bar\\nbaz")
+  end
+
+  it 'expands \n and \r in quoted strings with DOTENV_LINEBREAK_MODE=legacy in current file' do
+    ENV["DOTENV_LINEBREAK_MODE"] = "strict"
+
+    contents = [
+      'DOTENV_LINEBREAK_MODE=legacy',
+      'FOO="bar\nbaz\rfizz"'
+    ].join("\n")
+    expect(env(contents)).to eql("DOTENV_LINEBREAK_MODE" => "legacy", "FOO" => "bar\nbaz\rfizz")
+  end
+
+  it 'expands \n and \r in quoted strings with DOTENV_LINEBREAK_MODE=legacy in ENV' do
+    ENV['DOTENV_LINEBREAK_MODE'] = 'legacy'
+    contents = 'FOO="bar\nbaz\rfizz"'
+    expect(env(contents)).to eql("FOO" => "bar\nbaz\rfizz")
   end
 
   it 'parses variables with "." in the name' do
@@ -259,8 +276,8 @@ one more line")
       expect(env("FOO=bar\r\nbaz=fbb")).to eql("FOO" => "bar", "baz" => "fbb")
     end
 
-    it "expands carriage return in quoted strings" do
-      expect(env('FOO="bar\rbaz"')).to eql("FOO" => "bar\rbaz")
+    it "escapes carriage return in quoted strings" do
+      expect(env('FOO="bar\rbaz"')).to eql("FOO" => "bar\\rbaz")
     end
 
     it "escape $ properly when no alphabets/numbers/_  are followed by it" do
