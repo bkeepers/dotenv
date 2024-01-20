@@ -20,7 +20,7 @@ module Dotenv
       var, value = line.split("=")
       template = var.gsub(EXPORT_COMMAND, "")
       is_a_comment = var.strip[0].eql?("#")
-      value.nil? || is_a_comment ? line : "#{var}=#{template}"
+      (value.nil? || is_a_comment) ? line : "#{var}=#{template}"
     end
   end
 end
