@@ -2,19 +2,6 @@ require "spec_helper"
 require "rails"
 require "dotenv/rails"
 
-# Fake watcher for Spring
-class SpecWatcher
-  attr_reader :items
-
-  def initialize
-    @items = []
-  end
-
-  def add(*items)
-    @items |= items
-  end
-end
-
 describe Dotenv::Rails do
   before do
     # Remove the singleton instance if it exists
@@ -23,7 +10,7 @@ describe Dotenv::Rails do
     Rails.env = "test"
     allow(Rails).to receive(:root).and_return Pathname.new(__dir__).join('../fixtures')
     Rails.application = double(:application)
-    Spring.watcher = SpecWatcher.new
+    Spring.watcher = Set.new # Responds to #add
   end
 
   after do
@@ -32,11 +19,11 @@ describe Dotenv::Rails do
     Rails.application = nil
   end
 
-  describe "config.dotenv.files" do
+  describe "files" do
     it "loads files for development environment" do
       Rails.env = "development"
 
-      expect(Dotenv::Rails.config.dotenv.files).to eql(
+      expect(Dotenv::Rails.files).to eql(
         [
           Rails.root.join(".env.development.local"),
           Rails.root.join(".env.local"),
@@ -48,7 +35,7 @@ describe Dotenv::Rails do
 
     it "does not load .env.local in test rails environment" do
       Rails.env = "test"
-      expect(Dotenv::Rails.config.dotenv.files).to eql(
+      expect(Dotenv::Rails.files).to eql(
         [
           Rails.root.join(".env.test.local"),
           Rails.root.join(".env.test"),
@@ -67,7 +54,7 @@ describe Dotenv::Rails do
     end
 
     context "with mode = :overload" do
-      before { Dotenv::Rails.config.dotenv.mode = :overload }
+      before { Dotenv::Rails.mode = :overload }
 
       it "calls #overload" do
         expect(Dotenv::Rails.instance).to receive(:overload)
@@ -80,13 +67,13 @@ describe Dotenv::Rails do
     before { Dotenv::Rails.load }
 
     it "watches .env with Spring" do
-      expect(Spring.watcher.items).to include(Rails.root.join(".env").to_s)
+      expect(Spring.watcher).to include(Rails.root.join(".env").to_s)
     end
 
     it "watches other loaded files with Spring" do
       path = fixture_path("plain.env")
       Dotenv.load(path)
-      expect(Spring.watcher.items).to include(path)
+      expect(Spring.watcher).to include(path)
     end
 
     it "loads .env.test before .env" do
@@ -95,7 +82,7 @@ describe Dotenv::Rails do
 
     it "loads configured files" do
       expect(Dotenv).to receive(:load).with("custom.env")
-      Dotenv::Rails.config.dotenv.files = ["custom.env"]
+      Dotenv::Rails.files = ["custom.env"]
       Dotenv::Rails.load
     end
 
@@ -120,7 +107,7 @@ describe Dotenv::Rails do
 
     it "loads configured files" do
       expect(Dotenv).to receive(:overload).with("custom.env")
-      Dotenv::Rails.config.dotenv.files = ["custom.env"]
+      Dotenv::Rails.files = ["custom.env"]
       Dotenv::Rails.overload
     end
 

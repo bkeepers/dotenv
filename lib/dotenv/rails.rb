@@ -12,23 +12,18 @@ rescue LoadError, ArgumentError
 end
 
 module Dotenv
-  # Dotenv Railtie for using Dotenv to load environment from a file into
-  # Rails applications
+  # Rails integration for using Dotenv to load ENV variables from a file
   class Rails < ::Rails::Railtie
-    def self.deprecator # :nodoc:
-      @deprecator ||= ActiveSupport::Deprecation.new
-    end
+    attr_accessor :mode, :files
 
     def initialize
-      config.dotenv = ActiveSupport::OrderedOptions.new.merge!(
-        mode: :load,
-        files: [
-          root.join(".env.#{env}.local"),
-          (root.join(".env.local") unless env.test?),
-          root.join(".env.#{env}"),
-          root.join(".env")
-        ].compact
-      )
+      @mode = :load
+      @files = [
+        root.join(".env.#{env}.local"),
+        (root.join(".env.local") unless env.test?),
+        root.join(".env.#{env}"),
+        root.join(".env")
+      ].compact
     end
 
     # Public: Load dotenv
@@ -36,14 +31,14 @@ module Dotenv
     # This will get called during the `before_configuration` callback, but you
     # can manually call `Dotenv::Railtie.load` if you needed it sooner.
     def load
-      Dotenv.load(*config.dotenv.files)
+      Dotenv.load(*files)
     end
 
     # Public: Reload dotenv
     #
     # Same as `load`, but will override existing values in `ENV`
     def overload
-      Dotenv.overload(*config.dotenv.files)
+      Dotenv.overload(*files)
     end
 
     # Internal: `Rails.root` is nil in Rails 4.1 before the application is
@@ -72,6 +67,10 @@ module Dotenv
       env
     end
 
+    def deprecator # :nodoc:
+      @deprecator ||= ActiveSupport::Deprecation.new
+    end
+
     # Rails uses `#method_missing` to delegate all class methods to the
     # instance, which means `Kernel#load` gets called here. We don't want that.
     def self.load
@@ -79,12 +78,12 @@ module Dotenv
     end
 
     initializer "dotenv.deprecator" do |app|
-      app.deprecators[:dotenv] = Dotenv::Railtie.deprecator
+      app.deprecators[:dotenv] = deprecator
     end
 
     config.before_configuration do
       Dotenv.instrumenter = ActiveSupport::Notifications
-      config.dotenv.mode == :load ? load : overload
+      mode == :load ? load : overload
     end
   end
 
