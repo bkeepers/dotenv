@@ -13,7 +13,7 @@ But it is not always practical to set environment variables on development machi
 Add this line to the top of your application's Gemfile:
 
 ```ruby
-gem 'dotenv-rails', groups: [:development, :test]
+gem 'dotenv', groups: [:development, :test]
 ```
 
 And then execute:
@@ -24,7 +24,7 @@ $ bundle
 
 #### Note on load order
 
-dotenv is initialized in your Rails app during the `before_configuration` callback, which is fired when the `Application` constant is defined in `config/application.rb` with `class Application < Rails::Application`. If you need it to be initialized sooner, you can manually call `Dotenv::Railtie.load`.
+dotenv is initialized in your Rails app during the `before_configuration` callback, which is fired when the `Application` constant is defined in `config/application.rb` with `class Application < Rails::Application`. If you need it to be initialized sooner, you can manually call `Dotenv::Rails.load`.
 
 ```ruby
 # config/application.rb
@@ -32,16 +32,16 @@ Bundler.require(*Rails.groups)
 
 # Load dotenv only in development or test environment
 if ['development', 'test'].include? ENV['RAILS_ENV']
-  Dotenv::Railtie.load
+  Dotenv::Rails.load
 end
 
 HOSTNAME = ENV['HOSTNAME']
 ```
 
-If you use gems that require environment variables to be set before they are loaded, then list `dotenv-rails` in the `Gemfile` before those other gems and require `dotenv/rails-now`.
+If you use gems that require environment variables to be set before they are loaded, then list `dotenv` in the `Gemfile` before those other gems and require `dotenv/load`.
 
 ```ruby
-gem 'dotenv-rails', require: 'dotenv/rails-now'
+gem 'dotenv', require: 'dotenv/load'
 gem 'gem-that-requires-env-variables'
 ```
 
@@ -94,7 +94,7 @@ To ensure `.env` is loaded in rake, load the tasks:
 require 'dotenv/tasks'
 
 task mytask: :dotenv do
-    # things that require .env
+  # things that require .env
 end
 ```
 

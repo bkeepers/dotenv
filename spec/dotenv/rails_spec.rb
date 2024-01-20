@@ -8,7 +8,7 @@ describe Dotenv::Rails do
     Dotenv::Rails.remove_instance_variable(:@instance)
 
     Rails.env = "test"
-    allow(Rails).to receive(:root).and_return Pathname.new(__dir__).join('../fixtures')
+    allow(Rails).to receive(:root).and_return Pathname.new(__dir__).join("../fixtures")
     Rails.application = double(:application)
     Spring.watcher = Set.new # Responds to #add
   end

@@ -29,7 +29,7 @@ module Dotenv
     # Public: Load dotenv
     #
     # This will get called during the `before_configuration` callback, but you
-    # can manually call `Dotenv::Railtie.load` if you needed it sooner.
+    # can manually call `Dotenv::Rails.load` if you needed it sooner.
     def load
       Dotenv.load(*files)
     end
@@ -83,7 +83,7 @@ module Dotenv
 
     config.before_configuration do
       Dotenv.instrumenter = ActiveSupport::Notifications
-      mode == :load ? load : overload
+      (mode == :load) ? load : overload
     end
   end
 

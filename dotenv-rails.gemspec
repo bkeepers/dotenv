@@ -7,9 +7,7 @@ Gem::Specification.new "dotenv-rails", Dotenv::VERSION do |gem|
   gem.description = gem.summary = "Autoload dotenv in Rails."
   gem.homepage = "https://github.com/bkeepers/dotenv"
   gem.license = "MIT"
-  gem.files = `git ls-files lib | grep rails`.split(
-    $OUTPUT_RECORD_SEPARATOR
-  ) + ["README.md", "LICENSE"]
+  gem.files = `git ls-files lib | grep dotenv-rails.rb`.split("\n") + ["README.md", "LICENSE"]
 
   gem.add_dependency "dotenv", Dotenv::VERSION
   gem.add_dependency "railties", ">= 3.2"
