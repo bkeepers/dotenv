@@ -14,7 +14,11 @@ end
 module Dotenv
   # Dotenv Railtie for using Dotenv to load environment from a file into
   # Rails applications
-  class Railtie < Rails::Railtie
+  class Rails < ::Rails::Railtie
+    def self.deprecator # :nodoc:
+      @deprecator ||= ActiveSupport::Deprecation.new
+    end
+
     def initialize
       config.dotenv = ActiveSupport::OrderedOptions.new.merge!(
         mode: :load,
@@ -46,11 +50,11 @@ module Dotenv
     # initialized, so this falls back to the `RAILS_ROOT` environment variable,
     # or the current working directory.
     def root
-      Rails.root || Pathname.new(ENV["RAILS_ROOT"] || Dir.pwd)
+      ::Rails.root || Pathname.new(ENV["RAILS_ROOT"] || Dir.pwd)
     end
 
     def env
-      env = Rails.env
+      env = ::Rails.env
 
       # Dotenv loads environment variables when the Rails application is initialized.
       # When running `rake`, the Rails application is initialized in development.
@@ -74,9 +78,15 @@ module Dotenv
       instance.load
     end
 
+    initializer "dotenv.deprecator" do |app|
+      app.deprecators[:dotenv] = Dotenv::Railtie.deprecator
+    end
+
     config.before_configuration do
       Dotenv.instrumenter = ActiveSupport::Notifications
       config.dotenv.mode == :load ? load : overload
     end
   end
+
+  Railtie = ActiveSupport::Deprecation::DeprecatedConstantProxy.new("Dotenv::Railtie", "Dotenv::Rails", Dotenv::Rails.deprecator)
 end
