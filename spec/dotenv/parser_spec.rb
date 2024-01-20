@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe Dotenv::Parser do
   def env(string)
-    Dotenv::Parser.call(string, true)
+    Dotenv::Parser.call(string)
   end
 
   it "parses unquoted values" do
@@ -129,14 +129,14 @@ export OH_NO_NOT_SET')
     ENV["DOTENV_LINEBREAK_MODE"] = "strict"
 
     contents = [
-      'DOTENV_LINEBREAK_MODE=legacy',
+      "DOTENV_LINEBREAK_MODE=legacy",
       'FOO="bar\nbaz\rfizz"'
     ].join("\n")
     expect(env(contents)).to eql("DOTENV_LINEBREAK_MODE" => "legacy", "FOO" => "bar\nbaz\rfizz")
   end
 
   it 'expands \n and \r in quoted strings with DOTENV_LINEBREAK_MODE=legacy in ENV' do
-    ENV['DOTENV_LINEBREAK_MODE'] = 'legacy'
+    ENV["DOTENV_LINEBREAK_MODE"] = "legacy"
     contents = 'FOO="bar\nbaz\rfizz"'
     expect(env(contents)).to eql("FOO" => "bar\nbaz\rfizz")
   end

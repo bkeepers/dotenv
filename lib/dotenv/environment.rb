@@ -4,13 +4,14 @@ module Dotenv
   class Environment < Hash
     attr_reader :filename
 
-    def initialize(filename, is_load = false)
+    def initialize(filename, overwrite: false)
       @filename = filename
-      load(is_load)
+      @overwrite = overwrite
+      load
     end
 
-    def load(is_load = false)
-      update Parser.call(read, is_load)
+    def load
+      update Parser.call(read, overwrite: @overwrite)
     end
 
     def read
@@ -18,11 +19,13 @@ module Dotenv
     end
 
     def apply
-      each { |k, v| ENV[k] ||= v }
-    end
-
-    def apply!
-      each { |k, v| ENV[k] = v }
+      each do |k, v|
+        if @overwrite
+          ENV[k] = v
+        else
+          ENV[k] ||= v
+        end
+      end
     end
   end
 end

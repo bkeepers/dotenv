@@ -32,15 +32,15 @@ module Dotenv
     class << self
       attr_reader :substitutions
 
-      def call(string, is_load = false)
-        new(string, is_load).call
+      def call(...)
+        new(...).call
       end
     end
 
-    def initialize(string, is_load = false)
+    def initialize(string, overwrite: false)
       @string = string
       @hash = {}
-      @is_load = is_load
+      @overwrite = overwrite
     end
 
     def call
@@ -88,7 +88,7 @@ module Dotenv
     end
 
     def variable_not_set?(line)
-      !line.split[1..-1].all? { |var| @hash.member?(var) }
+      !line.split[1..].all? { |var| @hash.member?(var) }
     end
 
     def unescape_value(value, maybe_quote)
@@ -104,7 +104,7 @@ module Dotenv
     def perform_substitutions(value, maybe_quote)
       if maybe_quote != "'"
         self.class.substitutions.each do |proc|
-          value = proc.call(value, @hash, @is_load)
+          value = proc.call(value, @hash, overwrite: @overwrite)
         end
       end
       value
