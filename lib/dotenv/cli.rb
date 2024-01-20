@@ -13,7 +13,7 @@ module Dotenv
       @filenames = []
       @overload = false
 
-      super "Usage: dotenv [options]"
+      super("Usage: dotenv [options]")
       separator ""
 
       on("-f FILES", Array, "List of env files to parse") do |list|
