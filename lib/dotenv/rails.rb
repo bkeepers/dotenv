@@ -1,5 +1,7 @@
 require "dotenv"
 
+Dotenv.instrumenter = ActiveSupport::Notifications
+
 # Watch all loaded env files with Spring
 begin
   require "spring/commands"
@@ -14,10 +16,10 @@ end
 module Dotenv
   # Rails integration for using Dotenv to load ENV variables from a file
   class Rails < ::Rails::Railtie
-    attr_accessor :mode, :files
+    attr_accessor :overwrite, :files
 
     def initialize
-      @mode = :load
+      @overwrite = false
       @files = [
         root.join(".env.#{env}.local"),
         (root.join(".env.local") unless env.test?),
@@ -31,13 +33,11 @@ module Dotenv
     # This will get called during the `before_configuration` callback, but you
     # can manually call `Dotenv::Rails.load` if you needed it sooner.
     def load
-      Dotenv.load(*files)
+      Dotenv.load(*files, overwrite: overwrite)
     end
 
-    # Public: Reload dotenv
-    #
-    # Same as `load`, but will override existing values in `ENV`
     def overload
+      deprecator.warn("Dotenv::Rails.overload is deprecated. Set `Dotenv::Rails.overwrite = true` and call Dotenv::Rails.load instead.")
       Dotenv.overload(*files)
     end
 
@@ -81,10 +81,7 @@ module Dotenv
       app.deprecators[:dotenv] = deprecator
     end
 
-    config.before_configuration do
-      Dotenv.instrumenter = ActiveSupport::Notifications
-      (mode == :load) ? load : overload
-    end
+    config.before_configuration { load }
   end
 
   Railtie = ActiveSupport::Deprecation::DeprecatedConstantProxy.new("Dotenv::Railtie", "Dotenv::Rails", Dotenv::Rails.deprecator)
