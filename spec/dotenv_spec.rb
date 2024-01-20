@@ -54,6 +54,30 @@ describe Dotenv do
     end
   end
 
+  shared_examples "overload" do
+    context "with multiple files" do
+      let(:env_files) { [fixture_path("important.env"), fixture_path("plain.env")] }
+
+      let(:expected) do
+        {
+          "OPTION_A" => "abc",
+          "OPTION_B" => "2",
+          "OPTION_C" => "3",
+          "OPTION_D" => "4",
+          "OPTION_E" => "5",
+          "PLAIN" => "false"
+        }
+      end
+
+      it "respects the file importance order" do
+        subject
+        expected.each do |key, value|
+          expect(ENV[key]).to eq(value)
+        end
+      end
+    end
+  end
+
   describe "load" do
     let(:env_files) { [] }
     subject { Dotenv.load(*env_files) }
@@ -101,6 +125,7 @@ describe Dotenv do
     let(:env_files) { [fixture_path("plain.env")] }
     subject { Dotenv.overload(*env_files) }
     it_behaves_like "load"
+    it_behaves_like "overload"
 
     it "initializes the Environment with a falsey is_load" do
       expect(Dotenv::Environment).to receive(:new).with(anything, false)
@@ -134,6 +159,7 @@ describe Dotenv do
     let(:env_files) { [fixture_path("plain.env")] }
     subject { Dotenv.overload!(*env_files) }
     it_behaves_like "load"
+    it_behaves_like "overload"
 
     it "initializes the Environment with a falsey is_load" do
       expect(Dotenv::Environment).to receive(:new).with(anything, false)
