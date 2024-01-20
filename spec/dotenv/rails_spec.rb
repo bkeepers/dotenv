@@ -4,13 +4,15 @@ require "dotenv/rails"
 
 describe Dotenv::Rails do
   before do
-    # Remove the singleton instance if it exists
-    Dotenv::Rails.remove_instance_variable(:@instance) rescue nil
-
     Rails.env = "test"
     allow(Rails).to receive(:root).and_return Pathname.new(__dir__).join("../fixtures")
     Rails.application = double(:application)
     Spring.watcher = Set.new # Responds to #add
+  end
+
+  after do
+    # Remove the singleton instance if it exists
+    Dotenv::Rails.remove_instance_variable(:@instance)
   end
 
   after do
@@ -53,8 +55,8 @@ describe Dotenv::Rails do
 
   context "before_configuration" do
     it "calls #load" do
-      expect(Dotenv::Rails).to receive(:load)
-      ActiveSupport.run_load_hooks(:before_configuration, )
+      expect(Dotenv::Rails.instance).to receive(:load)
+      ActiveSupport.run_load_hooks(:before_configuration)
     end
   end
 
