@@ -33,19 +33,31 @@ module Dotenv
   # Dotenv Railtie for using Dotenv to load environment from a file into
   # Rails applications
   class Railtie < Rails::Railtie
+    def initialize
+      config.dotenv = ActiveSupport::OrderedOptions.new.merge!(
+        mode: :load,
+        files: [
+          root.join(".env.#{Rails.env}.local"),
+          (root.join(".env.local") unless Rails.env.test?),
+          root.join(".env.#{Rails.env}"),
+          root.join(".env")
+        ].compact
+      )
+    end
+
     # Public: Load dotenv
     #
     # This will get called during the `before_configuration` callback, but you
     # can manually call `Dotenv::Railtie.load` if you needed it sooner.
     def load
-      Dotenv.load(*dotenv_files)
+      Dotenv.load(*config.dotenv.files)
     end
 
     # Public: Reload dotenv
     #
     # Same as `load`, but will override existing values in `ENV`
     def overload
-      Dotenv.overload(*dotenv_files)
+      Dotenv.overload(*config.dotenv.files)
     end
 
     # Internal: `Rails.root` is nil in Rails 4.1 before the application is
@@ -61,17 +73,8 @@ module Dotenv
       instance.load
     end
 
-    private
-
-    def dotenv_files
-      [
-        root.join(".env.#{Rails.env}.local"),
-        (root.join(".env.local") unless Rails.env.test?),
-        root.join(".env.#{Rails.env}"),
-        root.join(".env")
-      ].compact
+    config.before_configuration do
+      config.dotenv.mode == :load ? load : overload
     end
-
-    config.before_configuration { load }
   end
 end

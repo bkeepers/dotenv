@@ -17,9 +17,11 @@ end
 
 describe Dotenv::Railtie do
   before do
+    # Remove the singleton instance if it exists
+    Dotenv::Railtie.remove_instance_variable(:@instance)
+
     Rails.env = "test"
-    allow(Rails).to receive(:root)
-      .and_return Pathname.new(File.expand_path("../../fixtures", __FILE__))
+    allow(Rails).to receive(:root).and_return Pathname.new(__dir__).join('../fixtures')
     Rails.application = double(:application)
     Spring.watcher = SpecWatcher.new
   end
@@ -30,10 +32,47 @@ describe Dotenv::Railtie do
     Rails.application = nil
   end
 
+  describe "config.dotenv.files" do
+    it "loads files for development environment" do
+      Rails.env = "development"
+
+      expect(Dotenv::Railtie.config.dotenv.files).to eql(
+        [
+          Rails.root.join(".env.development.local"),
+          Rails.root.join(".env.local"),
+          Rails.root.join(".env.development"),
+          Rails.root.join(".env")
+        ]
+      )
+    end
+
+    it "does not load .env.local in test rails environment" do
+      Rails.env = "test"
+      expect(Dotenv::Railtie.config.dotenv.files).to eql(
+        [
+          Rails.root.join(".env.test.local"),
+          Rails.root.join(".env.test"),
+          Rails.root.join(".env")
+        ]
+      )
+    end
+  end
+
   context "before_configuration" do
-    it "calls #load" do
-      expect(Dotenv::Railtie.instance).to receive(:load)
-      ActiveSupport.run_load_hooks(:before_configuration)
+    context "with mode = :load" do
+      it "calls #load" do
+        expect(Dotenv::Railtie.instance).to receive(:load)
+        ActiveSupport.run_load_hooks(:before_configuration)
+      end
+    end
+
+    context "with mode = :overload" do
+      before { Dotenv::Railtie.config.dotenv.mode = :overload }
+
+      it "calls #overload" do
+        expect(Dotenv::Railtie.instance).to receive(:overload)
+        ActiveSupport.run_load_hooks(:before_configuration)
+      end
     end
   end
 
@@ -50,30 +89,14 @@ describe Dotenv::Railtie do
       expect(Spring.watcher.items).to include(path)
     end
 
-    it "does not load .env.local in test rails environment" do
-      expect(Dotenv::Railtie.instance.send(:dotenv_files)).to eql(
-        [
-          Rails.root.join(".env.test.local"),
-          Rails.root.join(".env.test"),
-          Rails.root.join(".env")
-        ]
-      )
-    end
-
-    it "does load .env.local in development environment" do
-      Rails.env = "development"
-      expect(Dotenv::Railtie.instance.send(:dotenv_files)).to eql(
-        [
-          Rails.root.join(".env.development.local"),
-          Rails.root.join(".env.local"),
-          Rails.root.join(".env.development"),
-          Rails.root.join(".env")
-        ]
-      )
-    end
-
     it "loads .env.test before .env" do
       expect(ENV["DOTENV"]).to eql("test")
+    end
+
+    it "loads configured files" do
+      expect(Dotenv).to receive(:load).with("custom.env")
+      Dotenv::Railtie.config.dotenv.files = ["custom.env"]
+      Dotenv::Railtie.load
     end
 
     context "when Rails.root is nil" do
@@ -91,30 +114,14 @@ describe Dotenv::Railtie do
   context "overload" do
     before { Dotenv::Railtie.overload }
 
-    it "does not load .env.local in test rails environment" do
-      expect(Dotenv::Railtie.instance.send(:dotenv_files)).to eql(
-        [
-          Rails.root.join(".env.test.local"),
-          Rails.root.join(".env.test"),
-          Rails.root.join(".env")
-        ]
-      )
-    end
-
-    it "does load .env.local in development environment" do
-      Rails.env = "development"
-      expect(Dotenv::Railtie.instance.send(:dotenv_files)).to eql(
-        [
-          Rails.root.join(".env.development.local"),
-          Rails.root.join(".env.local"),
-          Rails.root.join(".env.development"),
-          Rails.root.join(".env")
-        ]
-      )
-    end
-
     it "overloads .env with .env.test" do
       expect(ENV["DOTENV"]).to eql("test")
+    end
+
+    it "loads configured files" do
+      expect(Dotenv).to receive(:overload).with("custom.env")
+      Dotenv::Railtie.config.dotenv.files = ["custom.env"]
+      Dotenv::Railtie.overload
     end
 
     context "when loading a file containing already set variables" do
