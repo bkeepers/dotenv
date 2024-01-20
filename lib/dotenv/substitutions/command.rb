@@ -20,7 +20,7 @@ module Dotenv
           )
         /x
 
-        def call(value, _env, _is_load)
+        def call(value, _env, overwrite: false)
           # Process interpolated shell commands
           value.gsub(INTERPOLATED_SHELL_COMMAND) do |*|
             # Eliminate opening and closing parentheses

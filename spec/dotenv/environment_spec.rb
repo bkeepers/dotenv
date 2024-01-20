@@ -11,7 +11,7 @@ describe Dotenv::Environment do
 
     it "fails if file does not exist" do
       expect do
-        Dotenv::Environment.new(".does_not_exists", true)
+        Dotenv::Environment.new(".does_not_exists")
       end.to raise_error(Errno::ENOENT)
     end
   end
@@ -27,27 +27,29 @@ describe Dotenv::Environment do
       subject.apply
       expect(ENV["OPTION_A"]).to eq("predefined")
     end
-  end
 
-  describe "apply!" do
-    it "sets variables in the ENV" do
-      subject.apply!
-      expect(ENV["OPTION_A"]).to eq("1")
-    end
+    context "with overwrite: true" do
+      subject { env("OPTION_A=1\nOPTION_B=2", overwrite: true) }
 
-    it "overrides defined variables" do
-      ENV["OPTION_A"] = "predefined"
-      subject.apply!
-      expect(ENV["OPTION_A"]).to eq("1")
+      it "sets variables in the ENV" do
+        subject.apply
+        expect(ENV["OPTION_A"]).to eq("1")
+      end
+
+      it "overrides defined variables" do
+        ENV["OPTION_A"] = "predefined"
+        subject.apply
+        expect(ENV["OPTION_A"]).to eq("1")
+      end
     end
   end
 
   require "tempfile"
-  def env(text)
+  def env(text, ...)
     file = Tempfile.new("dotenv")
     file.write text
     file.close
-    env = Dotenv::Environment.new(file.path, true)
+    env = Dotenv::Environment.new(file.path, ...)
     file.unlink
     env
   end

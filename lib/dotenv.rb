@@ -10,58 +10,41 @@ module Dotenv
 
   module_function
 
-  def load(*filenames)
-    with(*filenames) do |f|
-      ignoring_nonexistent_files do
-        env = Environment.new(f, true)
-        instrument("dotenv.load", env: env) { env.apply }
-      end
+  def load(*filenames, **kwargs)
+    parse(*filenames, **kwargs) do |env|
+      instrument("dotenv.load", env: env) { env.apply }
     end
   end
 
   # same as `load`, but raises Errno::ENOENT if any files don't exist
   def load!(*filenames)
-    with(*filenames) do |f|
-      env = Environment.new(f, true)
-      instrument("dotenv.load", env: env) { env.apply }
-    end
+    load(*filenames, ignore: false)
   end
 
   # same as `load`, but will override existing values in `ENV`
   def overload(*filenames)
-    with(*filenames.reverse) do |f|
-      ignoring_nonexistent_files do
-        env = Environment.new(f, false)
-        instrument("dotenv.overload", env: env) { env.apply! }
-      end
-    end
+    load(*filenames, overwrite: true)
   end
 
   # same as `overload`, but raises Errno::ENOENT if any files don't exist
   def overload!(*filenames)
-    with(*filenames.reverse) do |f|
-      env = Environment.new(f, false)
-      instrument("dotenv.overload", env: env) { env.apply! }
-    end
+    load(*filenames, overwrite: true, ignore: false)
   end
 
   # returns a hash of parsed key/value pairs but does not modify ENV
-  def parse(*filenames)
-    with(*filenames) do |f|
-      ignoring_nonexistent_files do
-        Environment.new(f, false)
-      end
-    end
-  end
-
-  # Internal: Helper to expand list of filenames.
-  #
-  # Returns a hash of all the loaded environment variables.
-  def with(*filenames)
+  def parse(*filenames, overwrite: false, ignore: true, &block)
     filenames << ".env" if filenames.empty?
+    filenames = filenames.reverse if overwrite
 
     filenames.reduce({}) do |hash, filename|
-      hash.merge!(yield(File.expand_path(filename)) || {})
+      begin
+        env = Environment.new(File.expand_path(filename), overwrite: overwrite)
+        env = block.call(env) if block
+      rescue Errno::ENOENT
+        raise unless ignore
+      end
+
+      hash.merge! env || {}
     end
   end
 

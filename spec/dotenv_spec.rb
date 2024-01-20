@@ -10,8 +10,7 @@ describe Dotenv do
       let(:env_files) { [] }
 
       it "defaults to .env" do
-        expect(Dotenv::Environment).to receive(:new).with(expand(".env"), anything)
-          .and_return(double(apply: {}, apply!: {}))
+        expect(Dotenv::Environment).to receive(:new).with(expand(".env"), anything).and_call_original
         subject
       end
     end
@@ -23,7 +22,7 @@ describe Dotenv do
         expected = expand("~/.env")
         allow(File).to receive(:exist?) { |arg| arg == expected }
         expect(Dotenv::Environment).to receive(:new).with(expected, anything)
-          .and_return(double(apply: {}, apply!: {}))
+          .and_return(Dotenv::Environment.new(".env"))
         subject
       end
     end
@@ -84,9 +83,9 @@ describe Dotenv do
 
     it_behaves_like "load"
 
-    it "initializes the Environment with a truthy is_load" do
-      expect(Dotenv::Environment).to receive(:new).with(anything, true)
-        .and_return(double(apply: {}, apply!: {}))
+    it "initializes the Environment with overwrite: false" do
+      expect(Dotenv::Environment).to receive(:new).with(anything, overwrite: false)
+        .and_call_original
       subject
     end
 
@@ -106,9 +105,9 @@ describe Dotenv do
 
     it_behaves_like "load"
 
-    it "initializes Environment with truthy is_load" do
-      expect(Dotenv::Environment).to receive(:new).with(anything, true)
-        .and_return(double(apply: {}, apply!: {}))
+    it "initializes Environment with overwrite: false" do
+      expect(Dotenv::Environment).to receive(:new).with(anything, overwrite: false)
+        .and_call_original
       subject
     end
 
@@ -127,9 +126,9 @@ describe Dotenv do
     it_behaves_like "load"
     it_behaves_like "overload"
 
-    it "initializes the Environment with a falsey is_load" do
-      expect(Dotenv::Environment).to receive(:new).with(anything, false)
-        .and_return(double(apply: {}, apply!: {}))
+    it "initializes the Environment overwrite: true" do
+      expect(Dotenv::Environment).to receive(:new).with(anything, overwrite: true)
+        .and_call_original
       subject
     end
 
@@ -161,9 +160,9 @@ describe Dotenv do
     it_behaves_like "load"
     it_behaves_like "overload"
 
-    it "initializes the Environment with a falsey is_load" do
-      expect(Dotenv::Environment).to receive(:new).with(anything, false)
-        .and_return(double(apply: {}, apply!: {}))
+    it "initializes the Environment with overwrite: true" do
+      expect(Dotenv::Environment).to receive(:new).with(anything, overwrite: true)
+        .and_call_original
       subject
     end
 
@@ -271,8 +270,8 @@ describe Dotenv do
       end
     end
 
-    it "initializes the Environment with a falsey is_load" do
-      expect(Dotenv::Environment).to receive(:new).with(anything, false)
+    it "initializes the Environment with overwrite: false" do
+      expect(Dotenv::Environment).to receive(:new).with(anything, overwrite: false)
       subject
     end
 
