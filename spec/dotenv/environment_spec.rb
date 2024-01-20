@@ -22,7 +22,7 @@ describe Dotenv::Environment do
       expect(ENV["OPTION_A"]).to eq("1")
     end
 
-    it "does not override defined variables" do
+    it "does not overwrite defined variables" do
       ENV["OPTION_A"] = "predefined"
       subject.apply
       expect(ENV["OPTION_A"]).to eq("predefined")
@@ -36,7 +36,7 @@ describe Dotenv::Environment do
         expect(ENV["OPTION_A"]).to eq("1")
       end
 
-      it "overrides defined variables" do
+      it "overwrites defined variables" do
         ENV["OPTION_A"] = "predefined"
         subject.apply
         expect(ENV["OPTION_A"]).to eq("1")

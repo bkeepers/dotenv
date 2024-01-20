@@ -22,15 +22,19 @@ module Dotenv
     load(*filenames, ignore: false)
   end
 
-  # same as `#load`, but will override existing values in `ENV`
-  def overload(*filenames)
+  # same as `#load`, but will overwrite existing values in `ENV`
+  def overwrite(*filenames)
     load(*filenames, overwrite: true)
   end
+  alias_method :overload, :overwrite
+  module_function :overload
 
-  # same as `#overload`, but raises Errno::ENOENT if any files don't exist
-  def overload!(*filenames)
+  # same as `#overwrite`, but raises Errno::ENOENT if any files don't exist
+  def overwrite!(*filenames)
     load(*filenames, overwrite: true, ignore: false)
   end
+  alias_method :overload!, :overwrite!
+  module_function :overload!
 
   # Parses the given files, yielding for each file if a block is given.
   #

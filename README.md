@@ -248,11 +248,11 @@ Credentials should only be accessible on the machines that need access to them. 
 
 Personally, I prefer to commit the `.env` file with development-only settings. This makes it easy for other developers to get started on the project without compromising credentials for other environments. If you follow this advice, make sure that all the credentials for your development environment are different from your other deployments and that the development credentials do not have access to any confidential data.
 
-### Why is it not overriding existing `ENV` variables?
+### Why is it not overwriting existing `ENV` variables?
 
-By default, it **won't** overwrite existing environment variables as dotenv assumes the deployment environment has more knowledge about configuration than the application does. To overwrite existing environment variables you can use `Dotenv.overload`.
+By default, it **won't** overwrite existing environment variables as dotenv assumes the deployment environment has more knowledge about configuration than the application does. To overwrite existing environment variables you can use `Dotenv.load files, overwrite: true`.
 
-You can also use the `-o` or `--overload` flag on the dotenv cli to override existing `ENV` variables.
+You can also use the `-o` or `--overwrite` flag on the dotenv cli to overwrite existing `ENV` variables.
 
 ```console
 $ dotenv -o -f ".env.local,.env"

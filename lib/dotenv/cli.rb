@@ -6,13 +6,13 @@ require "optparse"
 module Dotenv
   # The command line interface
   class CLI < OptionParser
-    attr_reader :argv, :filenames, :overload
+    attr_reader :argv, :filenames, :overwrite
 
     def initialize(argv = [])
       @argv = argv.dup
       @filenames = []
       @ignore = false
-      @overload = false
+      @overwrite = false
 
       super("Usage: dotenv [options]")
       separator ""
@@ -25,9 +25,10 @@ module Dotenv
         @ignore = true
       end
 
-      on("-o", "--overload", "override existing ENV variables") do
-        @overload = true
+      on("-o", "--overwrite", "overwrite existing ENV variables") do
+        @overwrite = true
       end
+      on("--overload") { @overwrite = true }
 
       on("-h", "--help", "Display help") do
         puts self
@@ -48,10 +49,7 @@ module Dotenv
     end
 
     def run
-      method = @overload ? "overload" : "load"
-      method = "#{method}!" unless @ignore
-
-      Dotenv.public_send(method, *@filenames)
+      Dotenv.load(*@filenames, overwrite: @overwrite, ignore: @ignore)
     rescue Errno::ENOENT => e
       abort e.message
     else
