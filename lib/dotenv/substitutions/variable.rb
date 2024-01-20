@@ -30,7 +30,7 @@ module Dotenv
 
         def substitute(match, variable, env)
           if match[1] == "\\"
-            variable[1..-1]
+            variable[1..]
           elsif match[3]
             env.fetch(match[3], "")
           else

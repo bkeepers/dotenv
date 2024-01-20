@@ -28,7 +28,7 @@ module Dotenv
 
             if $LAST_MATCH_INFO[:backslash]
               # Command is escaped, don't replace it.
-              $LAST_MATCH_INFO[0][1..-1]
+              $LAST_MATCH_INFO[0][1..]
             else
               # Execute the command and return the value
               `#{command}`.chomp
