@@ -48,11 +48,10 @@ module Dotenv
     end
 
     def run
-      meth = "load"
-      meth = "overload" if @overload
-      meth = "#{meth}!" unless @ignore
+      method = @overload ? "overload" : "load"
+      method = "#{method}!" unless @ignore
 
-      Dotenv.public_send(meth, *@filenames)
+      Dotenv.public_send(method, *@filenames)
     rescue Errno::ENOENT => e
       abort e.message
     else
