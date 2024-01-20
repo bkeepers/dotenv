@@ -1,23 +1,5 @@
 require "dotenv"
 
-# Fix for rake tasks loading in development
-#
-# Dotenv loads environment variables when the Rails application is initialized.
-# When running `rake`, the Rails application is initialized in development.
-# Rails includes some hacks to set `RAILS_ENV=test` when running `rake test`,
-# but rspec does not include the same hacks.
-#
-# See https://github.com/bkeepers/dotenv/issues/219
-if defined?(Rake.application)
-  task_regular_expression = /^(default$|parallel:spec|spec(:|$))/
-  if Rake.application.top_level_tasks.grep(task_regular_expression).any?
-    environment = Rake.application.options.show_tasks ? "development" : "test"
-    Rails.env = ENV["RAILS_ENV"] ||= environment
-  end
-end
-
-Dotenv.instrumenter = ActiveSupport::Notifications
-
 # Watch all loaded env files with Spring
 begin
   require "spring/commands"
@@ -37,9 +19,9 @@ module Dotenv
       config.dotenv = ActiveSupport::OrderedOptions.new.merge!(
         mode: :load,
         files: [
-          root.join(".env.#{Rails.env}.local"),
-          (root.join(".env.local") unless Rails.env.test?),
-          root.join(".env.#{Rails.env}"),
+          root.join(".env.#{env}.local"),
+          (root.join(".env.local") unless env.test?),
+          root.join(".env.#{env}"),
           root.join(".env")
         ].compact
       )
@@ -67,6 +49,25 @@ module Dotenv
       Rails.root || Pathname.new(ENV["RAILS_ROOT"] || Dir.pwd)
     end
 
+    def env
+      env = Rails.env
+
+      # Dotenv loads environment variables when the Rails application is initialized.
+      # When running `rake`, the Rails application is initialized in development.
+      # Rails includes some hacks to set `RAILS_ENV=test` when running `rake test`,
+      # but rspec does not include the same hacks.
+      #
+      # See https://github.com/bkeepers/dotenv/issues/219
+      if defined?(Rake.application)
+        task_regular_expression = /^(default$|parallel:spec|spec(:|$))/
+        if Rake.application.top_level_tasks.grep(task_regular_expression).any?
+          env = ActiveSupport::EnvironmentInquirer.new(Rake.application.options.show_tasks ? "development" : "test")
+        end
+      end
+
+      env
+    end
+
     # Rails uses `#method_missing` to delegate all class methods to the
     # instance, which means `Kernel#load` gets called here. We don't want that.
     def self.load
@@ -74,6 +75,7 @@ module Dotenv
     end
 
     config.before_configuration do
+      Dotenv.instrumenter = ActiveSupport::Notifications
       config.dotenv.mode == :load ? load : overload
     end
   end
