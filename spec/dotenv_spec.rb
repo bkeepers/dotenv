@@ -10,8 +10,7 @@ describe Dotenv do
       let(:env_files) { [] }
 
       it "defaults to .env" do
-        expect(Dotenv::Environment).to receive(:new).with(expand(".env"),
-                                                          anything)
+        expect(Dotenv::Environment).to receive(:new).with(expand(".env"), anything)
           .and_return(double(apply: {}, apply!: {}))
         subject
       end
@@ -33,13 +32,13 @@ describe Dotenv do
       let(:env_files) { [".env", fixture_path("plain.env")] }
 
       let(:expected) do
-        { "OPTION_A" => "1",
-          "OPTION_B" => "2",
-          "OPTION_C" => "3",
-          "OPTION_D" => "4",
-          "OPTION_E" => "5",
-          "PLAIN" => "true",
-          "DOTENV" => "true" }
+        {"OPTION_A" => "1",
+         "OPTION_B" => "2",
+         "OPTION_C" => "3",
+         "OPTION_D" => "4",
+         "OPTION_E" => "5",
+         "PLAIN" => "true",
+         "DOTENV" => "true"}
       end
 
       it "loads all files" do
@@ -51,6 +50,30 @@ describe Dotenv do
 
       it "returns hash of loaded environments" do
         expect(subject).to eq(expected)
+      end
+    end
+  end
+
+  shared_examples "overload" do
+    context "with multiple files" do
+      let(:env_files) { [fixture_path("important.env"), fixture_path("plain.env")] }
+
+      let(:expected) do
+        {
+          "OPTION_A" => "abc",
+          "OPTION_B" => "2",
+          "OPTION_C" => "3",
+          "OPTION_D" => "4",
+          "OPTION_E" => "5",
+          "PLAIN" => "false"
+        }
+      end
+
+      it "respects the file importance order" do
+        subject
+        expected.each do |key, value|
+          expect(ENV[key]).to eq(value)
+        end
       end
     end
   end
@@ -102,6 +125,7 @@ describe Dotenv do
     let(:env_files) { [fixture_path("plain.env")] }
     subject { Dotenv.overload(*env_files) }
     it_behaves_like "load"
+    it_behaves_like "overload"
 
     it "initializes the Environment with a falsey is_load" do
       expect(Dotenv::Environment).to receive(:new).with(anything, false)
@@ -135,6 +159,7 @@ describe Dotenv do
     let(:env_files) { [fixture_path("plain.env")] }
     subject { Dotenv.overload!(*env_files) }
     it_behaves_like "load"
+    it_behaves_like "overload"
 
     it "initializes the Environment with a falsey is_load" do
       expect(Dotenv::Environment).to receive(:new).with(anything, false)
@@ -189,11 +214,10 @@ describe Dotenv do
     before { Dotenv.load(*env_files) }
 
     it "raises exception with not defined mandatory ENV keys" do
-      expect { Dotenv.require_keys("BOM", "TEST") }.to \
-        raise_error(
-          Dotenv::MissingKeys,
-          'Missing required configuration key: ["TEST"]'
-        )
+      expect { Dotenv.require_keys("BOM", "TEST") }.to raise_error(
+        Dotenv::MissingKeys,
+        'Missing required configuration key: ["TEST"]'
+      )
     end
   end
 
@@ -206,7 +230,7 @@ describe Dotenv do
 
       it "defaults to .env" do
         expect(Dotenv::Environment).to receive(:new).with(expand(".env"),
-                                                          anything)
+          anything)
         subject
       end
     end
@@ -226,13 +250,13 @@ describe Dotenv do
       let(:env_files) { [".env", fixture_path("plain.env")] }
 
       let(:expected) do
-        { "OPTION_A" => "1",
-          "OPTION_B" => "2",
-          "OPTION_C" => "3",
-          "OPTION_D" => "4",
-          "OPTION_E" => "5",
-          "PLAIN" => "true",
-          "DOTENV" => "true" }
+        {"OPTION_A" => "1",
+         "OPTION_B" => "2",
+         "OPTION_C" => "3",
+         "OPTION_D" => "4",
+         "OPTION_E" => "5",
+         "PLAIN" => "true",
+         "DOTENV" => "true"}
       end
 
       it "does not modify ENV" do
@@ -270,7 +294,7 @@ describe Dotenv do
     end
 
     it "fixture file has UTF-8 BOM" do
-      contents = File.open(subject, "rb", &:read).force_encoding("UTF-8")
+      contents = File.binread(subject).force_encoding("UTF-8")
       expect(contents).to start_with("\xEF\xBB\xBF".force_encoding("UTF-8"))
     end
   end

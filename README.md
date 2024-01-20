@@ -18,7 +18,7 @@ gem 'dotenv-rails', groups: [:development, :test]
 
 And then execute:
 
-```shell
+```console
 $ bundle
 ```
 
@@ -30,7 +30,10 @@ dotenv is initialized in your Rails app during the `before_configuration` callba
 # config/application.rb
 Bundler.require(*Rails.groups)
 
-Dotenv::Railtie.load
+# Load dotenv only in development or test environment
+if ['development', 'test'].include? ENV['RAILS_ENV']
+  Dotenv::Railtie.load
+end
 
 HOSTNAME = ENV['HOSTNAME']
 ```
@@ -46,7 +49,7 @@ gem 'gem-that-requires-env-variables'
 
 Install the gem:
 
-```shell
+```console
 $ gem install dotenv
 ```
 
@@ -69,14 +72,20 @@ Dotenv.load('file1.env', 'file2.env')
 
 Alternatively, you can use the `dotenv` executable to launch your application:
 
-```shell
+```console
 $ dotenv ./script.rb
 ```
 
-The `dotenv` executable also accepts a single flag, `-f`. Its value should be a comma-separated list of configuration files, in the order of most important to least. All of the files must exist. There _must_ be a space between the flag and its value.
+The `dotenv` executable also accepts the flag `-f`. Its value should be a comma-separated list of configuration files, in the order of most important to least. All of the files must exist. There _must_ be a space between the flag and its value.
 
-```
+```console
 $ dotenv -f ".env.local,.env" ./script.rb
+```
+
+The `dotenv` executable can optionally ignore missing files with the `-i` or `--ignore` flag. For example, if the `.env.local` file does not exist, the following will ignore the missing file and only load the `.env` file.
+
+```console
+$ dotenv -i -f ".env.local,.env" ./script.rb
 ```
 
 To ensure `.env` is loaded in rake, load the tasks:
@@ -220,10 +229,11 @@ Credentials should only be accessible on the machines that need access to them. 
 
 
 You can use the `-t` or `--template` flag on the dotenv cli to create a template of your `.env` file.
-```shell
+
+```console
 $ dotenv -t .env
 ```
-A template will be created in your working directory named `{FINAME}.template`. So in the above example, it would create a `.env.template` file. 
+A template will be created in your working directory named `{FINAME}.template`. So in the above example, it would create a `.env.template` file.
 
 The template will contain all the environment variables in your `.env` file but with their values set to the variable names.
 
@@ -233,7 +243,7 @@ S3_BUCKET=YOURS3BUCKET
 SECRET_KEY=YOURSECRETKEYGOESHERE
 ```
 
-Would become 
+Would become
 
 ```shell
 # .env.template
@@ -246,6 +256,12 @@ Personally, I prefer to commit the `.env` file with development-only settings. T
 ### Why is it not overriding existing `ENV` variables?
 
 By default, it **won't** overwrite existing environment variables as dotenv assumes the deployment environment has more knowledge about configuration than the application does. To overwrite existing environment variables you can use `Dotenv.overload`.
+
+You can also use the `-o` or `--overload` flag on the dotenv cli to override existing `ENV` variables.
+
+```console
+$ dotenv -o -f ".env.local,.env"
+```
 
 ## Contributing
 

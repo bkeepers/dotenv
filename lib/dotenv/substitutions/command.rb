@@ -13,7 +13,7 @@ module Dotenv
           \$                  # literal $
           (?<cmd>             # collect command content for eval
             \(                # require opening paren
-            ([^()]|\g<cmd>)+  # allow any number of non-parens, or balanced
+            (?:[^()]|\g<cmd>)+  # allow any number of non-parens, or balanced
                               # parens (by nesting the <cmd> expression
                               # recursively)
             \)                # require closing paren

@@ -2,20 +2,20 @@ require "spec_helper"
 require "rails"
 require "dotenv/rails"
 
-describe Dotenv::Railtie do
-  # Fake watcher for Spring
-  class SpecWatcher
-    attr_reader :items
+# Fake watcher for Spring
+class SpecWatcher
+  attr_reader :items
 
-    def initialize
-      @items = []
-    end
-
-    def add(*items)
-      @items |= items
-    end
+  def initialize
+    @items = []
   end
 
+  def add(*items)
+    @items |= items
+  end
+end
+
+describe Dotenv::Railtie do
   before do
     Rails.env = "test"
     allow(Rails).to receive(:root)
@@ -113,8 +113,8 @@ describe Dotenv::Railtie do
       )
     end
 
-    it "overloads .env.test with .env" do
-      expect(ENV["DOTENV"]).to eql("true")
+    it "overloads .env with .env.test" do
+      expect(ENV["DOTENV"]).to eql("test")
     end
 
     context "when loading a file containing already set variables" do
@@ -125,7 +125,7 @@ describe Dotenv::Railtie do
 
         expect do
           subject
-        end.to(change { ENV["DOTENV"] }.from("predefined").to("true"))
+        end.to(change { ENV["DOTENV"] }.from("predefined").to("test"))
       end
     end
   end

@@ -113,13 +113,11 @@ describe Dotenv::Parser do
 export OPTION_A')).to eql("OPTION_A" => "2")
   end
 
-  it "allows export line if you want to do it that way and checks for unset"\
-     " variables" do
+  it "allows export line if you want to do it that way and checks for unset variables" do
     expect do
       env('OPTION_A=2
 export OH_NO_NOT_SET')
-    end.to raise_error(Dotenv::FormatError, 'Line "export OH_NO_NOT_SET"'\
-                                            " has an unset variable")
+    end.to raise_error(Dotenv::FormatError, 'Line "export OH_NO_NOT_SET" has an unset variable')
   end
 
   it "expands newlines in quoted strings" do
@@ -276,7 +274,7 @@ one more line")
 
     # This functionality is not supported on JRuby or Rubinius
     if (!defined?(RUBY_ENGINE) || RUBY_ENGINE != "jruby") &&
-       !defined?(Rubinius)
+        !defined?(Rubinius)
       it "substitutes shell variables within interpolated shell commands" do
         expect(env(%(VAR1=var1\ninterp=$(echo "VAR1 is $VAR1")))["interp"])
           .to eql("VAR1 is var1")
