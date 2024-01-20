@@ -8,52 +8,34 @@ But it is not always practical to set environment variables on development machi
 
 ## Installation
 
-### Rails
-
-Add this line to the top of your application's Gemfile:
+Add this line to the top of your application's Gemfile and run `bundle install`:
 
 ```ruby
 gem 'dotenv', groups: [:development, :test]
 ```
 
-And then execute:
+## Usage
 
-```console
-$ bundle
+Add your application configuration to your `.env` file in the root of your project:
+
+```shell
+S3_BUCKET=YOURS3BUCKET
+SECRET_KEY=YOURSECRETKEYGOESHERE
 ```
 
-#### Note on load order
-
-dotenv is initialized in your Rails app during the `before_configuration` callback, which is fired when the `Application` constant is defined in `config/application.rb` with `class Application < Rails::Application`. If you need it to be initialized sooner, you can manually call `Dotenv::Rails.load`.
+Whenever your application loads, these variables will be available in `ENV`:
 
 ```ruby
-# config/application.rb
-Bundler.require(*Rails.groups)
-
-# Load dotenv only in development or test environment
-if ['development', 'test'].include? ENV['RAILS_ENV']
-  Dotenv::Rails.load
-end
-
-HOSTNAME = ENV['HOSTNAME']
+config.fog_directory = ENV['S3_BUCKET']
 ```
 
-If you use gems that require environment variables to be set before they are loaded, then list `dotenv` in the `Gemfile` before those other gems and require `dotenv/load`.
+### Rails
 
-```ruby
-gem 'dotenv', require: 'dotenv/load'
-gem 'gem-that-requires-env-variables'
-```
+Dotenv will automatically load when your Rails app boots. See [Customizing Rails](#customizing-rails) to change which files are loaded and when.
 
-### Sinatra or Plain ol' Ruby
+### Sinatra / Ruby
 
-Install the gem:
-
-```console
-$ gem install dotenv
-```
-
-As early as possible in your application bootstrap process, load `.env`:
+Load Dotenv as early as possible in your application bootstrap process:
 
 ```ruby
 require 'dotenv/load'
@@ -70,7 +52,21 @@ require 'dotenv'
 Dotenv.load('file1.env', 'file2.env')
 ```
 
-Alternatively, you can use the `dotenv` executable to launch your application:
+### Rake
+
+To ensure `.env` is loaded in rake, load the tasks:
+
+```ruby
+require 'dotenv/tasks'
+
+task mytask: :dotenv do
+  # things that require .env
+end
+```
+
+### CLI
+
+You can use the `dotenv` executable load `.env` before launching your application:
 
 ```console
 $ dotenv ./script.rb
@@ -88,47 +84,47 @@ The `dotenv` executable can optionally ignore missing files with the `-i` or `--
 $ dotenv -i -f ".env.local,.env" ./script.rb
 ```
 
-To ensure `.env` is loaded in rake, load the tasks:
+### Load Order
+
+If you use gems that require environment variables to be set before they are loaded, then list `dotenv` in the `Gemfile` before those other gems and require `dotenv/load`.
 
 ```ruby
-require 'dotenv/tasks'
+gem 'dotenv', require: 'dotenv/load'
+gem 'gem-that-requires-env-variables'
+```
 
-task mytask: :dotenv do
-  # things that require .env
+### Customizing Rails
+
+Dotenv will load the following files depending on `RAILS_ENV`, with the last file listed having the highest precedence:
+
+* **development**: `.env`, `.env.development`, `.env.local`, `.env.development.local`
+* **test**: `.env`, `.env.test`, `.env.test.local` - Note that it will **not** load `.env.local`.
+* **development**: `.env`, `.env.production`, `.env.local`, `.env.production.local`
+
+These files are loaded during the `before_configuration` callback, which is fired when the `Application` constant is defined in `config/application.rb` with `class Application < Rails::Application`. If you need it to be initialized sooner, or need to customize the loading process, you can do so at the top of `application.rb`
+
+```ruby
+# config/application.rb
+Bundler.require(*Rails.groups)
+
+# Load .env.local in test
+Dotenv::Rails.files.unshift(".env.local") if ENV["RAILS_ENV"] == "test"
+
+module YourApp
+  class Application < Rails::Application
+    # ...
+  end
 end
 ```
 
-## Usage
+Available options:
 
-Add your application configuration to your `.env` file in the root of your project:
-
-```shell
-S3_BUCKET=YOURS3BUCKET
-SECRET_KEY=YOURSECRETKEYGOESHERE
-```
-
-Whenever your application loads, these variables will be available in `ENV`:
-
-```ruby
-config.fog_directory  = ENV['S3_BUCKET']
-```
-
-You may also add `export` in front of each line so you can `source` the file in bash:
-
-```shell
-export S3_BUCKET=YOURS3BUCKET
-export SECRET_KEY=YOURSECRETKEYGOESHERE
-```
+* `Dotenv::Rails.files` - list of files to be loaded, in order of precedence.
+* `Dotenv::Rails.overwrite` - Overwrite exiting `ENV` variables with contents of `.env*` files
 
 ### Multi-line values
 
-If you need multiline variables, for example private keys, you can double quote strings and use the `\n` character for newlines:
-
-```shell
-PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\nHkVN9...\n-----END DSA PRIVATE KEY-----\n"
-```
-
-Alternatively, multi-line values with line breaks are now supported for quoted values.
+Multi-line values with line breaks must be surrounded with double quotes.
 
 ```shell
 PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----
@@ -138,7 +134,12 @@ HkVN9...
 -----END DSA PRIVATE KEY-----"
 ```
 
-This is particularly helpful when using the Heroku command line plugin [`heroku-config`](https://github.com/xavdid/heroku-config) to pull configuration variables down that may have line breaks.
+Prior to 3.0, dotenv would replace `\n` in quoted strings with a newline, but that behavior is deprecated. To use the old behavior, set `DOTENV_LINEBREAK_MODE=legacy` before any variables that include `\n`:
+
+```shell
+DOTENV_LINEBREAK_MODE=legacy
+PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\nHkVN9...\n-----END DSA PRIVATE KEY-----\n"
+```
 
 ### Command Substitution
 
@@ -172,6 +173,15 @@ SECRET_KEY=YOURSECRETKEYGOESHERE # comment
 SECRET_HASH="something-with-a-#-hash"
 ```
 
+### Exports
+
+For compatability, you may also add `export` in front of each line so you can `source` the file in bash:
+
+```shell
+export S3_BUCKET=YOURS3BUCKET
+export SECRET_KEY=YOURSECRETKEYGOESHERE
+```
+
 ### Required Keys
 
 If a particular configuration value is required but not set, it's appropriate to raise an error.
@@ -197,36 +207,7 @@ Dotenv.parse(".env.local", ".env")
 
 This method returns a hash of the ENV var name/value pairs.
 
-## Frequently Answered Questions
-
-### Can I use dotenv in production?
-
-dotenv was originally created to load configuration variables into `ENV` in *development*. There are typically better ways to manage configuration in production environments - such as `/etc/environment` managed by [Puppet](https://github.com/puppetlabs/puppet) or [Chef](https://github.com/chef/chef), `heroku config`, etc.
-
-However, some find dotenv to be a convenient way to configure Rails applications in staging and production environments, and you can do that by defining environment-specific files like `.env.production` or `.env.test`.
-
-If you use this gem to handle env vars for multiple Rails environments (development, test, production, etc.), please note that env vars that are general to all environments should be stored in `.env`. Then, environment specific env vars should be stored in `.env.<that environment's name>`.
-
-### What other .env* files can I use?
-
-`dotenv-rails` will override in the following order (highest defined variable overrides lower):
-
-| Hierarchy Priority | Filename                 | Environment          | Should I `.gitignore`it?                            | Notes                                                        |
-| ------------------ | ------------------------ | -------------------- | --------------------------------------------------- | ------------------------------------------------------------ |
-| 1st (highest)      | `.env.development.local` | Development          | Yes!                                                | Local overrides of environment-specific settings.            |
-| 1st                | `.env.test.local`        | Test                 | Yes!                                                | Local overrides of environment-specific settings.            |
-| 1st                | `.env.production.local`  | Production           | Yes!                                                | Local overrides of environment-specific settings.            |
-| 2nd                | `.env.local`             | Wherever the file is | Definitely.                                         | Local overrides. This file is loaded for all environments _except_ `test`. |
-| 3rd                | `.env.development`       | Development          | No.                                                 | Shared environment-specific settings                         |
-| 3rd                | `.env.test`              | Test                 | No.                                                 | Shared environment-specific settings                         |
-| 3rd                | `.env.production`        | Production           | No.                                                 | Shared environment-specific settings                         |
-| Last               | `.env`                   | All Environments     | Depends (See [below](#should-i-commit-my-env-file)) | The Original®                                                |
-
-
-### Should I commit my .env file?
-
-Credentials should only be accessible on the machines that need access to them. Never commit sensitive information to a repository that is not needed by every development machine and server.
-
+### Templates
 
 You can use the `-t` or `--template` flag on the dotenv cli to create a template of your `.env` file.
 
@@ -250,6 +231,20 @@ Would become
 S3_BUCKET=S3_BUCKET
 SECRET_KEY=SECRET_KEY
 ```
+
+## Frequently Answered Questions
+
+### Can I use dotenv in production?
+
+dotenv was originally created to load configuration variables into `ENV` in *development*. There are typically better ways to manage configuration in production environments - such as `/etc/environment` managed by [Puppet](https://github.com/puppetlabs/puppet) or [Chef](https://github.com/chef/chef), `heroku config`, etc.
+
+However, some find dotenv to be a convenient way to configure Rails applications in staging and production environments, and you can do that by defining environment-specific files like `.env.production` or `.env.test`.
+
+If you use this gem to handle env vars for multiple Rails environments (development, test, production, etc.), please note that env vars that are general to all environments should be stored in `.env`. Then, environment specific env vars should be stored in `.env.<that environment's name>`.
+
+### Should I commit my .env file?
+
+Credentials should only be accessible on the machines that need access to them. Never commit sensitive information to a repository that is not needed by every development machine and server.
 
 Personally, I prefer to commit the `.env` file with development-only settings. This makes it easy for other developers to get started on the project without compromising credentials for other environments. If you follow this advice, make sure that all the credentials for your development environment are different from your other deployments and that the development credentials do not have access to any confidential data.
 
