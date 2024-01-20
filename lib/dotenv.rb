@@ -10,28 +10,35 @@ module Dotenv
 
   module_function
 
+  # Loads environment variables from one or more `.env` files. See `#parse` for more details.
   def load(*filenames, **kwargs)
     parse(*filenames, **kwargs) do |env|
       instrument("dotenv.load", env: env) { env.apply }
     end
   end
 
-  # same as `load`, but raises Errno::ENOENT if any files don't exist
+  # Same as `#load`, but raises Errno::ENOENT if any files don't exist
   def load!(*filenames)
     load(*filenames, ignore: false)
   end
 
-  # same as `load`, but will override existing values in `ENV`
+  # same as `#load`, but will override existing values in `ENV`
   def overload(*filenames)
     load(*filenames, overwrite: true)
   end
 
-  # same as `overload`, but raises Errno::ENOENT if any files don't exist
+  # same as `#overload`, but raises Errno::ENOENT if any files don't exist
   def overload!(*filenames)
     load(*filenames, overwrite: true, ignore: false)
   end
 
-  # returns a hash of parsed key/value pairs but does not modify ENV
+  # Parses the given files, yielding for each file if a block is given.
+  #
+  # @param filenames [String, Array<String>] Files to parse
+  # @param overwrite [Boolean] Overwrite existing `ENV` values
+  # @param ignore [Boolean] Ignore non-existent files
+  # @param block [Proc] Block to yield for each parsed `Dotenv::Environment`
+  # @return [Hash] parsed key/value pairs
   def parse(*filenames, overwrite: false, ignore: true, &block)
     filenames << ".env" if filenames.empty?
     filenames = filenames.reverse if overwrite
@@ -60,10 +67,5 @@ module Dotenv
     missing_keys = keys.flatten - ::ENV.keys
     return if missing_keys.empty?
     raise MissingKeys, missing_keys
-  end
-
-  def ignoring_nonexistent_files
-    yield
-  rescue Errno::ENOENT
   end
 end
