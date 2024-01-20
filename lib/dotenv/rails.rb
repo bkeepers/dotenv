@@ -38,7 +38,7 @@ module Dotenv
 
     def overload
       deprecator.warn("Dotenv::Rails.overload is deprecated. Set `Dotenv::Rails.overwrite = true` and call Dotenv::Rails.load instead.")
-      Dotenv.overload(*files)
+      Dotenv.load(*files, overwrite: true)
     end
 
     # Internal: `Rails.root` is nil in Rails 4.1 before the application is

@@ -86,7 +86,7 @@ describe Dotenv::Rails do
         expect(ENV["DOTENV"]).to eql("test")
       end
 
-      it "overrides any existing ENV variables" do
+      it "overwrites any existing ENV variables" do
         ENV["DOTENV"] = "predefined"
         expect { subject }.to(change { ENV["DOTENV"] }.from("predefined").to("test"))
       end

@@ -53,7 +53,7 @@ describe Dotenv do
     end
   end
 
-  shared_examples "overload" do
+  shared_examples "overwrite" do
     context "with multiple files" do
       let(:env_files) { [fixture_path("important.env"), fixture_path("plain.env")] }
 
@@ -120,11 +120,11 @@ describe Dotenv do
     end
   end
 
-  describe "overload" do
+  describe "overwrite" do
     let(:env_files) { [fixture_path("plain.env")] }
-    subject { Dotenv.overload(*env_files) }
+    subject { Dotenv.overwrite(*env_files) }
     it_behaves_like "load"
-    it_behaves_like "overload"
+    it_behaves_like "overwrite"
 
     it "initializes the Environment overwrite: true" do
       expect(Dotenv::Environment).to receive(:new).with(anything, overwrite: true)
@@ -135,7 +135,7 @@ describe Dotenv do
     context "when loading a file containing already set variables" do
       let(:env_files) { [fixture_path("plain.env")] }
 
-      it "overrides any existing ENV variables" do
+      it "overwrites any existing ENV variables" do
         ENV["OPTION_A"] = "predefined"
 
         subject
@@ -154,11 +154,11 @@ describe Dotenv do
     end
   end
 
-  describe "overload!" do
+  describe "overwrite!" do
     let(:env_files) { [fixture_path("plain.env")] }
-    subject { Dotenv.overload!(*env_files) }
+    subject { Dotenv.overwrite!(*env_files) }
     it_behaves_like "load"
-    it_behaves_like "overload"
+    it_behaves_like "overwrite"
 
     it "initializes the Environment with overwrite: true" do
       expect(Dotenv::Environment).to receive(:new).with(anything, overwrite: true)
@@ -169,7 +169,7 @@ describe Dotenv do
     context "when loading a file containing already set variables" do
       let(:env_files) { [fixture_path("plain.env")] }
 
-      it "overrides any existing ENV variables" do
+      it "overwrites any existing ENV variables" do
         ENV["OPTION_A"] = "predefined"
         subject
         expect(ENV["OPTION_A"]).to eq("1")

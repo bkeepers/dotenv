@@ -74,7 +74,7 @@ describe Dotenv::Parser do
       .to eql("test")
   end
 
-  it "doesn't expand variables from ENV if in local env in overload" do
+  it "doesn't expand variables from ENV if in local env in overwrite" do
     ENV["FOO"] = "test"
     expect(env("FOO=development\nBAR=${FOO}")["BAR"])
       .to eql("test")
