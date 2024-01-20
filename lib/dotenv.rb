@@ -69,3 +69,5 @@ module Dotenv
     raise MissingKeys, missing_keys
   end
 end
+
+require "dotenv/rails" if defined?(Rails::Railtie)

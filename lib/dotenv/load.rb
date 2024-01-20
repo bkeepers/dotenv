@@ -1,2 +1,3 @@
 require "dotenv"
-Dotenv.load
+
+defined?(Dotenv::Rails) ? Dotenv::Rails.load : Dotenv.load
