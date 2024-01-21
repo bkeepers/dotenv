@@ -48,24 +48,21 @@ module Dotenv
       ::Rails.root || Pathname.new(ENV["RAILS_ROOT"] || Dir.pwd)
     end
 
+    # The current environment that the app is running in.
+    #
+    # When running `rake`, the Rails application is initialized in development, so we have to
+    # check which rake tasks are being run to determine the environment.
+    #
+    # See https://github.com/bkeepers/dotenv/issues/219
     def env
-      env = ::Rails.env
-
-      # Dotenv loads environment variables when the Rails application is initialized.
-      # When running `rake`, the Rails application is initialized in development.
-      # Rails includes some hacks to set `RAILS_ENV=test` when running `rake test`,
-      # but rspec does not include the same hacks.
-      #
-      # See https://github.com/bkeepers/dotenv/issues/219
-      if defined?(Rake.application)
-        task_regular_expression = /^(default$|parallel:spec|spec(:|$))/
-        if Rake.application.top_level_tasks.grep(task_regular_expression).any?
-          env = ActiveSupport::EnvironmentInquirer.new(Rake.application.options.show_tasks ? "development" : "test")
-        end
+      @env ||= if defined?(Rake.application) && Rake.application.top_level_tasks.grep(TEST_RAKE_TASKS).any?
+        env = Rake.application.options.show_tasks ? "development" : "test"
+        ActiveSupport::EnvironmentInquirer.new(env)
+      else
+        ::Rails.env
       end
-
-      env
     end
+    TEST_RAKE_TASKS = /^(default$|test(:|$)|parallel:spec|spec(:|$))/
 
     def deprecator # :nodoc:
       @deprecator ||= ActiveSupport::Deprecation.new
