@@ -10,7 +10,7 @@ Gem::Specification.new "dotenv-rails", Dotenv::VERSION do |gem|
   gem.files = `git ls-files lib | grep dotenv-rails.rb`.split("\n") + ["README.md", "LICENSE"]
 
   gem.add_dependency "dotenv", Dotenv::VERSION
-  gem.add_dependency "railties", ">= 3.2"
+  gem.add_dependency "railties", ">= 6.1"
 
   gem.add_development_dependency "spring"
 end
