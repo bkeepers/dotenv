@@ -14,4 +14,6 @@ Gem::Specification.new "dotenv", Dotenv::VERSION do |gem|
   gem.add_development_dependency "rake"
   gem.add_development_dependency "rspec"
   gem.add_development_dependency "standard"
+
+  gem.required_ruby_version = ">= 3.0"
 end
