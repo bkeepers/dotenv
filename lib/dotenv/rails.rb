@@ -19,6 +19,7 @@ module Dotenv
     attr_accessor :overwrite, :files
 
     def initialize
+      super()
       @overwrite = false
       @files = [
         root.join(".env.#{env}.local"),
