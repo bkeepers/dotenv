@@ -3,10 +3,31 @@ require "rails"
 require "dotenv/rails"
 
 describe Dotenv::Rails do
+  let(:application) do
+    Class.new(Rails::Application) do
+      config.load_defaults Rails::VERSION::STRING.to_f
+      config.eager_load = false
+      config.logger = ActiveSupport::Logger.new(StringIO.new)
+      config.root = fixture_path
+    end.instance
+  end
+
+  around do |example|
+    # These get frozen after the app initializes
+    autoload_paths = ActiveSupport::Dependencies.autoload_paths.dup
+    autoload_once_paths = ActiveSupport::Dependencies.autoload_once_paths.dup
+
+    # Run in fixtures directory
+    Dir.chdir(fixture_path) { example.run }
+  ensure
+    # Restore autoload paths to unfrozen state
+    ActiveSupport::Dependencies.autoload_paths = autoload_paths
+    ActiveSupport::Dependencies.autoload_once_paths = autoload_once_paths
+  end
+
   before do
     Rails.env = "test"
-    allow(Rails).to receive(:root).and_return Pathname.new(__dir__).join("../fixtures")
-    Rails.application = double(:application)
+    Rails.application = nil
     Spring.watcher = Set.new # Responds to #add
   end
 
@@ -15,22 +36,16 @@ describe Dotenv::Rails do
     Dotenv::Rails.remove_instance_variable(:@instance)
   end
 
-  after do
-    # Reset
-    Spring.watcher = nil
-    Rails.application = nil
-  end
-
   describe "files" do
     it "loads files for development environment" do
       Rails.env = "development"
 
       expect(Dotenv::Rails.files).to eql(
         [
-          Rails.root.join(".env.development.local"),
-          Rails.root.join(".env.local"),
-          Rails.root.join(".env.development"),
-          Rails.root.join(".env")
+          application.root.join(".env.development.local"),
+          application.root.join(".env.local"),
+          application.root.join(".env.development"),
+          application.root.join(".env")
         ]
       )
     end
@@ -39,15 +54,16 @@ describe Dotenv::Rails do
       Rails.env = "test"
       expect(Dotenv::Rails.files).to eql(
         [
-          Rails.root.join(".env.test.local"),
-          Rails.root.join(".env.test"),
-          Rails.root.join(".env")
+          application.root.join(".env.test.local"),
+          application.root.join(".env.test"),
+          application.root.join(".env")
         ]
       )
     end
   end
 
-  it "watches loaded files with Spring" do
+  it "watches other loaded files with Spring" do
+    application.initialize!
     path = fixture_path("plain.env")
     Dotenv.load(path)
     expect(Spring.watcher).to include(path.to_s)
@@ -61,7 +77,7 @@ describe Dotenv::Rails do
   end
 
   context "load" do
-    subject { Dotenv::Rails.load }
+    subject { application.initialize! }
 
     it "watches .env with Spring" do
       subject
@@ -107,6 +123,27 @@ describe Dotenv::Rails do
         ENV["RAILS_ROOT"] = "/tmp"
         expect(Dotenv::Rails.root.to_s).to eql("/tmp")
       end
+    end
+  end
+
+  describe "test_help" do
+    it "is loaded if RAILS_ENV=test" do
+      expect(Dotenv::Rails.test_help).to eq(true)
+      expect(Dotenv::Rails.instance).to receive(:require).with("dotenv/test_help")
+      application.initialize!
+    end
+
+    it "is not loaded if RAILS_ENV=development" do
+      Rails.env = "development"
+      expect(Dotenv::Rails.test_help).to eq(false)
+      expect(Dotenv::Rails.instance).not_to receive(:require).with("dotenv/test_help")
+      application.initialize!
+    end
+
+    it "is not loaded if test_help set to false" do
+      Dotenv::Rails.test_help = false
+      expect(Dotenv::Rails.instance).not_to receive(:require).with("dotenv/test_help")
+      application.initialize!
     end
   end
 end

@@ -63,7 +63,7 @@ module Dotenv
     if instrumenter
       instrumenter.instrument(name, payload, &block)
     else
-      yield
+      block&.call
     end
   end
 
@@ -71,6 +71,17 @@ module Dotenv
     missing_keys = keys.flatten - ::ENV.keys
     return if missing_keys.empty?
     raise MissingKeys, missing_keys
+  end
+
+  # Save a snapshot of the current `ENV` to be restored later
+  def save
+    @snapshot = ENV.to_h.freeze
+    instrument("dotenv.save", env: @snapshot)
+  end
+
+  # Restore the previous snapshot of `ENV`
+  def restore
+    instrument("dotenv.restore", env: @snapshot) { ENV.replace(@snapshot) }
   end
 end
 
