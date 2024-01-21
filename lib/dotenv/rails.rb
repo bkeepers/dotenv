@@ -81,7 +81,7 @@ module Dotenv
     end
 
     initializer "dotenv.deprecator" do |app|
-      app.deprecators[:dotenv] = deprecator
+      app.deprecators[:dotenv] = deprecator if app.respond_to?(:deprecators)
     end
 
     config.before_configuration { load }
