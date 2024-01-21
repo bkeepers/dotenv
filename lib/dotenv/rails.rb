@@ -74,6 +74,12 @@ module Dotenv
       instance.load
     end
 
+    # Rails.logger was not intialized when dotenv loaded. Wait until it is and log what happened.
+    initializer "dotenv", after: :initialize_logger do |app|
+      loaded_files = files.select(&:exist?).map { |p| p.relative_path_from(root).to_s }
+      ::Rails.logger.debug "dotenv loaded ENV from #{loaded_files.to_sentence}"
+    end
+
     initializer "dotenv.deprecator" do |app|
       app.deprecators[:dotenv] = deprecator
     end
