@@ -4,6 +4,7 @@ rescue LoadError
   # Rails 7.1 fails if this is not loaded
 end
 
+require "active_support" # Rails 6.1 fails if this is not loaded
 require "active_support/test_case"
 require "minitest/autorun"
 
