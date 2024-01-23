@@ -9,6 +9,9 @@ describe Dotenv::Rails do
       config.eager_load = false
       config.logger = ActiveSupport::Logger.new(StringIO.new)
       config.root = fixture_path
+
+      # Remove method fails since app is reloaded for each test
+      config.active_support.remove_deprecated_time_with_zone_name = false
     end.instance
   end
 
