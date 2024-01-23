@@ -1,6 +1,7 @@
 require "dotenv/parser"
 require "dotenv/environment"
 require "dotenv/missing_keys"
+require "dotenv/diff"
 
 # The top level Dotenv module. The entrypoint for the application logic.
 module Dotenv
@@ -13,7 +14,12 @@ module Dotenv
   # Loads environment variables from one or more `.env` files. See `#parse` for more details.
   def load(*filenames, **kwargs)
     parse(*filenames, **kwargs) do |env|
-      instrument("dotenv.load", env: env) { env.apply }
+      instrument(:load, env: env) do |payload|
+        env_before = ENV.to_h
+        env.apply
+        payload[:diff] = Dotenv::Diff.new(env_before, ENV.to_h)
+        env
+      end
     end
   end
 
@@ -61,9 +67,9 @@ module Dotenv
 
   def instrument(name, payload = {}, &block)
     if instrumenter
-      instrumenter.instrument(name, payload, &block)
+      instrumenter.instrument("#{name}.dotenv", payload, &block)
     else
-      block&.call
+      block&.call payload
     end
   end
 
@@ -76,12 +82,12 @@ module Dotenv
   # Save a snapshot of the current `ENV` to be restored later
   def save
     @snapshot = ENV.to_h.freeze
-    instrument("dotenv.save", env: @snapshot)
+    instrument(:save, snapshot: @snapshot)
   end
 
   # Restore the previous snapshot of `ENV`
   def restore
-    instrument("dotenv.restore", env: @snapshot) { ENV.replace(@snapshot) }
+    instrument(:restore, diff: Dotenv::Diff.new(ENV.to_h, @snapshot)) { ENV.replace(@snapshot) }
   end
 end
 
