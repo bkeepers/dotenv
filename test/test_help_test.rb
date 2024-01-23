@@ -1,4 +1,9 @@
-require "active_support/deprecator"
+begin
+  require "active_support/deprecator"
+rescue LoadError
+  # Rails 7.1 fails if this is not loaded
+end
+
 require "active_support/test_case"
 require "minitest/autorun"
 
