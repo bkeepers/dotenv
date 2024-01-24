@@ -1,3 +1,5 @@
+# Automatically restore `ENV` to its original state after
+
 if defined?(RSpec.configure)
   RSpec.configure do |config|
     # Save ENV before the suite starts
@@ -10,12 +12,12 @@ end
 
 if defined?(ActiveSupport)
   ActiveSupport.on_load(:active_support_test_case) do
-    # Save ENV when the test suite loads
-    Dotenv.save
-
     ActiveSupport::TestCase.class_eval do
+      # Save ENV before each test
+      setup { Dotenv.save }
+
       # Restore ENV after each test
-      setup { Dotenv.restore }
+      teardown { Dotenv.restore }
     end
   end
 end

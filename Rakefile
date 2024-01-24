@@ -33,6 +33,8 @@ RSpec::Core::RakeTask.new(:spec) do |t|
   t.verbose = false
 end
 
-Rake::TestTask.new
+Rake::TestTask.new do |t|
+  t.test_files = Dir["test/**/*_test.rb"]
+end
 
 task default: [:spec, :test, :standard]
