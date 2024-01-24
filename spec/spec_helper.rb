@@ -1,5 +1,5 @@
 require "dotenv"
-require "dotenv/test_help"
+require "dotenv/autorestore"
 
 def fixture_path(*parts)
   Pathname.new(__dir__).join("./fixtures", *parts)

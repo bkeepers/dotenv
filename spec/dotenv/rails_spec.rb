@@ -129,23 +129,23 @@ describe Dotenv::Rails do
     end
   end
 
-  describe "test_help" do
+  describe "autorestore" do
     it "is loaded if RAILS_ENV=test" do
-      expect(Dotenv::Rails.test_help).to eq(true)
-      expect(Dotenv::Rails.instance).to receive(:require).with("dotenv/test_help")
+      expect(Dotenv::Rails.autorestore).to eq(true)
+      expect(Dotenv::Rails.instance).to receive(:require).with("dotenv/autorestore")
       application.initialize!
     end
 
     it "is not loaded if RAILS_ENV=development" do
       Rails.env = "development"
-      expect(Dotenv::Rails.test_help).to eq(false)
-      expect(Dotenv::Rails.instance).not_to receive(:require).with("dotenv/test_help")
+      expect(Dotenv::Rails.autorestore).to eq(false)
+      expect(Dotenv::Rails.instance).not_to receive(:require).with("dotenv/autorestore")
       application.initialize!
     end
 
-    it "is not loaded if test_help set to false" do
-      Dotenv::Rails.test_help = false
-      expect(Dotenv::Rails.instance).not_to receive(:require).with("dotenv/test_help")
+    it "is not loaded if autorestore set to false" do
+      Dotenv::Rails.autorestore = false
+      expect(Dotenv::Rails.instance).not_to receive(:require).with("dotenv/autorestore")
       application.initialize!
     end
   end

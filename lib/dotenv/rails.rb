@@ -16,7 +16,7 @@ end
 module Dotenv
   # Rails integration for using Dotenv to load ENV variables from a file
   class Rails < ::Rails::Railtie
-    delegate :files, :files=, :overwrite, :overwrite=, :test_help, :test_help=, to: "config.dotenv"
+    delegate :files, :files=, :overwrite, :overwrite=, :autorestore, :autorestore=, to: "config.dotenv"
 
     def initialize
       super()
@@ -28,7 +28,7 @@ module Dotenv
           root.join(".env.#{env}"),
           root.join(".env")
         ].compact,
-        test_help: env.test?
+        autorestore: env.test?
       )
     end
 
@@ -88,8 +88,8 @@ module Dotenv
       app.deprecators[:dotenv] = deprecator if app.respond_to?(:deprecators)
     end
 
-    initializer "dotenv.test_help" do |app|
-      require "dotenv/test_help" if test_help
+    initializer "dotenv.autorestore" do |app|
+      require "dotenv/autorestore" if autorestore
     end
 
     config.before_configuration { load }

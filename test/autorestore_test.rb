@@ -1,17 +1,11 @@
-begin
-  require "active_support/deprecator"
-rescue LoadError
-  # Rails 7.1 fails if this is not loaded
-end
-
 require "active_support" # Rails 6.1 fails if this is not loaded
 require "active_support/test_case"
 require "minitest/autorun"
 
 require "dotenv"
-require "dotenv/test_help"
+require "dotenv/autorestore"
 
-class TestHelpTest < ActiveSupport::TestCase
+class AutorestoreTest < ActiveSupport::TestCase
   test "restores ENV between tests, part 1" do
     assert_nil ENV["DOTENV"], "ENV was not restored between tests"
     ENV["DOTENV"] = "1"

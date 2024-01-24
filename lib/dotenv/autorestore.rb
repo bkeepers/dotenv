@@ -1,3 +1,5 @@
+# Automatically restore `ENV` to its original state after
+
 if defined?(RSpec.configure)
   RSpec.configure do |config|
     # Save ENV before the suite starts
