@@ -199,7 +199,7 @@ describe Dotenv do
     describe "load" do
       it "instruments if the file exists" do
         expect(instrumenter).to receive(:instrument) do |name, payload|
-          expect(name).to eq("dotenv.load")
+          expect(name).to eq("load.dotenv")
           expect(payload[:env]).to be_instance_of(Dotenv::Environment)
           {}
         end

@@ -32,11 +32,13 @@ describe Dotenv::Rails do
     Rails.env = "test"
     Rails.application = nil
     Spring.watcher = Set.new # Responds to #add
-  end
 
-  after do
-    # Remove the singleton instance if it exists
-    Dotenv::Rails.remove_instance_variable(:@instance)
+    begin
+      # Remove the singleton instance if it exists
+      Dotenv::Rails.remove_instance_variable(:@instance)
+    rescue
+      nil
+    end
   end
 
   describe "files" do

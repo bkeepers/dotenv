@@ -1,11 +1,13 @@
 require "dotenv"
+require "dotenv/replay_logger"
+require "dotenv/log_subscriber"
 
 Dotenv.instrumenter = ActiveSupport::Notifications
 
 # Watch all loaded env files with Spring
 begin
   require "spring/commands"
-  ActiveSupport::Notifications.subscribe("dotenv.load") do |*args|
+  ActiveSupport::Notifications.subscribe("load.dotenv") do |*args|
     event = ActiveSupport::Notifications::Event.new(*args)
     Spring.watch event.payload[:env].filename if Rails.application
   end
@@ -16,11 +18,13 @@ end
 module Dotenv
   # Rails integration for using Dotenv to load ENV variables from a file
   class Rails < ::Rails::Railtie
-    delegate :files, :files=, :overwrite, :overwrite=, :autorestore, :autorestore=, to: "config.dotenv"
+    delegate :files, :files=, :overwrite, :overwrite=, :autorestore, :autorestore=, :logger, :logger=, to: "config.dotenv"
 
     def initialize
       super()
       config.dotenv = ActiveSupport::OrderedOptions.new.update(
+        # Rails.logger is not available yet, so we'll save log messages and replay them when it is
+        logger: Dotenv::ReplayLogger.new,
         overwrite: false,
         files: [
           root.join(".env.#{env}.local"),
@@ -78,10 +82,11 @@ module Dotenv
       instance.load
     end
 
-    # Rails.logger was not intialized when dotenv loaded. Wait until it is and log what happened.
     initializer "dotenv", after: :initialize_logger do |app|
-      loaded_files = files.select(&:exist?).map { |p| p.relative_path_from(root).to_s }
-      ::Rails.logger.debug "dotenv loaded ENV from #{loaded_files.to_sentence}"
+      # Set up a new logger once Rails has initialized the logger and replay logs
+      new_logger = ActiveSupport::TaggedLogging.new(::Rails.logger).tagged("dotenv")
+      logger.replay new_logger if logger.respond_to?(:replay)
+      self.logger = new_logger
     end
 
     initializer "dotenv.deprecator" do |app|
