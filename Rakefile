@@ -1,6 +1,9 @@
 #!/usr/bin/env rake
 
 require "bundler/gem_helper"
+require "rspec/core/rake_task"
+require "rake/testtask"
+require "standard/rake"
 
 namespace "dotenv" do
   Bundler::GemHelper.install_tasks name: "dotenv"
@@ -24,14 +27,14 @@ task build: ["dotenv:build", "dotenv-rails:build"]
 task install: ["dotenv:install", "dotenv-rails:install"]
 task release: ["dotenv:release", "dotenv-rails:release"]
 
-require "rspec/core/rake_task"
-
 desc "Run all specs"
 RSpec::Core::RakeTask.new(:spec) do |t|
   t.rspec_opts = %w[--color]
   t.verbose = false
 end
 
-require "standard/rake"
+Rake::TestTask.new do |t|
+  t.test_files = Dir["test/**/*_test.rb"]
+end
 
-task default: [:spec, :standard]
+task default: [:spec, :test, :standard]

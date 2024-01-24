@@ -94,7 +94,10 @@ describe Dotenv do
 
       it "fails silently" do
         expect { subject }.not_to raise_error
-        expect(ENV.keys).to eq(@env_keys)
+      end
+
+      it "does not change ENV" do
+        expect { subject }.not_to change { ENV.inspect }
       end
     end
   end
@@ -149,7 +152,10 @@ describe Dotenv do
 
       it "fails silently" do
         expect { subject }.not_to raise_error
-        expect(ENV.keys).to eq(@env_keys)
+      end
+
+      it "does not change ENV" do
+        expect { subject }.not_to change { ENV.inspect }
       end
     end
   end

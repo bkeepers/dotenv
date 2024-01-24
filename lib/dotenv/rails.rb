@@ -5,7 +5,7 @@ Dotenv.instrumenter = ActiveSupport::Notifications
 # Watch all loaded env files with Spring
 begin
   require "spring/commands"
-  ActiveSupport::Notifications.subscribe(/^dotenv/) do |*args|
+  ActiveSupport::Notifications.subscribe("dotenv.load") do |*args|
     event = ActiveSupport::Notifications::Event.new(*args)
     Spring.watch event.payload[:env].filename if Rails.application
   end
@@ -16,17 +16,20 @@ end
 module Dotenv
   # Rails integration for using Dotenv to load ENV variables from a file
   class Rails < ::Rails::Railtie
-    attr_accessor :overwrite, :files
+    delegate :files, :files=, :overwrite, :overwrite=, :autorestore, :autorestore=, to: "config.dotenv"
 
     def initialize
       super()
-      @overwrite = false
-      @files = [
-        root.join(".env.#{env}.local"),
-        (root.join(".env.local") unless env.test?),
-        root.join(".env.#{env}"),
-        root.join(".env")
-      ].compact
+      config.dotenv = ActiveSupport::OrderedOptions.new.update(
+        overwrite: false,
+        files: [
+          root.join(".env.#{env}.local"),
+          (root.join(".env.local") unless env.test?),
+          root.join(".env.#{env}"),
+          root.join(".env")
+        ].compact,
+        autorestore: env.test?
+      )
     end
 
     # Public: Load dotenv
@@ -83,6 +86,10 @@ module Dotenv
 
     initializer "dotenv.deprecator" do |app|
       app.deprecators[:dotenv] = deprecator if app.respond_to?(:deprecators)
+    end
+
+    initializer "dotenv.autorestore" do |app|
+      require "dotenv/autorestore" if autorestore
     end
 
     config.before_configuration { load }
