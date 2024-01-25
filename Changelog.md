@@ -1,6 +1,6 @@
 # Changelog
 
-[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.8.1...master)
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.8.1...main)
 
 ## 2.8.1 - July 27, 2022
 
