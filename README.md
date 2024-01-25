@@ -62,6 +62,8 @@ To disable this behavior, set `config.dotenv.autorestore = false` in `config/app
 
 To use this behavior outside of a Rails app, just `require "dotenv/autorestore"` in your test suite.
 
+See [`Dotenv.save`](https://rubydoc.info/github/bkeepers/dotenv/main/Dotenv:save), [Dotenv.restore](https://rubydoc.info/github/bkeepers/dotenv/main/Dotenv:restore), and [`Dotenv.modify(hash) { ... }`](https://rubydoc.info/github/bkeepers/dotenv/main/Dotenv:modify) for manual usage.
+
 ### Rake
 
 To ensure `.env` is loaded in rake, load the tasks:

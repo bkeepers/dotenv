@@ -2,6 +2,35 @@
 
 [Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.8.1...main)
 
+## 3.0.0
+
+**Breaking Changes**
+
+* Ruby >= 3.0 and Rails >= 6.1 are now required. Lock dotenv to `~> 2.0` if you are using an outdated Ruby or Rails version. https://github.com/bkeepers/dotenv/pull/466, https://github.com/bkeepers/dotenv/pull/471
+* `\n` is no longer expanded into a newline in quoted strings. Use multi-line strings with real line breaks, or set `DOTENV_LINEBREAK_MODE=legacy` to preserve the old behavior. @nitsujri https://github.com/bkeepers/dotenv/pull/423
+* `ENV` will be [automatically restored between tests](https://github.com/bkeepers/dotenv#autorestore-in-tests) (`ActiveSupport::TestCase` and `Rspec`). https://github.com/bkeepers/dotenv/pull/472, https://github.com/bkeepers/dotenv/pull/475
+* Fixed precedence when using `Dotenv::Rails.overload`. So now `.env.development.local` will overwrite `.env.local`, which will overwrite `.env.development`, which will overwrite `.env`. @eriklovmo - https://github.com/bkeepers/dotenv/pull/460
+* The instrumentation event `dotenv.load` has been renamed to `load.dotenv` to properly make use of namespaces in [ActiveSupport::Notifications](https://guides.rubyonrails.org/active_support_instrumentation.html) https://github.com/bkeepers/dotenv/pull/472
+
+**Other improvements**
+
+* All changes to ENV will be logged in Rails apps. https://github.com/bkeepers/dotenv/pull/473
+* Fixed an issue where `rake` loaded development files (`.env*development`) for test-related tasks. https://github.com/bkeepers/dotenv/pull/470
+* Add `-i`/`--ignore` option to `dotenv` CLI to optionally ignore missing files. @stevenharman https://github.com/bkeepers/dotenv/pull/463
+* You can [customize which files get loaded](https://github.com/bkeepers/dotenv#customizing-rails) by setting `Dotenv::Rails.files`. https://github.com/bkeepers/dotenv/pull/468
+
+**Deprecations**
+* The `dotenv-rails` gem is now superfluous. It's not technically deprecated yet and will continue to work, but the `dotenv` gem does the same thing. https://github.com/bkeepers/dotenv/pull/468
+* `Dotenv::Railtie` has been deprecated. Use `Dotenv::Rails`. https://github.com/bkeepers/dotenv/pull/468
+* `Dotenv.overload` has been replaced with `overwrite`. `overload` will still work and is not technically deprecated, but documentation refers to `Dotenv.overwrite` now. https://github.com/bkeepers/dotenv/pull/469
+
+**New Contributors**
+* @stevenharman made their first contribution in https://github.com/bkeepers/dotenv/pull/463
+* @eriklovmo made their first contribution in https://github.com/bkeepers/dotenv/pull/460
+* @nitsujri made their first contribution in https://github.com/bkeepers/dotenv/pull/423
+
+**Full Changelog**: https://github.com/bkeepers/dotenv/compare/v2.8.1...v3.0.0
+
 ## 2.8.1 - July 27, 2022
 
 * Restore support for EOL'd Ruby versions (2.5, 2.6) (#458)[https://github.com/bkeepers/dotenv/pull/458]
