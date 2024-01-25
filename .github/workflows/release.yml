@@ -3,17 +3,14 @@ on: release
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write # mandatory for trusted publishing
+      contents: write # required for `rake release` to push the release tag
     steps:
       - uses: actions/checkout@v4
-      - name: Release dotenv
-        uses: cadwallion/publish-rubygems-action@master
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          RUBYGEMS_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
-          RELEASE_COMMAND: rake dotenv:release
-      - name: Release dotenv-rails
-        uses: cadwallion/publish-rubygems-action@master
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          RUBYGEMS_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
-          RELEASE_COMMAND: rake dotenv-rails:release
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          ruby-version: ruby
+      - uses: rubygems/release-gem@v1
