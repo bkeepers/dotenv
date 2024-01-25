@@ -2,6 +2,9 @@ name: Publish Gem
 on:
   release:
     types: [published]
+  push:
+    tags:
+      - "v**"
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -10,9 +13,14 @@ jobs:
       contents: write # required for `rake release` to push the release tag
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-          ruby-version: ruby
-      - uses: rubygems/release-gem@v1
+      - name: Inspect ref
+        run: |
+          echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
+          echo "Tag name from github.ref_name: ${{ github.ref_name }}"
+
+      # - name: Set up Ruby
+      #   uses: ruby/setup-ruby@v1
+      #   with:
+      #     bundler-cache: true
+      #     ruby-version: ruby
+      # - uses: rubygems/release-gem@v1
