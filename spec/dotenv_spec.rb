@@ -47,13 +47,20 @@ describe Dotenv do
         end
       end
 
-      it "returns hash of loaded environments" do
+      it "returns hash of loaded variables" do
         expect(subject).to eq(expected)
+      end
+
+      it "does not return unchanged variables" do
+        ENV["OPTION_A"] = "1"
+        expect(subject).not_to have_key("OPTION_A")
       end
     end
   end
 
   shared_examples "overwrite" do
+    it_behaves_like "load"
+
     context "with multiple files" do
       let(:env_files) { [fixture_path("important.env"), fixture_path("plain.env")] }
 
@@ -301,6 +308,62 @@ describe Dotenv do
     it "fixture file has UTF-8 BOM" do
       contents = File.binread(subject).force_encoding("UTF-8")
       expect(contents).to start_with("\xEF\xBB\xBF".force_encoding("UTF-8"))
+    end
+  end
+
+  describe "restore" do
+    it "restores previously saved snapshot" do
+      ENV["MODIFIED"] = "true"
+      Dotenv.restore # save was already called in setup
+      expect(ENV["MODIFIED"]).to be_nil
+    end
+
+    it "raises an error in threads" do
+      ENV["MODIFIED"] = "true"
+      Thread.new do
+        expect { Dotenv.restore }.to raise_error(ThreadError, /not thread safe/)
+      end.join
+      expect(ENV["MODIFIED"]).to eq("true")
+    end
+  end
+
+  describe "modify" do
+    it "sets values for the block" do
+      ENV["FOO"] = "initial"
+
+      Dotenv.modify(FOO: "during", BAR: "baz") do
+        expect(ENV["FOO"]).to eq("during")
+        expect(ENV["BAR"]).to eq("baz")
+      end
+
+      expect(ENV["FOO"]).to eq("initial")
+      expect(ENV).not_to have_key("BAR")
+    end
+  end
+
+  describe "update" do
+    it "sets new variables" do
+      Dotenv.update({"OPTION_A" => "1"})
+      expect(ENV["OPTION_A"]).to eq("1")
+    end
+
+    it "does not overwrite defined variables" do
+      ENV["OPTION_A"] = "original"
+      Dotenv.update({"OPTION_A" => "updated"})
+      expect(ENV["OPTION_A"]).to eq("original")
+    end
+
+    context "with overwrite: true" do
+      it "sets new variables" do
+        Dotenv.update({"OPTION_A" => "1"}, overwrite: true)
+        expect(ENV["OPTION_A"]).to eq("1")
+      end
+
+      it "overwrites defined variables" do
+        ENV["OPTION_A"] = "original"
+        Dotenv.update({"OPTION_A" => "updated"}, overwrite: true)
+        expect(ENV["OPTION_A"]).to eq("updated")
+      end
     end
   end
 

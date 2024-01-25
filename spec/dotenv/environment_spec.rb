@@ -16,34 +16,6 @@ describe Dotenv::Environment do
     end
   end
 
-  describe "apply" do
-    it "sets variables in ENV" do
-      subject.apply
-      expect(ENV["OPTION_A"]).to eq("1")
-    end
-
-    it "does not overwrite defined variables" do
-      ENV["OPTION_A"] = "predefined"
-      subject.apply
-      expect(ENV["OPTION_A"]).to eq("predefined")
-    end
-
-    context "with overwrite: true" do
-      subject { env("OPTION_A=1\nOPTION_B=2", overwrite: true) }
-
-      it "sets variables in the ENV" do
-        subject.apply
-        expect(ENV["OPTION_A"]).to eq("1")
-      end
-
-      it "overwrites defined variables" do
-        ENV["OPTION_A"] = "predefined"
-        subject.apply
-        expect(ENV["OPTION_A"]).to eq("1")
-      end
-    end
-  end
-
   require "tempfile"
   def env(text, ...)
     file = Tempfile.new("dotenv")

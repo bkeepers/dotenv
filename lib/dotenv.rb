@@ -3,22 +3,21 @@ require "dotenv/environment"
 require "dotenv/missing_keys"
 require "dotenv/diff"
 
-# The top level Dotenv module. The entrypoint for the application logic.
+# Shim to load environment variables from `.env files into `ENV`.
 module Dotenv
-  class << self
-    attr_accessor :instrumenter
-  end
+  extend self
 
-  module_function
+  # An internal monitor to synchronize access to ENV in multi-threaded environments.
+  SEMAPHORE = Monitor.new
+  private_constant :SEMAPHORE
+
+  attr_accessor :instrumenter
 
   # Loads environment variables from one or more `.env` files. See `#parse` for more details.
-  def load(*filenames, **kwargs)
-    parse(*filenames, **kwargs) do |env|
+  def load(*filenames, overwrite: false, ignore: true)
+    parse(*filenames, overwrite: overwrite, ignore: ignore) do |env|
       instrument(:load, env: env) do |payload|
-        env_before = ENV.to_h
-        env.apply
-        payload[:diff] = Dotenv::Diff.new(env_before, ENV.to_h)
-        env
+        update(env, overwrite: overwrite)
       end
     end
   end
@@ -33,14 +32,12 @@ module Dotenv
     load(*filenames, overwrite: true)
   end
   alias_method :overload, :overwrite
-  module_function :overload
 
   # same as `#overwrite`, but raises Errno::ENOENT if any files don't exist
   def overwrite!(*filenames)
     load(*filenames, overwrite: true, ignore: false)
   end
   alias_method :overload!, :overwrite!
-  module_function :overload!
 
   # Parses the given files, yielding for each file if a block is given.
   #
@@ -65,11 +62,60 @@ module Dotenv
     end
   end
 
-  def instrument(name, payload = {}, &block)
-    if instrumenter
-      instrumenter.instrument("#{name}.dotenv", payload, &block)
-    else
-      block&.call payload
+  # Save the current `ENV` to be restored later
+  def save
+    instrument(:save) do |payload|
+      @diff = payload[:diff] = Dotenv::Diff.new
+    end
+  end
+
+  # Restore `ENV` to a given state
+  #
+  # @param env [Hash] Hash of keys and values to restore, defaults to the last saved state
+  # @param safe [Boolean] Is it safe to modify `ENV`? Defaults to `true` in the main thread, otherwise raises an error.
+  def restore(env = @diff&.a, safe: Thread.current == Thread.main)
+    diff = Dotenv::Diff.new(b: env)
+    return unless diff.any?
+
+    unless safe
+      raise ThreadError, <<~EOE.tr("\n", " ")
+        Dotenv.restore is not thread safe. Use `Dotenv.modify { }` to update ENV for the duration
+        of the block in a thread safe manner, or call `Dotenv.restore(safe: true)` to ignore
+        this error.
+      EOE
+    end
+    instrument(:restore, diff: diff) { ENV.replace(env) }
+  end
+
+  # Update `ENV` with the given hash of keys and values
+  #
+  # @param env [Hash] Hash of keys and values to set in `ENV`
+  # @param overwrite [Boolean] Overwrite existing `ENV` values
+  def update(env = {}, overwrite: false)
+    instrument(:update) do |payload|
+      diff = payload[:diff] = Dotenv::Diff.new do
+        ENV.update(env.transform_keys(&:to_s)) do |key, old_value, new_value|
+          # This block is called when a key exists. Return the new value if overwrite is true.
+          overwrite ? new_value : old_value
+        end
+      end
+      diff.env
+    end
+  end
+
+  # Modify `ENV` for the block and restore it to its previous state afterwards.
+  #
+  # Note that the block is synchronized to prevent concurrent modifications to `ENV`,
+  # so multiple threads will be executed serially.
+  #
+  # @param env [Hash] Hash of keys and values to set in `ENV`
+  def modify(env = {}, &block)
+    SEMAPHORE.synchronize do
+      diff = Dotenv::Diff.new
+      update(env, overwrite: true)
+      block.call
+    ensure
+      restore(diff.a, safe: true)
     end
   end
 
@@ -79,15 +125,14 @@ module Dotenv
     raise MissingKeys, missing_keys
   end
 
-  # Save a snapshot of the current `ENV` to be restored later
-  def save
-    @snapshot = ENV.to_h.freeze
-    instrument(:save, snapshot: @snapshot)
-  end
+  private
 
-  # Restore the previous snapshot of `ENV`
-  def restore
-    instrument(:restore, diff: Dotenv::Diff.new(ENV.to_h, @snapshot)) { ENV.replace(@snapshot) }
+  def instrument(name, payload = {}, &block)
+    if instrumenter
+      instrumenter.instrument("#{name}.dotenv", payload, &block)
+    else
+      block&.call payload
+    end
   end
 end
 
