@@ -1,9 +1,12 @@
 module Dotenv
-  # This class inherits from Hash and represents the environment into which
-  # Dotenv will load key value pairs from a file.
+  # A `.env` file that will be read and parsed into a Hash
   class Environment < Hash
     attr_reader :filename, :overwrite
 
+    # Create a new Environment
+    #
+    # @param filename [String] the path to the file to read
+    # @param overwrite [Boolean] whether the parser should assume existing values will be overwritten
     def initialize(filename, overwrite: false)
       super()
       @filename = filename

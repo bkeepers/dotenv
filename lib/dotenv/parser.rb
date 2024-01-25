@@ -2,11 +2,11 @@ require "dotenv/substitutions/variable"
 require "dotenv/substitutions/command" if RUBY_VERSION > "1.8.7"
 
 module Dotenv
+  # Error raised when encountering a syntax error while parsing a .env file.
   class FormatError < SyntaxError; end
 
-  # This class enables parsing of a string for key value pairs to be returned
-  # and stored in the Environment. It allows for variable substitutions and
-  # exporting of variables.
+  # Parses the `.env` file format into key/value pairs.
+  # It allows for variable substitutions, command substitutions, and exporting of variables.
   class Parser
     @substitutions =
       [Dotenv::Substitutions::Variable, Dotenv::Substitutions::Command]

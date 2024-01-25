@@ -1,6 +1,13 @@
 require "active_support/log_subscriber"
 
 module Dotenv
+  # Logs instrumented events
+  #
+  # Usage:
+  #   require "active_support/notifications"
+  #   require "dotenv/log_subscriber"
+  #   Dotenv.instrumenter = ActiveSupport::Notifications
+  #
   class LogSubscriber < ActiveSupport::LogSubscriber
     attach_to :dotenv
 

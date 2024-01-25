@@ -4,7 +4,7 @@ require "dotenv/template"
 require "optparse"
 
 module Dotenv
-  # The command line interface
+  # The `dotenv` command line interface. Run `$ dotenv --help` to see usage.
   class CLI < OptionParser
     attr_reader :argv, :filenames, :overwrite
 
