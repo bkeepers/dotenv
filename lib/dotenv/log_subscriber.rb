@@ -9,13 +9,15 @@ module Dotenv
     end
 
     def load(event)
-      diff = event.payload[:diff]
       env = event.payload[:env]
 
-      # Only show the keys that were added or changed
-      changed = env.slice(*(diff.added.keys + diff.changed.keys)).keys.map { |key| color_var(key) }
+      info "Loaded #{color_filename(env.filename)}"
+    end
 
-      info "Set #{changed.to_sentence} from #{color_filename(env.filename)}" if changed.any?
+    def update(event)
+      diff = event.payload[:diff]
+      changed = diff.env.keys.map { |key| color_var(key) }
+      debug "Set #{changed.to_sentence}" if diff.any?
     end
 
     def save(event)

@@ -12,21 +12,11 @@ module Dotenv
     end
 
     def load
-      update Parser.call(read, overwrite: @overwrite)
+      update Parser.call(read, overwrite: overwrite)
     end
 
     def read
       File.open(@filename, "rb:bom|utf-8", &:read)
-    end
-
-    def apply
-      each do |k, v|
-        if @overwrite
-          ENV[k] = v
-        else
-          ENV[k] ||= v
-        end
-      end
     end
   end
 end

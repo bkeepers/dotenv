@@ -11,31 +11,35 @@ describe Dotenv::LogSubscriber do
     Dotenv::Rails.logger = Logger.new(logs)
   end
 
-  context "set" do
-    it "logs when a new instance variable is set" do
+  describe "load" do
+    it "logs when a file is loaded" do
       Dotenv.load(fixture_path("plain.env"))
-      expect(logs.string).to match(/Set.*PLAIN.*from.*plain.env/)
+      expect(logs.string).to match(/Loaded.*plain.env/)
+      expect(logs.string).to match(/Set.*PLAIN/)
+    end
+  end
+
+  context "update" do
+    it "logs when a new instance variable is set" do
+      Dotenv.update({"PLAIN" => "true"})
+      expect(logs.string).to match(/Set.*PLAIN/)
     end
 
     it "logs when an instance variable is overwritten" do
       ENV["PLAIN"] = "nope"
-      Dotenv.load(fixture_path("plain.env"), overwrite: true)
-      expect(logs.string).to match(/Set.*PLAIN.*from.*plain.env/)
+      Dotenv.update({"PLAIN" => "true"}, overwrite: true)
+      expect(logs.string).to match(/Set.*PLAIN/)
     end
 
     it "does not log when an instance variable is not overwritten" do
-      # load everything once and clear the logs
-      Dotenv.load(fixture_path("plain.env"))
-      logs.truncate(0)
-
-      # load again
-      Dotenv.load(fixture_path("plain.env"))
-      expect(logs.string).not_to match(/Set.*plain.env/i)
+      ENV["FOO"] = "existing"
+      Dotenv.update({"FOO" => "new"})
+      expect(logs.string).not_to match(/FOO/)
     end
 
     it "does not log when an instance variable is unchanged" do
       ENV["PLAIN"] = "true"
-      Dotenv.load(fixture_path("plain.env"), overwrite: true)
+      Dotenv.update({"PLAIN" => "true"}, overwrite: true)
       expect(logs.string).not_to match(/PLAIN/)
     end
   end

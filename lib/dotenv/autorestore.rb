@@ -17,7 +17,13 @@ if defined?(ActiveSupport)
       setup { Dotenv.save }
 
       # Restore ENV after each test
-      teardown { Dotenv.restore }
+      teardown do
+        Dotenv.restore
+      rescue ThreadError => e
+        # Restore will fail if running tests in parallel.
+        warn e.message
+        warn "Set `config.dotenv.autorestore = false` in `config/initializers/test.rb`" if defined?(Dotenv::Rails)
+      end
     end
   end
 end
