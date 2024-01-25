@@ -1,6 +1,6 @@
 # Changelog
 
-[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v2.8.1...main)
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v3.0.0...main)
 
 ## 3.0.0
 
