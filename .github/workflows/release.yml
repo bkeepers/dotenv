@@ -12,15 +12,11 @@ jobs:
       id-token: write # mandatory for trusted publishing
       contents: write # required for `rake release` to push the release tag
     steps:
-      - uses: actions/checkout@v4
-      - name: Inspect ref
-        run: |
-          echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
-          echo "Tag name from github.ref_name: ${{ github.ref_name }}"
-
-      # - name: Set up Ruby
-      #   uses: ruby/setup-ruby@v1
-      #   with:
-      #     bundler-cache: true
-      #     ruby-version: ruby
-      # - uses: rubygems/release-gem@v1
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          ruby-version: ruby
+      - name: Bump version
+        run: gem bump --push --version ${GITHUB_REF_NAME#v}
+      - uses: rubygems/release-gem@v1
