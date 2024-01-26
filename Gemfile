@@ -3,7 +3,6 @@ gemspec name: "dotenv"
 gemspec name: "dotenv-rails"
 
 gem "railties", "~> #{ENV["RAILS_VERSION"] || "7.1"}"
-gem "gem-release"
 
 group :guard do
   gem "guard-rspec"
