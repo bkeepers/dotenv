@@ -107,11 +107,59 @@ gem 'gem-that-requires-env-variables'
 
 ### Customizing Rails
 
-Dotenv will load the following files depending on `RAILS_ENV`, with the last file listed having the highest precedence:
+Dotenv will load the following files depending on `RAILS_ENV`, with the first file having the highest precedence, and `.env` having the lowest precedence:
 
-* **development**: `.env`, `.env.development`, `.env.local`, `.env.development.local`
-* **test**: `.env`, `.env.test`, `.env.test.local` - Note that it will **not** load `.env.local`.
-* **development**: `.env`, `.env.production`, `.env.local`, `.env.production.local`
+<table>
+  <thead>
+    <tr>
+      <th>Priority</th>
+      <th colspan="3">Environment</th>
+      <th><code>.gitignore</code>it?</th>
+      <th>Notes</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>development</th>
+      <th>test</th>
+      <th>production</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tr>
+    <td>highest</td>
+    <td><code>.env.development.local</code></td>
+    <td><code>.env.test.local</code></td>
+    <td><code>.env.production.local</code></td>
+    <td>Yes</td>
+    <td>Environment-specific local overrides</td>
+  </tr>
+  <tr>
+    <td>2nd</td>
+    <td><code>.env.local</code></td>
+    <td><strong>N/A</strong></td>
+    <td><code>.env.local</code></td>
+    <td>Yes</td>
+    <td>Local overrides</td>
+  </tr>
+  <tr>
+    <td>3rd</td>
+    <td><code>.env.development</code></td>
+    <td><code>.env.test</code></td>
+    <td><code>.env.production</code></td>
+    <td>No</td>
+    <td>Shared environment-specific variables</td>
+  </tr>
+  <tr>
+    <td>last</td>
+    <td><code>.env</code></td>
+    <td><code>.env</code></td>
+    <td><code>.env</code></td>
+    <td><a href="#should-i-commit-my-env-file">Maybe</a></td>
+    <td>Shared for all environments</td>
+  </tr>
+</table>
+
 
 These files are loaded during the `before_configuration` callback, which is fired when the `Application` constant is defined in `config/application.rb` with `class Application < Rails::Application`. If you need it to be initialized sooner, or need to customize the loading process, you can do so at the top of `application.rb`
 
