@@ -32,7 +32,7 @@ module Dotenv
           root.join(".env.#{env}"),
           root.join(".env")
         ].compact,
-        autorestore: env.test?
+        autorestore: env.test? && !defined?(ClimateControl) && !defined?(IceAge)
       )
     end
 

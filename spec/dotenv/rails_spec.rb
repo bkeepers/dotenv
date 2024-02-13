@@ -150,5 +150,17 @@ describe Dotenv::Rails do
       expect(Dotenv::Rails.instance).not_to receive(:require).with("dotenv/autorestore")
       application.initialize!
     end
+
+    it "is not loaded if ClimateControl is defined" do
+      stub_const("ClimateControl", Module.new)
+      expect(Dotenv::Rails.instance).not_to receive(:require).with("dotenv/autorestore")
+      application.initialize!
+    end
+
+    it "is not loaded if IceAge is defined" do
+      stub_const("IceAge", Module.new)
+      expect(Dotenv::Rails.instance).not_to receive(:require).with("dotenv/autorestore")
+      application.initialize!
+    end
   end
 end
