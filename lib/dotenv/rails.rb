@@ -1,3 +1,9 @@
+# Since rubygems doesn't support optional dependencies, we have to manually check
+unless Gem::Requirement.new(">= 6.1").satisfied_by?(Gem::Version.new(Rails.version))
+  warn "dotenv 3.0 only supports Rails 6.1 or later. Use dotenv ~> 2.0."
+  return
+end
+
 require "dotenv"
 require "dotenv/replay_logger"
 require "dotenv/log_subscriber"
