@@ -65,6 +65,17 @@ describe Dotenv::Rails do
         ]
       )
     end
+
+    it "returns the relatives paths to Rails.root" do
+      expect(Dotenv::Rails.files.last).to eql(fixture_path(".env"))
+      allow(Rails).to receive(:root).and_return(Pathname.new("/tmp"))
+      expect(Dotenv::Rails.files.last.to_s).to eql("/tmp/.env")
+    end
+
+    it "returns absolute paths unchanged" do
+      Dotenv::Rails.files = ["/tmp/.env"]
+      expect(Dotenv::Rails.files).to eql([Pathname.new("/tmp/.env")])
+    end
   end
 
   it "watches other loaded files with Spring" do

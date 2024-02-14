@@ -18,7 +18,7 @@ end
 module Dotenv
   # Rails integration for using Dotenv to load ENV variables from a file
   class Rails < ::Rails::Railtie
-    delegate :files, :files=, :overwrite, :overwrite=, :autorestore, :autorestore=, :logger, :logger=, to: "config.dotenv"
+    delegate :files=, :overwrite, :overwrite=, :autorestore, :autorestore=, :logger, :logger=, to: "config.dotenv"
 
     def initialize
       super()
@@ -27,13 +27,18 @@ module Dotenv
         logger: Dotenv::ReplayLogger.new,
         overwrite: false,
         files: [
-          root.join(".env.#{env}.local"),
-          (root.join(".env.local") unless env.test?),
-          root.join(".env.#{env}"),
-          root.join(".env")
+          ".env.#{env}.local",
+          (".env.local" unless env.test?),
+          ".env.#{env}",
+          ".env"
         ].compact,
         autorestore: env.test?
       )
+    end
+
+    # The list of files to load, joined with Rails.root
+    def files
+      config.dotenv.files.map { |file| root.join(file) }
     end
 
     # Public: Load dotenv
