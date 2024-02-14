@@ -2,6 +2,16 @@
 
 [Unreleased changes](https://github.com/bkeepers/dotenv/compare/v3.0.0...main)
 
+## 3.0.1
+
+**What's Changed**
+
+* Disable autorestore if using climate_control or ice_age by @bkeepers in https://github.com/bkeepers/dotenv/pull/483
+* Join files to Rails.root at load time by @bkeepers in https://github.com/bkeepers/dotenv/pull/484
+* Manually check optional Rails dependency version by @bkeepers in https://github.com/bkeepers/dotenv/pull/481
+
+**Full Changelog**: https://github.com/bkeepers/dotenv/compare/v3.0.0...v3.0.1
+
 ## 3.0.0
 
 **Breaking Changes**
