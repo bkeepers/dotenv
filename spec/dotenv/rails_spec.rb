@@ -47,10 +47,10 @@ describe Dotenv::Rails do
 
       expect(Dotenv::Rails.files).to eql(
         [
-          application.root.join(".env.development.local"),
-          application.root.join(".env.local"),
-          application.root.join(".env.development"),
-          application.root.join(".env")
+          ".env.development.local",
+          ".env.local",
+          ".env.development",
+          ".env"
         ]
       )
     end
@@ -59,22 +59,16 @@ describe Dotenv::Rails do
       Rails.env = "test"
       expect(Dotenv::Rails.files).to eql(
         [
-          application.root.join(".env.test.local"),
-          application.root.join(".env.test"),
-          application.root.join(".env")
+          ".env.test.local",
+          ".env.test",
+          ".env"
         ]
       )
     end
 
-    it "returns the relatives paths to Rails.root" do
-      expect(Dotenv::Rails.files.last).to eql(fixture_path(".env"))
-      allow(Rails).to receive(:root).and_return(Pathname.new("/tmp"))
-      expect(Dotenv::Rails.files.last.to_s).to eql("/tmp/.env")
-    end
-
-    it "returns absolute paths unchanged" do
-      Dotenv::Rails.files = ["/tmp/.env"]
-      expect(Dotenv::Rails.files).to eql([Pathname.new("/tmp/.env")])
+    it "can be modified in place" do
+      Dotenv::Rails.files << ".env.shared"
+      expect(Dotenv::Rails.files.last).to eq(".env.shared")
     end
   end
 
@@ -108,6 +102,19 @@ describe Dotenv::Rails do
     it "loads configured files" do
       Dotenv::Rails.files = [fixture_path("plain.env")]
       expect { subject }.to change { ENV["PLAIN"] }.from(nil).to("true")
+    end
+
+    it "loads file relative to Rails.root" do
+      allow(Rails).to receive(:root).and_return(Pathname.new("/tmp"))
+      Dotenv::Rails.files = [".env"]
+      expect(Dotenv).to receive(:load).with("/tmp/.env", {overwrite: false})
+      subject
+    end
+
+    it "returns absolute paths unchanged" do
+      Dotenv::Rails.files = ["/tmp/.env"]
+      expect(Dotenv).to receive(:load).with("/tmp/.env", {overwrite: false})
+      subject
     end
 
     context "with overwrite = true" do
