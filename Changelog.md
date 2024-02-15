@@ -2,6 +2,10 @@
 
 [Unreleased changes](https://github.com/bkeepers/dotenv/compare/v3.0.0...main)
 
+## 3.0.2
+
+* Fix: Restore ability to mutate Dotenv::Rails.files by @bkeepers in https://github.com/bkeepers/dotenv/pull/486
+
 ## 3.0.1
 
 **What's Changed**
