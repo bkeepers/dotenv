@@ -5,6 +5,10 @@ module Dotenv
       @logs = []
     end
 
+    def level
+      Logger::Severity::DEBUG
+    end
+
     def method_missing(name, *args, &block)
       @logs.push([name, args, block])
     end
