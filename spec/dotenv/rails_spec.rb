@@ -89,6 +89,22 @@ describe Dotenv::Rails do
   context "load" do
     subject { application.initialize! }
 
+    it "use the same rails logger object for simple loggers" do
+      subject
+      expect(application.config.dotenv.logger).to equal(::Rails.logger)
+    end
+
+    it "use a tag when rails is configured to use a tagged logger" do
+      application.config.logger = ActiveSupport::Logger.new(StringIO.new)
+        .tap { |logger| logger.formatter = ::Logger::Formatter.new }
+        .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
+      allow(application.config.logger).to receive(:tagged).and_call_original
+
+      subject
+
+      expect(application.config.logger).to have_received(:tagged).with("dotenv")
+    end
+
     it "watches .env with Spring" do
       subject
       expect(Spring.watcher).to include(fixture_path(".env").to_s)
