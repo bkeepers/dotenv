@@ -31,6 +31,7 @@ describe Dotenv::Rails do
   before do
     Rails.env = "test"
     Rails.application = nil
+    Rails.logger = nil
     Spring.watcher = Set.new # Responds to #add
 
     begin
