@@ -3,13 +3,13 @@ require "rails"
 require "dotenv/rails"
 
 describe Dotenv::Rails do
-  let(:log_io) { StringIO.new }
+  let(:log_output) { StringIO.new }
   let(:application) do
-    log_io = self.log_io
+    log_output = self.log_output
     Class.new(Rails::Application) do
       config.load_defaults Rails::VERSION::STRING.to_f
       config.eager_load = false
-      config.logger = ActiveSupport::Logger.new(log_io)
+      config.logger = ActiveSupport::Logger.new(log_output)
       config.root = fixture_path
 
       # Remove method fails since app is reloaded for each test
@@ -201,16 +201,14 @@ describe Dotenv::Rails do
   end
 
   describe "logger" do
-    it "defaults to ReplayLogger" do
-      expect(Dotenv::Rails.logger).to be_a(Dotenv::ReplayLogger)
-      application.initialize!
-      expect(Dotenv::Rails.logger).to be_a(ActiveSupport::BroadcastLogger)
-    end
-
     it "replays to Rails.logger" do
+      expect(Dotenv::Rails.logger).to be_a(Dotenv::ReplayLogger)
       Dotenv::Rails.logger.debug("test")
+
       application.initialize!
-      expect(log_io.string).to include("test")
+
+      expect(Dotenv::Rails.logger).not_to be_a(Dotenv::ReplayLogger)
+      expect(log_output.string).to include("test")
     end
   end
 end
