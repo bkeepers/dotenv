@@ -2,6 +2,20 @@
 
 [Unreleased changes](https://github.com/bkeepers/dotenv/compare/v3.0.0...main)
 
+## 3.0.3
+
+**What's Changed**
+* Solve circular require warning by @martijnbolhuis in https://github.com/bkeepers/dotenv/pull/491
+* Use tagged logger already configured on Rails by @kriansa in https://github.com/bkeepers/dotenv/pull/489
+* Fix exception on startup for Rails 7.1.0 by @bkeepers and @zspencer in https://github.com/bkeepers/dotenv/pull/492
+
+**New Contributors**
+* @zspencer made their first contribution in https://github.com/bkeepers/dotenv/pull/492
+* @martijnbolhuis made their first contribution in https://github.com/bkeepers/dotenv/pull/491
+* @kriansa made their first contribution in https://github.com/bkeepers/dotenv/pull/489
+
+**Full Changelog**: https://github.com/bkeepers/dotenv/compare/v3.0.2...v3.0.3
+
 ## 3.0.2
 
 * Fix: Restore ability to mutate Dotenv::Rails.files by @bkeepers in https://github.com/bkeepers/dotenv/pull/486
