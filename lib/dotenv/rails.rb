@@ -4,7 +4,6 @@ unless Gem::Requirement.new(">= 6.1").satisfied_by?(Gem::Version.new(Rails.versi
   return
 end
 
-require "dotenv"
 require "dotenv/replay_logger"
 require "dotenv/log_subscriber"
 
