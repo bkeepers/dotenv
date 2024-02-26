@@ -1,1 +1,1 @@
-require "dotenv/rails"
+require "dotenv"
