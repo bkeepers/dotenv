@@ -99,11 +99,10 @@ describe Dotenv::Rails do
       application.config.logger = ActiveSupport::Logger.new(StringIO.new)
         .tap { |logger| logger.formatter = ::Logger::Formatter.new }
         .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
-      allow(application.config.logger).to receive(:tagged).and_call_original
+
+      expect(application.config.logger).to receive(:tagged).with("dotenv").and_call_original
 
       subject
-
-      expect(application.config.logger).to have_received(:tagged).with("dotenv")
     end
 
     it "watches .env with Spring" do
