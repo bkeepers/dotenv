@@ -89,7 +89,8 @@ module Dotenv
 
     initializer "dotenv", after: :initialize_logger do |app|
       # Set up a new logger once Rails has initialized the logger and replay logs
-      new_logger = ActiveSupport::TaggedLogging.new(::Rails.logger).tagged("dotenv")
+      new_logger = ::Rails.logger
+      new_logger = new_logger.tagged("dotenv") if new_logger.respond_to?(:tagged)
       logger.replay new_logger if logger.respond_to?(:replay)
       self.logger = new_logger
     end
