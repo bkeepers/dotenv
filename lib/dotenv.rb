@@ -1,3 +1,4 @@
+require "dotenv/version"
 require "dotenv/parser"
 require "dotenv/environment"
 require "dotenv/missing_keys"
