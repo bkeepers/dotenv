@@ -23,7 +23,7 @@ end
 module Dotenv
   # Rails integration for using Dotenv to load ENV variables from a file
   class Rails < ::Rails::Railtie
-    delegate :files, :files=, :overwrite, :overwrite=, :autorestore, :autorestore=, :logger, :logger=, to: "config.dotenv"
+    delegate :files, :files=, :overwrite, :overwrite=, :autorestore, :autorestore=, :logger, to: "config.dotenv"
 
     def initialize
       super()
@@ -61,6 +61,12 @@ module Dotenv
       ::Rails.root || Pathname.new(ENV["RAILS_ROOT"] || Dir.pwd)
     end
 
+    # Set a new logger and replay logs
+    def logger=(new_logger)
+      logger.replay new_logger if logger.is_a?(ReplayLogger)
+      config.dotenv.logger = new_logger
+    end
+
     # The current environment that the app is running in.
     #
     # When running `rake`, the Rails application is initialized in development, so we have to
@@ -88,11 +94,9 @@ module Dotenv
     end
 
     initializer "dotenv", after: :initialize_logger do |app|
-      # Set up a new logger once Rails has initialized the logger and replay logs
-      new_logger = ::Rails.logger
-      new_logger = new_logger.tagged("dotenv") if new_logger.respond_to?(:tagged)
-      logger.replay new_logger if logger.respond_to?(:replay)
-      self.logger = new_logger
+      if logger.is_a?(ReplayLogger)
+        self.logger = ActiveSupport::TaggedLogging.new(::Rails.logger).tagged("dotenv")
+      end
     end
 
     initializer "dotenv.deprecator" do |app|
