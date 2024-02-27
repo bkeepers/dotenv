@@ -1,6 +1,6 @@
 # Changelog
 
-[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v3.0.0...main)
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v3.1.0...main)
 
 ## 3.1.0
 
@@ -18,6 +18,8 @@
     end
   end
   ```
+
+**Full Changelog**: https://github.com/bkeepers/dotenv/compare/v3.0.3...v3.1.0
 
 ## 3.0.3
 
