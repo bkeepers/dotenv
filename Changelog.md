@@ -2,6 +2,23 @@
 
 [Unreleased changes](https://github.com/bkeepers/dotenv/compare/v3.0.0...main)
 
+## 3.1.0
+
+**What's Changed**
+* Fix regression with semantic-logger, allow setting custom logger by @bkeepers in https://github.com/bkeepers/dotenv/pull/494
+  ```ruby
+  # config/application.rb
+
+  # Set a custom dotenv logger
+  Dotenv::Rails.logger = MyCustomLogger.new
+
+  module YourApp
+    class Application < Rails::Application
+      # …
+    end
+  end
+  ```
+
 ## 3.0.3
 
 **What's Changed**
