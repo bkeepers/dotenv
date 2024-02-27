@@ -54,7 +54,7 @@ require 'dotenv'
 Dotenv.load('file1.env', 'file2.env')
 ```
 
-## Autorestore in tests
+### Autorestore in tests
 
 Since 3.0, dotenv in a Rails app will automatically restore `ENV` after each test. This means you can modify `ENV` in your tests without fear of leaking state to other tests. It works with both `ActiveSupport::TestCase` and `Rspec`.
 
@@ -181,6 +181,8 @@ Available options:
 
 * `Dotenv::Rails.files` - list of files to be loaded, in order of precedence.
 * `Dotenv::Rails.overwrite` - Overwrite exiting `ENV` variables with contents of `.env*` files
+* `Dotenv::Rails.logger` - The logger to use for dotenv's logging. Defaults to `Rails.logger`
+* `Dotenv::Rails.autorestore` - Enable or disable [autorestore](#autorestore-in-tests)
 
 ### Multi-line values
 
