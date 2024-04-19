@@ -89,6 +89,20 @@ describe "dotenv binary" do
       expect(@buffer.string).to eq("export FOO=FOO\nexport FOO2=FOO2\n")
     end
 
+    it "templates multi-line variables" do
+      @input = StringIO.new(<<~TEXT)
+        FOO=BAR
+        FOO2="BAR2
+        BAR2"
+      TEXT
+      allow(File).to receive(:open).with(@origin_filename, "r").and_yield(@input)
+      allow(File).to receive(:open).with(@template_filename, "w").and_yield(@buffer)
+      # call the function that writes to the file
+      Dotenv::CLI.new(["-t", @origin_filename])
+      # reading the buffer and checking its content.
+      expect(@buffer.string).to eq("FOO=FOO\nFOO2=FOO2\n")
+    end
+
     it "ignores blank lines" do
       @input = StringIO.new("\nFOO=BAR\nFOO2=BAR2")
       allow(File).to receive(:open).with(@origin_filename, "r").and_yield(@input)
