@@ -325,6 +325,17 @@ describe Dotenv do
       end.join
       expect(ENV["MODIFIED"]).to eq("true")
     end
+
+    it "is a noop if nil state provided" do
+      expect { Dotenv.restore(nil) }.not_to raise_error
+    end
+
+    it "is a noop if no previously saved state" do
+      # Clear state saved in setup
+      expect(Dotenv.instance_variable_get(:@diff)).to be_instance_of(Dotenv::Diff)
+      Dotenv.instance_variable_set(:@diff, nil)
+      expect { Dotenv.restore }.not_to raise_error
+    end
   end
 
   describe "modify" do

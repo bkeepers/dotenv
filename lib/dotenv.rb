@@ -74,6 +74,9 @@ module Dotenv
   # @param env [Hash] Hash of keys and values to restore, defaults to the last saved state
   # @param safe [Boolean] Is it safe to modify `ENV`? Defaults to `true` in the main thread, otherwise raises an error.
   def restore(env = @diff&.a, safe: Thread.current == Thread.main)
+    # No previously saved or provided state to restore
+    return unless env
+
     diff = Dotenv::Diff.new(b: env)
     return unless diff.any?
 
