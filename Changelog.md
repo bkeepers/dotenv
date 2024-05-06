@@ -1,6 +1,25 @@
 # Changelog
 
-[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v3.1.0...main)
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v3.1.2...main)
+
+## 3.1.2
+
+* Fix: "can't modify frozen Hash" when stubbing ENV by @bkeepers in https://github.com/bkeepers/dotenv/pull/504
+
+**Full Changelog**: https://github.com/bkeepers/dotenv/compare/v3.1.1...v3.1.2
+
+## 3.1.1
+
+**What's Changed**
+* Require version file so VERSION is available by @javierjulio in https://github.com/bkeepers/dotenv/pull/495
+* Fix template (-t) handling of multi-line variables by @maxjacobson in https://github.com/bkeepers/dotenv/pull/502
+* Guard against restore being called with no previously saved state by @bkeepers in https://github.com/bkeepers/dotenv/pull/503
+
+**New Contributors**
+* @javierjulio made their first contribution in https://github.com/bkeepers/dotenv/pull/495
+* @maxjacobson made their first contribution in https://github.com/bkeepers/dotenv/pull/502
+
+**Full Changelog**: https://github.com/bkeepers/dotenv/compare/v3.1.0...v3.1.1
 
 ## 3.1.0
 
