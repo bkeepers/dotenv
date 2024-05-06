@@ -336,6 +336,15 @@ describe Dotenv do
       Dotenv.instance_variable_set(:@diff, nil)
       expect { Dotenv.restore }.not_to raise_error
     end
+
+    it "can save and restore stubbed ENV" do
+      stub_const("ENV", ENV.to_h.merge("STUBBED" => "1"))
+      Dotenv.save
+      ENV["MODIFIED"] = "1"
+      Dotenv.restore
+      expect(ENV["STUBBED"]).to eq("1")
+      expect(ENV["MODIFED"]).to be(nil)
+    end
   end
 
   describe "modify" do
