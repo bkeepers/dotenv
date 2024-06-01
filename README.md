@@ -276,7 +276,7 @@ You can use the `-t` or `--template` flag on the dotenv cli to create a template
 ```console
 $ dotenv -t .env
 ```
-A template will be created in your working directory named `{FINAME}.template`. So in the above example, it would create a `.env.template` file.
+A template will be created in your working directory named `{FILENAME}.template`. So in the above example, it would create a `.env.template` file.
 
 The template will contain all the environment variables in your `.env` file but with their values set to the variable names.
 
