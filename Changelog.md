@@ -76,7 +76,7 @@
 * `\n` is no longer expanded into a newline in quoted strings. Use multi-line strings with real line breaks, or set `DOTENV_LINEBREAK_MODE=legacy` to preserve the old behavior. @nitsujri https://github.com/bkeepers/dotenv/pull/423
 * `ENV` will be [automatically restored between tests](https://github.com/bkeepers/dotenv#autorestore-in-tests) (`ActiveSupport::TestCase` and `Rspec`). https://github.com/bkeepers/dotenv/pull/472, https://github.com/bkeepers/dotenv/pull/475
 * Fixed precedence when using `Dotenv::Rails.overload`. So now `.env.development.local` will overwrite `.env.local`, which will overwrite `.env.development`, which will overwrite `.env`. @eriklovmo - https://github.com/bkeepers/dotenv/pull/460
-* The instrumentation event `dotenv.load` has been renamed to `load.dotenv` to properly make use of namespaces in [ActiveSupport::Notifications](https://guides.rubyonrails.org/active_support_instrumentation.html) https://github.com/bkeepers/dotenv/pull/472
+* The instrumentation event `dotenv.load` has been renamed to `load.dotenv` to properly make use of namespaces in [ActiveSupport::Notifications](https://guides.rubyonrails.org/v7.0/active_support_instrumentation.html#creating-custom-events) https://github.com/bkeepers/dotenv/pull/473
 
 **Other improvements**
 
