@@ -17,5 +17,5 @@ Gem::Specification.new "dotenv", Dotenv::VERSION do |gem|
 
   gem.required_ruby_version = ">= 3.0"
 
-  gem.metadata["changelog_uri"] = gem.homepage + "/blob/master/Changelog.md"
+  gem.metadata["changelog_uri"] = "https://github.com/bkeepers/dotenv/releases"
 end
