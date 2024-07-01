@@ -180,7 +180,7 @@ end
 Available options:
 
 * `Dotenv::Rails.files` - list of files to be loaded, in order of precedence.
-* `Dotenv::Rails.overwrite` - Overwrite exiting `ENV` variables with contents of `.env*` files
+* `Dotenv::Rails.overwrite` - Overwrite existing `ENV` variables with contents of `.env*` files
 * `Dotenv::Rails.logger` - The logger to use for dotenv's logging. Defaults to `Rails.logger`
 * `Dotenv::Rails.autorestore` - Enable or disable [autorestore](#autorestore-in-tests)
 
