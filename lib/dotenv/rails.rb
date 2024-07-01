@@ -26,7 +26,7 @@ module Dotenv
     delegate :files, :files=, :overwrite, :overwrite=, :autorestore, :autorestore=, :logger, to: "config.dotenv"
 
     def initialize
-      super()
+      super
       config.dotenv = ActiveSupport::OrderedOptions.new.update(
         # Rails.logger is not available yet, so we'll save log messages and replay them when it is
         logger: Dotenv::ReplayLogger.new,
