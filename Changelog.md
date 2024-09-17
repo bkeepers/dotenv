@@ -1,6 +1,23 @@
 # Changelog
 
-[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v3.1.2...main)
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v3.1.3...main)
+
+## 3.1.3
+
+* Only use Spring if already loaded by @runephilosof-abtion in https://github.com/bkeepers/dotenv/pull/511
+* Doc Updates:
+  * Spell out 'FILENAME' in readme by @mikegee in https://github.com/bkeepers/dotenv/pull/505
+  * Provide a 'Changelog' link on rubygems.org/gems/dotenv by @mark-young-atg in https://github.com/bkeepers/dotenv/pull/506
+  * README.md: typo "exiting" by @olleolleolle in https://github.com/bkeepers/dotenv/pull/508
+* cleanup: Run standard:fix by @olleolleolle in https://github.com/bkeepers/dotenv/pull/509
+
+### New Contributors
+* @mikegee made their first contribution in https://github.com/bkeepers/dotenv/pull/505
+* @mark-young-atg made their first contribution in https://github.com/bkeepers/dotenv/pull/506
+* @olleolleolle made their first contribution in https://github.com/bkeepers/dotenv/pull/508
+* @runephilosof-abtion made their first contribution in https://github.com/bkeepers/dotenv/pull/511
+
+**Full Changelog**: https://github.com/bkeepers/dotenv/compare/v3.1.2...v3.1.3
 
 ## 3.1.2
 
