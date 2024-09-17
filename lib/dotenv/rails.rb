@@ -10,14 +10,11 @@ require "dotenv/log_subscriber"
 Dotenv.instrumenter = ActiveSupport::Notifications
 
 # Watch all loaded env files with Spring
-begin
-  require "spring/commands"
+if defined?(Spring)
   ActiveSupport::Notifications.subscribe("load.dotenv") do |*args|
     event = ActiveSupport::Notifications::Event.new(*args)
     Spring.watch event.payload[:env].filename if Rails.application
   end
-rescue LoadError, ArgumentError
-  # Spring is not available
 end
 
 module Dotenv
