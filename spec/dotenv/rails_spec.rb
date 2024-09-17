@@ -34,7 +34,6 @@ describe Dotenv::Rails do
     Rails.env = "test"
     Rails.application = nil
     Rails.logger = nil
-    Spring.watcher = Set.new # Responds to #add
 
     begin
       # Remove the singleton instance if it exists
@@ -76,6 +75,7 @@ describe Dotenv::Rails do
   end
 
   it "watches other loaded files with Spring" do
+    stub_spring
     application.initialize!
     path = fixture_path("plain.env")
     Dotenv.load(path)
@@ -93,6 +93,7 @@ describe Dotenv::Rails do
     subject { application.initialize! }
 
     it "watches .env with Spring" do
+      stub_spring
       subject
       expect(Spring.watcher).to include(fixture_path(".env").to_s)
     end
@@ -203,5 +204,15 @@ describe Dotenv::Rails do
       application.initialize!
       expect(Dotenv::Rails.logger).to be(logger)
     end
+  end
+
+  def stub_spring
+    spring = Struct.new("Spring", :watcher) do
+      def watch(path)
+        watcher.add path
+      end
+    end
+
+    stub_const "Spring", spring.new(Set.new)
   end
 end
