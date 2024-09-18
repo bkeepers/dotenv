@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# exit on error, export all vars
+set -ea
+
+# Load the given files
+source $@
+
+# Print the environment, null-separated, without the given vars
+env -0 -u _ -u SHLVL
