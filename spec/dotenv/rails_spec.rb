@@ -75,11 +75,19 @@ describe Dotenv::Rails do
   end
 
   it "watches other loaded files with Spring" do
-    stub_spring
+    stub_spring(load_watcher: true)
     application.initialize!
     path = fixture_path("plain.env")
     Dotenv.load(path)
     expect(Spring.watcher).to include(path.to_s)
+  end
+
+  it "doesn't raise an error if Spring.watch is not defined" do
+    stub_spring(load_watcher: false)
+
+    expect {
+      application.initialize!
+    }.to_not raise_error
   end
 
   context "before_configuration" do
@@ -93,7 +101,7 @@ describe Dotenv::Rails do
     subject { application.initialize! }
 
     it "watches .env with Spring" do
-      stub_spring
+      stub_spring(load_watcher: true)
       subject
       expect(Spring.watcher).to include(fixture_path(".env").to_s)
     end
@@ -206,13 +214,19 @@ describe Dotenv::Rails do
     end
   end
 
-  def stub_spring
-    spring = Struct.new("Spring", :watcher) do
-      def watch(path)
-        watcher.add path
+  def stub_spring(load_watcher: true)
+    spring = Module.new do
+      if load_watcher
+        def self.watcher
+          @watcher ||= Set.new
+        end
+
+        def self.watch(path)
+          watcher.add path
+        end
       end
     end
 
-    stub_const "Spring", spring.new(Set.new)
+    stub_const "Spring", spring
   end
 end
