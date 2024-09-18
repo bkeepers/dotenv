@@ -75,7 +75,7 @@ describe Dotenv::Rails do
   end
 
   it "watches other loaded files with Spring" do
-    stub_spring
+    stub_spring(load_watcher: true)
     application.initialize!
     path = fixture_path("plain.env")
     Dotenv.load(path)
@@ -101,7 +101,7 @@ describe Dotenv::Rails do
     subject { application.initialize! }
 
     it "watches .env with Spring" do
-      stub_spring
+      stub_spring(load_watcher: true)
       subject
       expect(Spring.watcher).to include(fixture_path(".env").to_s)
     end
@@ -215,15 +215,15 @@ describe Dotenv::Rails do
   end
 
   def stub_spring(load_watcher: true)
-    spring = Module.new
+    spring = Module.new do
+      if load_watcher
+        def self.watcher
+          @watcher ||= Set.new
+        end
 
-    if load_watcher
-      def spring.watcher
-        @watcher ||= Set.new
-      end
-
-      def spring.watch(path)
-        watcher.add path
+        def self.watch(path)
+          watcher.add path
+        end
       end
     end
 
