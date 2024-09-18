@@ -2,6 +2,15 @@
 
 [Unreleased changes](https://github.com/bkeepers/dotenv/compare/v3.1.3...main)
 
+## 3.1.4
+
+* Fix an error when only the `Spring::Client` is loaded by @alpaca-tc in https://github.com/bkeepers/dotenv/pull/512
+
+### New Contributors
+* @alpaca-tc made their first contribution in https://github.com/bkeepers/dotenv/pull/512
+
+**Full Changelog**: https://github.com/bkeepers/dotenv/compare/v3.1.3...v3.1.4
+
 ## 3.1.3
 
 * Only use Spring if already loaded by @runephilosof-abtion in https://github.com/bkeepers/dotenv/pull/511
