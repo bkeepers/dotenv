@@ -11,7 +11,7 @@ Dotenv.instrumenter = ActiveSupport::Notifications
 
 # Watch all loaded env files with Spring
 ActiveSupport::Notifications.subscribe("load.dotenv") do |*args|
-  if defined?(Spring)
+  if defined?(Spring) && Spring.respond_to?(:watch)
     event = ActiveSupport::Notifications::Event.new(*args)
     Spring.watch event.payload[:env].filename if Rails.application
   end

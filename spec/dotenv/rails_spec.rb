@@ -82,6 +82,14 @@ describe Dotenv::Rails do
     expect(Spring.watcher).to include(path.to_s)
   end
 
+  it "doesn't raise an error if Spring.watch is not defined" do
+    stub_spring(load_watcher: false)
+
+    expect {
+      application.initialize!
+    }.to_not raise_error
+  end
+
   context "before_configuration" do
     it "calls #load" do
       expect(Dotenv::Rails.instance).to receive(:load)
@@ -206,13 +214,19 @@ describe Dotenv::Rails do
     end
   end
 
-  def stub_spring
-    spring = Struct.new("Spring", :watcher) do
-      def watch(path)
+  def stub_spring(load_watcher: true)
+    spring = Module.new
+
+    if load_watcher
+      def spring.watcher
+        @watcher ||= Set.new
+      end
+
+      def spring.watch(path)
         watcher.add path
       end
     end
 
-    stub_const "Spring", spring.new(Set.new)
+    stub_const "Spring", spring
   end
 end
