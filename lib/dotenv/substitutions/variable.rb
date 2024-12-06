@@ -18,11 +18,10 @@ module Dotenv
           \}?           # closing brace
         /xi
 
-        def call(value, env, overwrite: false)
-          combined_env = overwrite ? ENV.to_h.merge(env) : env.merge(ENV)
+        def call(value, env)
           value.gsub(VARIABLE) do |variable|
             match = $LAST_MATCH_INFO
-            substitute(match, variable, combined_env)
+            substitute(match, variable, env)
           end
         end
 
@@ -32,7 +31,7 @@ module Dotenv
           if match[1] == "\\"
             variable[1..]
           elsif match[3]
-            env.fetch(match[3], "")
+            env[match[3]] || ENV[match[3]] || ""
           else
             variable
           end
