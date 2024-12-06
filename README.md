@@ -213,7 +213,7 @@ DATABASE_URL="postgres://$(whoami)@localhost/my_database"
 
 ### Variable Substitution
 
-You need to add the value of another variable in one of your variables? You can reference the variable with `${VAR}` or often just `$VAR` in unqoted or double-quoted values.
+You need to add the value of another variable in one of your variables? You can reference the variable with `${VAR}` or often just `$VAR` in unquoted or double-quoted values.
 
 ```shell
 DATABASE_URL="postgres://${USER}@localhost/my_database"
