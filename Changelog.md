@@ -1,6 +1,18 @@
 # Changelog
 
-[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v3.1.3...main)
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v3.1.5...main)
+
+## 3.1.5
+
+* Optimize parser by removing repeated hash merges by @andrewts129 in https://github.com/bkeepers/dotenv/pull/515
+* Refactor parser to avoid duplicate scan/gsub by @bkeepers in https://github.com/bkeepers/dotenv/pull/517
+* Fix typo in README by @JohnYangSam in https://github.com/bkeepers/dotenv/pull/516
+
+### New Contributors
+* @JohnYangSam made their first contribution in https://github.com/bkeepers/dotenv/pull/516
+* @andrewts129 made their first contribution in https://github.com/bkeepers/dotenv/pull/515
+
+**Full Changelog**: https://github.com/bkeepers/dotenv/compare/v3.1.4...v3.1.5
 
 ## 3.1.4
 
