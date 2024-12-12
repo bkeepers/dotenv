@@ -34,7 +34,7 @@ module Dotenv
 
     def var_defined?(line)
       match = Dotenv::Parser::LINE.match(line)
-      match && match[1]
+      match && match[:key]
     end
 
     def line_blank?(line)
