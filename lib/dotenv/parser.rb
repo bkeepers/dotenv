@@ -8,8 +8,10 @@ module Dotenv
   # Parses the `.env` file format into key/value pairs.
   # It allows for variable substitutions, command substitutions, and exporting of variables.
   class Parser
-    @substitutions =
-      [Dotenv::Substitutions::Variable, Dotenv::Substitutions::Command]
+    @substitutions = [
+      Dotenv::Substitutions::Variable,
+      Dotenv::Substitutions::Command
+    ]
 
     LINE = /
       (?:^|\A)              # beginning of line
@@ -40,7 +42,7 @@ module Dotenv
     def initialize(string, overwrite: false)
       @string = string
       @hash = {}
-      @variables_to_ignore = overwrite ? nil : ENV.except("DOTENV_LINEBREAK_MODE")
+      @overwrite = overwrite
     end
 
     def call
@@ -48,7 +50,8 @@ module Dotenv
       lines = @string.gsub(/\r\n?/, "\n")
       # Process matches
       lines.scan(LINE).each do |key, value|
-        next if @variables_to_ignore&.include?(key)
+        # Skip parsing values that will be ignored
+        next if ignore?(key)
 
         @hash[key] = parse_value(value || "")
       end
@@ -61,6 +64,11 @@ module Dotenv
 
     private
 
+    # Determine if the key can be ignored.
+    def ignore?(key)
+      !@overwrite && key != "DOTENV_LINEBREAK_MODE" && ENV.key?(key)
+    end
+
     def parse_line(line)
       if line.split.first == "export"
         if variable_not_set?(line)
@@ -69,12 +77,22 @@ module Dotenv
       end
     end
 
+    QUOTED_STRING = /\A(['"])(.*)\1\z/m
     def parse_value(value)
       # Remove surrounding quotes
-      value = value.strip.sub(/\A(['"])(.*)\1\z/m, '\2')
+      value = value.strip.sub(QUOTED_STRING, '\2')
       maybe_quote = Regexp.last_match(1)
-      value = unescape_value(value, maybe_quote)
-      perform_substitutions(value, maybe_quote)
+
+      # Expand new lines in double quoted values
+      value = expand_newlines(value) if maybe_quote == '"'
+
+      # Unescape characters and performs substitutions unless value is single quoted
+      if maybe_quote != "'"
+        value = unescape_characters(value)
+        self.class.substitutions.each { |proc| value = proc.call(value, @hash) }
+      end
+
+      value
     end
 
     def unescape_characters(value)
@@ -91,25 +109,6 @@ module Dotenv
 
     def variable_not_set?(line)
       !line.split[1..].all? { |var| @hash.member?(var) }
-    end
-
-    def unescape_value(value, maybe_quote)
-      if maybe_quote == '"'
-        unescape_characters(expand_newlines(value))
-      elsif maybe_quote.nil?
-        unescape_characters(value)
-      else
-        value
-      end
-    end
-
-    def perform_substitutions(value, maybe_quote)
-      if maybe_quote != "'"
-        self.class.substitutions.each do |proc|
-          value = proc.call(value, @hash)
-        end
-      end
-      value
     end
   end
 end
