@@ -40,7 +40,7 @@ module Dotenv
     def initialize(string, overwrite: false)
       @string = string
       @hash = {}
-      @overwrite = overwrite
+      @variables_to_ignore = overwrite ? nil : ENV.except("DOTENV_LINEBREAK_MODE")
     end
 
     def call
@@ -48,6 +48,8 @@ module Dotenv
       lines = @string.gsub(/\r\n?/, "\n")
       # Process matches
       lines.scan(LINE).each do |key, value|
+        next if @variables_to_ignore&.include?(key)
+
         @hash[key] = parse_value(value || "")
       end
       # Process non-matches
@@ -104,7 +106,7 @@ module Dotenv
     def perform_substitutions(value, maybe_quote)
       if maybe_quote != "'"
         self.class.substitutions.each do |proc|
-          value = proc.call(value, @hash, overwrite: @overwrite)
+          value = proc.call(value, @hash)
         end
       end
       value
