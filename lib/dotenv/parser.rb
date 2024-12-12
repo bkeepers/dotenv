@@ -14,21 +14,23 @@ module Dotenv
     ]
 
     LINE = /
-      (?:^|\A)              # beginning of line
-      \s*                   # leading whitespace
-      (?:export\s+)?        # optional export
-      ([\w.]+)              # key
-      (?:\s*=\s*?|:\s+?)    # separator
-      (                     # optional value begin
-        \s*'(?:\\'|[^'])*'  #   single quoted value
-        |                   #   or
-        \s*"(?:\\"|[^"])*"  #   double quoted value
-        |                   #   or
-        [^\#\r\n]+          #   unquoted value
-      )?                    # value end
-      \s*                   # trailing whitespace
-      (?:\#.*)?             # optional comment
-      (?:$|\z)              # end of line
+      (?:^|\A)                # beginning of line
+      \s*                     # leading whitespace
+      (?<export>export\s+)?   # optional export
+      (?<key>[\w.]+)          # key
+      (?:                     # optional separator and value
+        (?:\s*=\s*?|:\s+?)    #   separator
+        (?<value>             #   optional value begin
+          \s*'(?:\\'|[^'])*'  #     single quoted value
+          |                   #     or
+          \s*"(?:\\"|[^"])*"  #     double quoted value
+          |                   #     or
+          [^\#\n]+            #     unquoted value
+        )?                    #   value end
+      )?                      # separator and value end
+      \s*                     # trailing whitespace
+      (?:\#.*)?               # optional comment
+      (?:$|\z)                # end of line
     /x
 
     class << self
@@ -40,25 +42,29 @@ module Dotenv
     end
 
     def initialize(string, overwrite: false)
-      @string = string
+      # Convert line breaks to same format
+      @string = string.gsub(/[\n\r]+/, "\n")
       @hash = {}
       @overwrite = overwrite
     end
 
     def call
-      # Convert line breaks to same format
-      lines = @string.gsub(/\r\n?/, "\n")
-      # Process matches
-      lines.scan(LINE).each do |key, value|
-        # Skip parsing values that will be ignored
-        next if ignore?(key)
+      @string.scan(LINE) do
+        match = $LAST_MATCH_INFO
 
-        @hash[key] = parse_value(value || "")
+        # Skip parsing values that will be ignored
+        next if ignore?(match[:key])
+
+        # Check for exported variable with no value
+        if match[:export] && !match[:value]
+          if !@hash.member?(match[:key])
+            raise FormatError, "Line #{match.to_s.inspect} has an unset variable"
+          end
+        else
+          @hash[match[:key]] = parse_value(match[:value] || "")
+        end
       end
-      # Process non-matches
-      lines.gsub(LINE, "").split(/[\n\r]+/).each do |line|
-        parse_line(line)
-      end
+
       @hash
     end
 
@@ -67,14 +73,6 @@ module Dotenv
     # Determine if the key can be ignored.
     def ignore?(key)
       !@overwrite && key != "DOTENV_LINEBREAK_MODE" && ENV.key?(key)
-    end
-
-    def parse_line(line)
-      if line.split.first == "export"
-        if variable_not_set?(line)
-          raise FormatError, "Line #{line.inspect} has an unset variable"
-        end
-      end
     end
 
     QUOTED_STRING = /\A(['"])(.*)\1\z/m
@@ -105,10 +103,6 @@ module Dotenv
       else
         value.gsub('\n', "\\\\\\n").gsub('\r', "\\\\\\r")
       end
-    end
-
-    def variable_not_set?(line)
-      !line.split[1..].all? { |var| @hash.member?(var) }
     end
   end
 end
