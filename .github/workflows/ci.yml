@@ -4,13 +4,25 @@ on:
     branches: [main]
   pull_request:
 jobs:
-  test:
-    name: Test on Ruby ${{ matrix.ruby }} and Rails ${{ matrix.rails }}
+  versions:
+    name: Get latest versions
     runs-on: ubuntu-latest
+    outputs:
+      ruby: ${{ steps.ruby.outputs.latest }}
+    steps:
+      - id: ruby
+        run: |
+          DATA=$(curl https://endoflife.date/api/ruby.json)
+          SUPPORTED=$(echo $DATA | jq '[.[] | select(.eol > (now | strftime("%Y-%m-%d")))]')
+          echo "latest=$(echo $SUPPORTED | jq -c 'map(.latest)')" >> $GITHUB_OUTPUT
+  test:
+    needs: versions
+    runs-on: ubuntu-latest
+    name: Test on Ruby ${{ matrix.ruby }} and Rails ${{ matrix.rails }}
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.1", "3.2", "3.3", "3.4", head]
+        ruby: ${{ fromJSON(needs.versions.outputs.ruby) }}
         rails: ["7.0.0", "7.1.0", "7.2.0", "8.0.0"]
     env:
       RAILS_VERSION: ${{ matrix.rails }}
