@@ -1,8 +1,8 @@
 require "spec_helper"
 
 describe Dotenv::Parser do
-  def env(string)
-    Dotenv::Parser.call(string)
+  def env(...)
+    Dotenv::Parser.call(...)
   end
 
   it "parses unquoted values" do
@@ -297,5 +297,10 @@ one more line")
           .to eql("VAR1 is var1")
       end
     end
+  end
+
+  it "returns existing value for redefined variable" do
+    ENV["FOO"] = "existing"
+    expect(env("FOO=bar")).to eql("FOO" => "existing")
   end
 end
