@@ -1,6 +1,12 @@
 # Changelog
 
-[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v3.1.5...main)
+[Unreleased changes](https://github.com/bkeepers/dotenv/compare/v3.1.6...main)
+
+## 3.1.6
+
+* Fix: Restore previous parser behavior of returning existing variables by @bkeepers in https://github.com/bkeepers/dotenv/pull/519
+
+**Full Changelog**: https://github.com/bkeepers/dotenv/compare/v3.1.5...v3.1.6
 
 ## 3.1.5
 
