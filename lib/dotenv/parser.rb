@@ -52,11 +52,11 @@ module Dotenv
       @string.scan(LINE) do
         match = $LAST_MATCH_INFO
 
-        # Skip parsing values that will be ignored
-        next if ignore?(match[:key])
-
-        # Check for exported variable with no value
-        if match[:export] && !match[:value]
+        if existing?(match[:key])
+          # Use value from already defined variable
+          @hash[match[:key]] = ENV[match[:key]]
+        elsif match[:export] && !match[:value]
+          # Check for exported variable with no value
           if !@hash.member?(match[:key])
             raise FormatError, "Line #{match.to_s.inspect} has an unset variable"
           end
@@ -70,8 +70,8 @@ module Dotenv
 
     private
 
-    # Determine if the key can be ignored.
-    def ignore?(key)
+    # Determine if a variable is already defined and should not be overwritten.
+    def existing?(key)
       !@overwrite && key != "DOTENV_LINEBREAK_MODE" && ENV.key?(key)
     end
 
