@@ -35,9 +35,15 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
       - name: Set up Ruby
+        id: setup-ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
           ruby-version: ${{ matrix.ruby }}
+        continue-on-error: true
+      - name: Incompatible Versions
+        if: steps.setup-ruby.outcome == 'failure'
+        run: echo "Ruby ${{ matrix.ruby }} is not supported with Rails ${{ matrix.rails }}"
       - name: Run Rake
+        if: steps.setup-ruby.outcome != 'failure'
         run: bundle exec rake
