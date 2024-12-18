@@ -43,7 +43,7 @@ module Dotenv
 
     def initialize(string, overwrite: false)
       # Convert line breaks to same format
-      @string = string.gsub(/[\n\r]+/, "\n")
+      @string = string.gsub(/\r\n?/, "\n")
       @hash = {}
       @overwrite = overwrite
     end

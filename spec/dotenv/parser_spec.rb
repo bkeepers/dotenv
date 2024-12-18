@@ -158,6 +158,11 @@ export OH_NO_NOT_SET')
       .to eql("foo" => "bar", "fizz" => "buzz")
   end
 
+  it "does not ignore empty lines in quoted string" do
+    value = "a\n\nb\n\nc"
+    expect(env("FOO=\"#{value}\"")).to eql("FOO" => value)
+  end
+
   it "ignores inline comments" do
     expect(env("foo=bar # this is foo")).to eql("foo" => "bar")
   end
