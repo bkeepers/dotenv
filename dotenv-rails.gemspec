@@ -13,4 +13,6 @@ Gem::Specification.new "dotenv-rails", Dotenv::VERSION do |gem|
   gem.add_dependency "railties", ">= 6.1"
 
   gem.add_development_dependency "spring"
+
+  gem.metadata["changelog_uri"] = "https://github.com/bkeepers/dotenv/releases"
 end
