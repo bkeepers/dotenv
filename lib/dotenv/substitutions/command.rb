@@ -20,7 +20,7 @@ module Dotenv
           )
         /x
 
-        def call(value, _env)
+        def call(value, &block)
           # Process interpolated shell commands
           value.gsub(INTERPOLATED_SHELL_COMMAND) do |*|
             # Eliminate opening and closing parentheses
@@ -31,7 +31,7 @@ module Dotenv
               $LAST_MATCH_INFO[0][1..]
             else
               # Execute the command and return the value
-              `#{command}`.chomp
+              `#{block.call command}`.chomp
             end
           end
         end

@@ -8,11 +8,6 @@ module Dotenv
   # Parses the `.env` file format into key/value pairs.
   # It allows for variable substitutions, command substitutions, and exporting of variables.
   class Parser
-    @substitutions = [
-      Dotenv::Substitutions::Variable,
-      Dotenv::Substitutions::Command
-    ]
-
     LINE = /
       (?:^|\A)                # beginning of line
       \s*                     # leading whitespace
@@ -34,8 +29,6 @@ module Dotenv
     /x
 
     class << self
-      attr_reader :substitutions
-
       def call(...)
         new(...).call
       end
@@ -87,7 +80,7 @@ module Dotenv
       # Unescape characters and performs substitutions unless value is single quoted
       if maybe_quote != "'"
         value = unescape_characters(value)
-        self.class.substitutions.each { |proc| value = proc.call(value, @hash) }
+        value = performs_substitutions(value)
       end
 
       value
@@ -103,6 +96,14 @@ module Dotenv
       else
         value.gsub('\n', "\\\\\\n").gsub('\r', "\\\\\\r")
       end
+    end
+
+    def performs_substitutions(value)
+      value = Dotenv::Substitutions::Command.call(value) do |command|
+        # Expand variables in command before execution
+        Dotenv::Substitutions::Variable.call(command, @hash)
+      end
+      Dotenv::Substitutions::Variable.call(value, @hash)
     end
   end
 end
