@@ -55,7 +55,7 @@ module Dotenv
       begin
         env = Environment.new(File.expand_path(filename), overwrite: overwrite)
         env = block.call(env) if block
-      rescue Errno::ENOENT
+      rescue Errno::ENOENT, Errno::EISDIR
         raise unless ignore
       end
 
