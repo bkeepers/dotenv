@@ -273,6 +273,10 @@ one more line")
         .to eql("Quotes won't be a problem")
     end
 
+    it "handles parentheses in variables in commands" do
+      expect(env("FOO='passwo(rd'\nBAR=$(echo '$FOO')")).to eql("FOO" => "passwo(rd", "BAR" => "passwo(rd")
+    end
+
     it "supports carriage return" do
       expect(env("FOO=bar\rbaz=fbb")).to eql("FOO" => "bar", "baz" => "fbb")
     end
