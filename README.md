@@ -84,7 +84,7 @@ You can use the `dotenv` executable load `.env` before launching your applicatio
 $ dotenv ./script.rb
 ```
 
-The `dotenv` executable also accepts the flag `-f`. Its value should be a comma-separated list of configuration files, in the order of most important to least. All of the files must exist. There _must_ be a space between the flag and its value.
+The `dotenv` executable also accepts the flag `-f`. Its value should be a comma-separated list of configuration files, in the order of the most important to the least important. All of the files must exist. There _must_ be a space between the flag and its value.
 
 ```console
 $ dotenv -f ".env.local,.env" ./script.rb
