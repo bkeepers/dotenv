@@ -86,7 +86,7 @@ describe Dotenv do
 
   describe "load" do
     let(:env_files) { [] }
-    let(:options) { {}}
+    let(:options) { {} }
     subject { Dotenv.load(*env_files, **options) }
 
     it_behaves_like "load"
