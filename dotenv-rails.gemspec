@@ -14,5 +14,8 @@ Gem::Specification.new "dotenv-rails", Dotenv::VERSION do |gem|
 
   gem.add_development_dependency "spring"
 
-  gem.metadata["changelog_uri"] = "https://github.com/bkeepers/dotenv/releases"
+  gem.metadata = {
+    "changelog_uri" => "https://github.com/bkeepers/dotenv/releases",
+    "funding_uri" => "https://github.com/sponsors/bkeepers"
+  }
 end

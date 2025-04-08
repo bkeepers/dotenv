@@ -2,6 +2,11 @@
 
 Shim to load environment variables from `.env` into `ENV` in *development*.
 
+<img align="left" src="https://github.com/user-attachments/assets/0052ed0b-00d2-416a-bdaa-0466c0226933" width="80" />
+<div><sup>Dotenv is proud to be <a href="https://github.com/sponsors/bkeepers">sponsored by</a>:</sup></div>
+<strong><a href="https://bit.ly/dotenv-stoked-seagull">Stoked Seagull Software</a></strong>
+<div>Need help with a software project but don't know where to begin? <a href="https://bit.ly/dotenv-stoked-seagull">Stoked Seagull can help.</a></div><br><br>
+
 Storing [configuration in the environment](http://12factor.net/config) is one of the tenets of a [twelve-factor app](http://12factor.net). Anything that is likely to change between deployment environments–such as resource handles for databases or credentials for external services–should be extracted from the code into environment variables.
 
 But it is not always practical to set environment variables on development machines or continuous integration servers where multiple projects are run. dotenv loads variables from a `.env` file into `ENV` when the environment is bootstrapped.
