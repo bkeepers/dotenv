@@ -9,8 +9,8 @@ module Dotenv
   # It allows for variable substitutions, command substitutions, and exporting of variables.
   class Parser
     @substitutions = [
-      Dotenv::Substitutions::Variable,
-      Dotenv::Substitutions::Command
+      Dotenv::Substitutions::Command,
+      Dotenv::Substitutions::Variable
     ]
 
     LINE = /
