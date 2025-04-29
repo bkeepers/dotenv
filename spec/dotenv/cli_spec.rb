@@ -141,11 +141,10 @@ describe "dotenv binary" do
     original_stderr = $stderr
     original_stdout = $stdout
     output = $stderr = $stdout = StringIO.new
-
     yield
-
+    output.string
+  ensure
     $stderr = original_stderr
     $stdout = original_stdout
-    output.string
   end
 end

@@ -52,7 +52,10 @@ require 'dotenv'
 Dotenv.load
 ```
 
-By default, `load` will look for a file called `.env` in the current working directory. Pass in multiple files and they will be loaded in order. The first value set for a variable will win.
+By default, `load` will look for a file called `.env` in the current working directory.
+Pass in multiple files and they will be loaded in order.
+The first value set for a variable will win.
+Existing environment variables will not be overwritten unless you set `overwrite: true`.
 
 ```ruby
 require 'dotenv'
