@@ -97,6 +97,15 @@ describe Dotenv do
       subject
     end
 
+    it "warns about not overwriting when requested" do
+      options[:overwrite] = :warn
+      ENV["DOTENV"] = "false"
+
+      expect(capture_output { subject }).to eq("Warning: Not overwriting ENV['DOTENV'] with 'true' (is 'false')\n")
+
+      expect(ENV["DOTENV"]).to eq("false")
+    end
+
     context "when the file does not exist" do
       let(:env_files) { [".env_does_not_exist"] }
 

@@ -135,17 +135,4 @@ describe "dotenv binary" do
       expect(@buffer.string).to eq("  #Heading comment\nFOO=FOO\nFOO2=FOO2\n")
     end
   end
-
-  # Capture output to $stdout and $stderr
-  def capture_output(&_block)
-    original_stderr = $stderr
-    original_stdout = $stdout
-    output = $stderr = $stdout = StringIO.new
-
-    yield
-
-    $stderr = original_stderr
-    $stdout = original_stdout
-    output.string
-  end
 end
