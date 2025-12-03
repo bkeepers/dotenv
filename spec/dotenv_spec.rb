@@ -101,7 +101,7 @@ describe Dotenv do
       options[:overwrite] = :warn
       ENV["DOTENV"] = "false"
 
-      expect(capture_output { subject }).to eq("Warning: Not overwriting ENV['DOTENV'] with 'true' (is 'false')\n")
+      expect(capture_output { subject }).to eq("Warning: dotenv not overwriting ENV[\"DOTENV\"]\n")
 
       expect(ENV["DOTENV"]).to eq("false")
     end
