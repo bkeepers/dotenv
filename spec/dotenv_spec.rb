@@ -86,7 +86,8 @@ describe Dotenv do
 
   describe "load" do
     let(:env_files) { [] }
-    subject { Dotenv.load(*env_files) }
+    let(:options) { {} }
+    subject { Dotenv.load(*env_files, **options) }
 
     it_behaves_like "load"
 
@@ -105,6 +106,26 @@ describe Dotenv do
 
       it "does not change ENV" do
         expect { subject }.not_to change { ENV.inspect }
+      end
+    end
+
+    context "when the file is a directory" do
+      let(:env_files) { [] }
+
+      around do |example|
+        Dir.mktmpdir do |dir|
+          env_files.push dir
+          example.run
+        end
+      end
+
+      it "fails silently with ignore: true (default)" do
+        expect { subject }.not_to raise_error
+      end
+
+      it "raises error with ignore: false" do
+        options[:ignore] = false
+        expect { subject }.to raise_error(/Is a directory/)
       end
     end
   end

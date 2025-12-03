@@ -33,6 +33,8 @@ module Dotenv
       (?:$|\z)                # end of line
     /x
 
+    QUOTED_STRING = /\A(['"])(.*)\1\z/m
+
     class << self
       attr_reader :substitutions
 
@@ -75,7 +77,6 @@ module Dotenv
       !@overwrite && key != "DOTENV_LINEBREAK_MODE" && ENV.key?(key)
     end
 
-    QUOTED_STRING = /\A(['"])(.*)\1\z/m
     def parse_value(value)
       # Remove surrounding quotes
       value = value.strip.sub(QUOTED_STRING, '\2')
