@@ -317,6 +317,9 @@ Personally, I prefer to commit the `.env` file with development-only settings. T
 
 By default, it **won't** overwrite existing environment variables as dotenv assumes the deployment environment has more knowledge about configuration than the application does. To overwrite existing environment variables you can use `Dotenv.load files, overwrite: true`.
 
+To warn when a value was not overwritten (e.g. to make users aware of this gotcha),
+use `Dotenv.load files, overwrite: :warn`.
+
 You can also use the `-o` or `--overwrite` flag on the dotenv cli to overwrite existing `ENV` variables.
 
 ```console
