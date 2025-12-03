@@ -252,6 +252,13 @@ describe Dotenv do
         'Missing required configuration key: ["TEST"]'
       )
     end
+
+    it "raises exception when missing multiple mandator keys" do
+      expect { Dotenv.require_keys("TEST1", "TEST2") }.to raise_error(
+        Dotenv::MissingKeys,
+        'Missing required configuration keys: ["TEST1", "TEST2"]'
+      )
+    end
   end
 
   describe "parse" do
