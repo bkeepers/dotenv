@@ -214,6 +214,22 @@ describe Dotenv::Rails do
     end
   end
 
+  describe "Dotenv::Railtie deprecation" do
+    it "returns Dotenv::Rails" do
+      allow(Dotenv::Rails.deprecator).to receive(:warn) # prevent deprecation warning from being printed in test output
+      expect(Dotenv::Railtie).to equal(Dotenv::Rails)
+    end
+
+    it "emits a deprecation warning" do
+      expect(Dotenv::Rails.deprecator).to receive(:warn).with(/Dotenv::Railtie is deprecated/)
+      Dotenv::Railtie
+    end
+
+    it "does not include :Railtie in Dotenv.constants" do
+      expect(Dotenv.constants).not_to include(:Railtie)
+    end
+  end
+
   def stub_spring(load_watcher: true)
     spring = Module.new do
       if load_watcher
