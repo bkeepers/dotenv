@@ -107,5 +107,10 @@ module Dotenv
     config.before_configuration { load }
   end
 
-  Railtie = ActiveSupport::Deprecation::DeprecatedConstantProxy.new("Dotenv::Railtie", "Dotenv::Rails", Dotenv::Rails.deprecator)
+  def self.const_missing(name)
+    super unless name == :Railtie
+
+    Rails.deprecator.warn("Dotenv::Railtie is deprecated! Use Dotenv::Rails instead.")
+    Dotenv::Rails
+  end
 end
