@@ -36,7 +36,7 @@ jobs:
       RAILS_VERSION: ${{ matrix.rails }}
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Set up Ruby
         id: setup-ruby
         uses: ruby/setup-ruby@v1
