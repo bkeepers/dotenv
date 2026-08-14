@@ -10,6 +10,7 @@ module Dotenv
     module Variable
       class << self
         VARIABLE = /
+          (\\\\)?       # is it preceded by a literal backslash escape?
           (\\)?         # is it escaped with a backslash?
           (\$)          # literal $
           (?!\()        # shouldn't be followed by parenthesis
@@ -22,10 +23,12 @@ module Dotenv
           value.gsub(VARIABLE) do |variable|
             match = $LAST_MATCH_INFO
 
-            if match[1] == "\\"
+            if match[1] == "\\\\"
+              "\\" + (env[match[4]] || ENV[match[4]] || "")
+            elsif match[2] == "\\"
               variable[1..]
-            elsif match[3]
-              env[match[3]] || ENV[match[3]] || ""
+            elsif match[4]
+              env[match[4]] || ENV[match[4]] || ""
             else
               variable
             end

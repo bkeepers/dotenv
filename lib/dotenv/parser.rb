@@ -95,7 +95,7 @@ module Dotenv
     end
 
     def unescape_characters(value)
-      value.gsub(/\\([^$])/, '\1')
+      value.gsub(/\\([^$\\])/, '\1')
     end
 
     def expand_newlines(value)

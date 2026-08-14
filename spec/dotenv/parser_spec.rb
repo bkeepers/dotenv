@@ -17,6 +17,10 @@ describe Dotenv::Parser do
     expect(env("FOO=bar\\ bar")).to eql("FOO" => "bar bar")
   end
 
+  it "preserves a literal backslash before a variable reference (#549)" do
+    expect(env("FOO=bar\nRESULT=\"a\\\\$FOO\"")).to eql("FOO" => "bar", "RESULT" => "a\\bar")
+  end
+
   it "parses values with spaces around equal sign" do
     expect(env("FOO =bar")).to eql("FOO" => "bar")
     expect(env("FOO= bar")).to eql("FOO" => "bar")
