@@ -74,6 +74,17 @@ describe Dotenv::Rails do
     end
   end
 
+  describe "options" do
+    it "are defined on the class and delegate to the instance" do
+      expect(Dotenv::Rails.singleton_class.instance_methods).to include(
+        :files, :files=, :overwrite, :overwrite=, :autorestore, :autorestore=, :logger, :logger=
+      )
+
+      Dotenv::Rails.overwrite = true
+      expect(Dotenv::Rails.instance.overwrite).to be(true)
+    end
+  end
+
   it "watches other loaded files with Spring" do
     stub_spring(load_watcher: true)
     application.initialize!
