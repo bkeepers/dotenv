@@ -22,6 +22,13 @@ module Dotenv
   class Rails < ::Rails::Railtie
     delegate :files, :files=, :overwrite, :overwrite=, :autorestore, :autorestore=, :logger, to: "config.dotenv"
 
+    # The documented options are configured on the class, which Rails only supports through
+    # `Railtie.method_missing`. Define them explicitly so they show up in `.methods`, have a
+    # source location, and don't depend on that forwarding.
+    class << self
+      delegate :files, :files=, :overwrite, :overwrite=, :autorestore, :autorestore=, :logger, :logger=, to: :instance
+    end
+
     def initialize
       super
       config.dotenv = ActiveSupport::OrderedOptions.new.update(
