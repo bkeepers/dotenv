@@ -170,8 +170,13 @@ These files are loaded during the `before_configuration` callback, which is fire
 # config/application.rb
 Bundler.require(*Rails.groups)
 
-# Load .env.local in test
-Dotenv::Rails.files.unshift(".env.local") if ENV["RAILS_ENV"] == "test"
+# Load .env.local in test, between .env.test.local and .env.test to match
+# the precedence .env.local has in the other environments
+if ENV["RAILS_ENV"] == "test"
+  files = Dotenv::Rails.files
+  index = files.index(".env.test.local")&.succ || files.index(".env.test") || 0
+  files.insert(index, ".env.local")
+end
 
 module YourApp
   class Application < Rails::Application
